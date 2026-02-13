@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Car Flip Calculator — UK</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0f0f0f; --paper: #f5f0e8; --red: #c8401a; --dark: #1a1a1a;
+  --mid: #4a4038; --muted: #8a7f74; --light: #e8e0d4; --card: #faf7f2;
+  --green: #2a6a3a; --amber: #c87a10; --red-bg: #fff0ec;
+  --green-bg: #edf7ef; --amber-bg: #fff8ec;
+}
+body { background: var(--paper); font-family: 'Instrument Sans', sans-serif; color: var(--ink); min-height: 100vh; }
+
+/* PRINT */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+  .page { box-shadow: none; }
+  .hero { background: var(--dark) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .verdict-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+.wrap { max-width: 800px; margin: 0 auto; padding: 0 16px 80px; }
+
+/* HERO */
+.hero {
+  background: var(--dark); padding: 28px 0 32px;
+  margin-bottom: 32px; position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; right: -60px; top: -60px;
+  width: 260px; height: 260px; border: 1px solid rgba(200,64,26,0.12);
+  border-radius: 50%;
+}
+.hero-inner { max-width: 800px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+.hero-tag { font-family: 'Bebas Neue'; font-size: 10px; letter-spacing: 0.25em; color: var(--red); margin-bottom: 8px; }
+.hero-title { font-family: 'Bebas Neue'; font-size: clamp(36px,7vw,64px); line-height: 0.9; color: white; margin-bottom: 10px; letter-spacing: -0.01em; }
+.hero-title span { color: var(--red); }
+.hero-sub { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.7; max-width: 480px; }
+
+/* LAYOUT */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+/* CARDS */
+.card {
+  background: var(--card); border: 2px solid var(--dark);
+  border-radius: 10px; overflow: hidden;
+}
+.card-head {
+  background: var(--dark); padding: 14px 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.card-head-num {
+  background: var(--red); color: white; font-family: 'Bebas Neue';
+  font-size: 16px; width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.card-head-title { font-family: 'Bebas Neue'; font-size: 15px; letter-spacing: 0.08em; color: white; }
+.card-body { padding: 18px 20px; }
+
+/* FIELDS */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12px; font-weight: 700; color: var(--mid);
+  margin-bottom: 5px; letter-spacing: 0.02em;
+}
+.field label .hint { font-weight: 400; font-style: italic; color: var(--muted); font-size: 11px; }
+.input-wrap { position: relative; }
+.input-prefix {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  font-family: 'Bebas Neue'; font-size: 14px; color: var(--red); pointer-events: none;
+}
+.field input[type=number], .field input[type=text], .field select {
+  width: 100%; padding: 10px 12px 10px 28px;
+  border: 2px solid var(--light); border-radius: 5px;
+  font-family: 'Instrument Sans'; font-size: 14px; color: var(--dark);
+  background: white; outline: none; transition: border-color 0.15s;
+  appearance: none; -moz-appearance: textfield;
+}
+.field input[type=number]::-webkit-inner-spin-button,
+.field input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.field input[type=number]:focus,
+.field input[type=text]:focus,
+.field select:focus { border-color: var(--red); }
+.field select { padding-left: 12px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7f74' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+.no-prefix .field input[type=number] { padding-left: 12px; }
+
+/* CALC ROWS */
+.calc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--light); gap: 12px;
+}
+.calc-row:last-child { border-bottom: none; }
+.calc-label { font-size: 13px; color: var(--mid); flex: 1; }
+.calc-label small { display: block; font-size: 10px; color: var(--muted); font-style: italic; margin-top: 1px; }
+.calc-value {
+  font-family: 'Bebas Neue'; font-size: 20px; color: var(--dark);
+  min-width: 90px; text-align: right;
+}
+.calc-value.pos { color: var(--green); }
+.calc-value.neg { color: var(--red); }
+.calc-value.neutral { color: var(--amber); }
+
+/* VERDICT */
+.verdict-box {
+  border-radius: 8px; padding: 20px; margin-top: 16px;
+  border: 2px solid; transition: all 0.3s;
+}
+.verdict-box.build { background: var(--green-bg); border-color: var(--green); }
+.verdict-box.tweak { background: var(--amber-bg); border-color: var(--amber); }
+.verdict-box.skip  { background: var(--red-bg);   border-color: var(--red); }
+.verdict-label {
+  font-family: 'Bebas Neue'; font-size: 30px; letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.verdict-box.build .verdict-label { color: var(--green); }
+.verdict-box.tweak .verdict-label { color: var(--amber); }
+.verdict-box.skip  .verdict-label { color: var(--red); }
+.verdict-text { font-size: 13px; line-height: 1.75; color: var(--mid); }
+
+/* SCORE RING */
+.score-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+.score-ring-wrap { flex-shrink: 0; }
+
+/* TOTALS */
+.totals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.total-tile {
+  background: var(--dark); border-radius: 7px; padding: 13px 14px;
+}
+.total-tile-label { font-size: 10px; color: #7a7068; margin-bottom: 3px; }
+.total-tile-value { font-family: 'Bebas Neue'; font-size: 22px; color: white; }
+.total-tile-sub { font-size: 10px; color: #5a5048; margin-top: 1px; }
+.total-tile.green { background: var(--green); }
+.total-tile.green .total-tile-label,
+.total-tile.green .total-tile-sub { color: rgba(255,255,255,0.6); }
+
+/* BREAKDOWN TABLE */
+.breakdown { margin-top: 12px; }
+.breakdown-row {
+  display: flex; justify-content: space-between;
+  padding: 7px 0; border-bottom: 1px dashed var(--light); font-size: 13px;
+}
+.breakdown-row:last-child { border-bottom: 2px solid var(--dark); font-weight: 700; }
+.breakdown-row span:last-child { font-family: 'Bebas Neue'; font-size: 16px; }
+
+/* PRINT BTN */
+.actions { display: flex; gap: 10px; margin-top: 20px; }
+.btn {
+  flex: 1; padding: 13px; border-radius: 5px; font-family: 'Bebas Neue';
+  font-size: 17px; letter-spacing: 0.08em; cursor: pointer; border: 2px solid var(--dark);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.btn-primary { background: var(--red); color: white; box-shadow: 3px 3px 0 var(--dark); }
+.btn-primary:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--dark); }
+.btn-secondary { background: var(--card); color: var(--dark); box-shadow: 3px 3px 0 var(--dark); }
+.btn-secondary:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--dark); }
+
+/* TIPS */
+.tips { margin-top: 28px; }
+.tips-title { font-family: 'Bebas Neue'; font-size: 18px; letter-spacing: 0.06em; margin-bottom: 14px; }
+.tip-row {
+  display: flex; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--light); align-items: flex-start;
+}
+.tip-row:last-child { border-bottom: none; }
+.tip-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.tip-body { font-size: 13px; color: var(--mid); line-height: 1.7; }
+.tip-body strong { color: var(--dark); display: block; margin-bottom: 2px; font-size: 13px; }
+
+/* UPSELL STRIP */
+.upsell-strip {
+  background: var(--dark); border-radius: 8px; padding: 20px;
+  margin-top: 24px; display: flex; align-items: center;
+  gap: 16px; flex-wrap: wrap;
+}
+.upsell-text { flex: 1; min-width: 200px; }
+.upsell-text p { font-size: 12px; color: #7a7068; margin-bottom: 4px; }
+.upsell-text h3 { font-family: 'Bebas Neue'; font-size: 18px; color: white; letter-spacing: 0.04em; margin-bottom: 4px; }
+.upsell-text small { font-size: 11px; color: #5a5048; }
+.btn-upsell {
+  padding: 12px 20px; background: var(--red); color: white; border: none;
+  border-radius: 5px; font-family: 'Bebas Neue'; font-size: 16px;
+  letter-spacing: 0.08em; cursor: pointer; white-space: nowrap;
+  box-shadow: 3px 3px 0 rgba(255,255,255,0.1); flex-shrink: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .totals-grid { grid-template-columns: 1fr; }
+  .actions { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero no-print">
+  <div class="hero-inner">
+    <p class="hero-tag">UK Car Flip Calculator — Free Download</p>
+    <h1 class="hero-title">CAR FLIP<br/><span>CALCULATOR</span></h1>
+    <p class="hero-sub">Fill in the details below. Your profit, hourly rate, and flip verdict calculate automatically — before you make an offer.</p>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="grid">
+
+  <!-- LEFT COLUMN: INPUTS -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+
+    <!-- CARD 1: THE BUY -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-num">1</div>
+        <div class="card-head-title">THE BUY</div>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Purchase price you'll pay <span class="hint">Your actual offer</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="purchase" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Your target sell price <span class="hint">Check AutoTrader comps first</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="sellTarget" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Realistic sell price <span class="hint">After negotiation (usually 5–8% less)</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="sellRealistic" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2: COSTS -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-num">2</div>
+        <div class="card-head-title">YOUR COSTS</div>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Mechanical repairs <span class="hint">Tyres, brakes, cambelt, etc.</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="costMech" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Cosmetic work <span class="hint">Valet, touch-up paint, mats</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="costCosmetic" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>MOT / service <span class="hint">If needed before sale</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="costMOT" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>HPI check <span class="hint">Never skip this — ~£10</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="costHPI" placeholder="10" min="0" value="10" oninput="calc()"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Advertising <span class="hint">AutoTrader, Facebook, etc.</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="costAds" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Fuel / transport <span class="hint">Collecting it, test drives</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="costFuel" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Other costs <span class="hint">Anything else</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">£</span>
+            <input type="number" id="costOther" placeholder="0" min="0" oninput="calc()"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3: YOUR TIME -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-num">3</div>
+        <div class="card-head-title">YOUR TIME</div>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Hours to find & buy <span class="hint">Searching, viewing, collecting</span></label>
+          <div class="input-wrap no-prefix">
+            <input type="number" id="timeBuy" placeholder="0" min="0" step="0.5" oninput="calc()" style="padding-left:12px"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Hours prepping & fixing <span class="hint">Cleaning, repairs, photos</span></label>
+          <div class="input-wrap no-prefix">
+            <input type="number" id="timePrep" placeholder="0" min="0" step="0.5" oninput="calc()" style="padding-left:12px"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Hours selling <span class="hint">Listing, calls, viewings</span></label>
+          <div class="input-wrap no-prefix">
+            <input type="number" id="timeSell" placeholder="0" min="0" step="0.5" oninput="calc()" style="padding-left:12px"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Days to sell (estimate) <span class="hint">How long on your drive?</span></label>
+          <div class="input-wrap no-prefix">
+            <input type="number" id="daysToSell" placeholder="14" min="1" value="14" oninput="calc()" style="padding-left:12px"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- END LEFT -->
+
+  <!-- RIGHT COLUMN: RESULTS -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+
+    <!-- PROFIT BREAKDOWN -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-num" style="background:white;color:var(--dark)">£</div>
+        <div class="card-head-title">LIVE PROFIT BREAKDOWN</div>
+      </div>
+      <div class="card-body">
+        <div class="breakdown">
+          <div class="breakdown-row">
+            <span>Realistic sell price</span>
+            <span id="r-sellRealistic" class="calc-value">£—</span>
+          </div>
+          <div class="breakdown-row">
+            <span>Purchase price</span>
+            <span id="r-purchase" class="calc-value neg">−£—</span>
+          </div>
+          <div class="breakdown-row">
+            <span>Total costs</span>
+            <span id="r-totalCosts" class="calc-value neg">−£—</span>
+          </div>
+          <div class="breakdown-row" style="font-weight:700">
+            <span>NET PROFIT</span>
+            <span id="r-profit" class="calc-value">£—</span>
+          </div>
+        </div>
+
+        <div class="totals-grid">
+          <div class="total-tile">
+            <div class="total-tile-label">Total invested</div>
+            <div class="total-tile-value" id="r-totalIn">£—</div>
+            <div class="total-tile-sub">purchase + all costs</div>
+          </div>
+          <div class="total-tile">
+            <div class="total-tile-label">Total costs only</div>
+            <div class="total-tile-value" id="r-costsOnly">£—</div>
+            <div class="total-tile-sub">repairs, ads, etc.</div>
+          </div>
+          <div class="total-tile">
+            <div class="total-tile-label">Hours invested</div>
+            <div class="total-tile-value" id="r-hours">—</div>
+            <div class="total-tile-sub">your time total</div>
+          </div>
+          <div class="total-tile green" id="hourly-tile">
+            <div class="total-tile-label">Your hourly rate</div>
+            <div class="total-tile-value" id="r-hourly">£—</div>
+            <div class="total-tile-sub">profit ÷ hours</div>
+          </div>
+        </div>
+
+        <!-- ROI -->
+        <div style="margin-top:12px; padding:12px; background:var(--light); border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px;font-weight:700;color:var(--mid);">RETURN ON INVESTMENT</span>
+          <span id="r-roi" style="font-family:'Bebas Neue';font-size:24px;color:var(--dark)">—%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VERDICT -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-num" style="background:var(--red);color:white">✓</div>
+        <div class="card-head-title">YOUR VERDICT</div>
+      </div>
+      <div class="card-body">
+        <div class="verdict-box tweak" id="verdict-box">
+          <div class="verdict-label" id="verdict-label">FILL IN YOUR NUMBERS</div>
+          <p class="verdict-text" id="verdict-text">Enter your purchase price, costs, and sell price on the left to get your instant verdict.</p>
+        </div>
+
+        <!-- Checklist -->
+        <div style="margin-top:16px;">
+          <p style="font-family:'Bebas Neue';font-size:13px;letter-spacing:0.1em;color:var(--muted);margin-bottom:10px;">FLIP CRITERIA</p>
+          <div id="criteria-list" style="display:flex;flex-direction:column;gap:6px;">
+            <div class="criteria-row" data-id="c1">
+              <span class="c-icon">○</span>
+              <span class="c-text" style="font-size:13px;color:var(--muted);">Profit over £400</span>
+            </div>
+            <div class="criteria-row" data-id="c2">
+              <span class="c-icon">○</span>
+              <span class="c-text" style="font-size:13px;color:var(--muted);">Hourly rate over £15/hr</span>
+            </div>
+            <div class="criteria-row" data-id="c3">
+              <span class="c-icon">○</span>
+              <span class="c-text" style="font-size:13px;color:var(--muted);">ROI over 15%</span>
+            </div>
+            <div class="criteria-row" data-id="c4">
+              <span class="c-icon">○</span>
+              <span class="c-text" style="font-size:13px;color:var(--muted);">Sells within 3 weeks</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions no-print">
+          <button class="btn btn-secondary" onclick="resetAll()">↺ RESET</button>
+          <button class="btn btn-primary" onclick="window.print()">⬇ PRINT / SAVE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPSELL -->
+    <div class="upsell-strip no-print">
+      <div class="upsell-text">
+        <p>Want the full step-by-step system?</p>
+        <h3>FIRST FLIP BLUEPRINT</h3>
+        <small>Which cars to buy, what to pay, what to sell for, UK legal guide & more</small>
+      </div>
+      <button class="btn-upsell">GET IT — £9 →</button>
+    </div>
+
+    <!-- TIPS -->
+    <div class="tips no-print">
+      <p class="tips-title">QUICK REFERENCE</p>
+      <div class="tip-row">
+        <div class="tip-icon">🔍</div>
+        <div class="tip-body">
+          <strong>Always run an HPI check</strong>
+          Outstanding finance on a car you buy becomes your debt. Check at hpi.co.uk (~£10). Non-negotiable.
+        </div>
+      </div>
+      <div class="tip-row">
+        <div class="tip-icon">📋</div>
+        <div class="tip-body">
+          <strong>Check MOT history free</strong>
+          gov.uk/check-mot-history — see every advisory, failure, and mileage reading going back years.
+        </div>
+      </div>
+      <div class="tip-row">
+        <div class="tip-icon">💰</div>
+        <div class="tip-body">
+          <strong>Price check on AutoTrader first</strong>
+          Search your exact car before you buy. How many are listed? How long have they been there? That's your real market.
+        </div>
+      </div>
+      <div class="tip-row">
+        <div class="tip-icon">⏱️</div>
+        <div class="tip-body">
+          <strong>Be brutally honest with your time</strong>
+          Most flippers forget the 3 hours of calls and viewings. That time costs you — include it every time.
+        </div>
+      </div>
+      <div class="tip-row">
+        <div class="tip-icon">📸</div>
+        <div class="tip-body">
+          <strong>Photos are your biggest sales tool</strong>
+          A car with 15 bright, clean photos sells 3× faster than one with 3 blurry shots. Good photos = quicker sale = lower cost.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- END RIGHT -->
+</div><!-- END GRID -->
+</div><!-- END WRAP -->
+
+<script>
+function v(id) {
+  const val = parseFloat(document.getElementById(id).value) || 0;
+  return val;
+}
+
+function fmt(n) {
+  if (isNaN(n) || !isFinite(n)) return '—';
+  return '£' + Math.round(n).toLocaleString('en-GB');
+}
+
+function fmtHr(n) {
+  if (isNaN(n) || !isFinite(n) || n <= 0) return '—';
+  return '£' + n.toFixed(2) + '/hr';
+}
+
+function setEl(id, text, cls) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  if (cls) { el.className = 'calc-value ' + cls; }
+}
+
+function calc() {
+  // Inputs
+  const purchase     = v('purchase');
+  const sellTarget   = v('sellTarget');
+  const sellReal     = v('sellRealistic') || sellTarget;
+  const costMech     = v('costMech');
+  const costCosmetic = v('costCosmetic');
+  const costMOT      = v('costMOT');
+  const costHPI      = v('costHPI') || 10;
+  const costAds      = v('costAds');
+  const costFuel     = v('costFuel');
+  const costOther    = v('costOther');
+  const timeBuy      = v('timeBuy');
+  const timePrep     = v('timePrep');
+  const timeSell     = v('timeSell');
+  const days         = v('daysToSell') || 14;
+
+  const totalCosts = costMech + costCosmetic + costMOT + costHPI + costAds + costFuel + costOther;
+  const totalIn    = purchase + totalCosts;
+  const profit     = sellReal - totalIn;
+  const totalHours = timeBuy + timePrep + timeSell;
+  const hourlyRate = totalHours > 0 ? profit / totalHours : 0;
+  const roi        = purchase > 0 ? (profit / totalIn) * 100 : 0;
+
+  // Update breakdown
+  setEl('r-sellRealistic', sellReal > 0 ? fmt(sellReal) : '£—');
+  setEl('r-purchase',      purchase > 0  ? '−' + fmt(purchase) : '−£—', 'neg');
+  setEl('r-totalCosts',    totalCosts > 0 ? '−' + fmt(totalCosts) : '−£—', 'neg');
+
+  const profitEl = document.getElementById('r-profit');
+  if (purchase > 0 && sellReal > 0) {
+    profitEl.textContent = fmt(profit);
+    profitEl.className = 'calc-value ' + (profit > 0 ? 'pos' : 'neg');
+  } else {
+    profitEl.textContent = '£—';
+    profitEl.className = 'calc-value';
+  }
+
+  setEl('r-totalIn',   totalIn > 0 ? fmt(totalIn) : '£—');
+  setEl('r-costsOnly', totalCosts > 0 ? fmt(totalCosts) : '£—');
+  setEl('r-hours',     totalHours > 0 ? totalHours + 'hrs' : '—hrs');
+  setEl('r-hourly',    totalHours > 0 && purchase > 0 ? fmtHr(hourlyRate) : '£—/hr');
+  document.getElementById('r-roi').textContent = (purchase > 0 && sellReal > 0) ? roi.toFixed(1) + '%' : '—%';
+
+  // Criteria checks
+  const criteria = [
+    { id: 'c1', pass: profit >= 400 },
+    { id: 'c2', pass: hourlyRate >= 15 && totalHours > 0 },
+    { id: 'c3', pass: roi >= 15 && purchase > 0 },
+    { id: 'c4', pass: days <= 21 && days > 0 },
+  ];
+
+  criteria.forEach(cr => {
+    const row = document.querySelector(`[data-id="${cr.id}"]`);
+    if (!row) return;
+    const icon = row.querySelector('.c-icon');
+    const txt  = row.querySelector('.c-text');
+    row.style.display = 'flex';
+    row.style.gap = '8px';
+    row.style.alignItems = 'center';
+    if (purchase === 0 && sellReal === 0) {
+      icon.textContent = '○';
+      icon.style.color = '#c0b8b0';
+      txt.style.color  = 'var(--muted)';
+    } else {
+      icon.textContent = cr.pass ? '✓' : '✗';
+      icon.style.color = cr.pass ? 'var(--green)' : 'var(--red)';
+      txt.style.color  = cr.pass ? 'var(--green)' : 'var(--red)';
+      txt.style.fontWeight = '600';
+    }
+  });
+
+  // Verdict
+  const verdictBox   = document.getElementById('verdict-box');
+  const verdictLabel = document.getElementById('verdict-label');
+  const verdictText  = document.getElementById('verdict-text');
+
+  if (purchase === 0 || sellReal === 0) {
+    verdictBox.className = 'verdict-box tweak';
+    verdictLabel.textContent = 'FILL IN YOUR NUMBERS';
+    verdictText.textContent  = 'Enter your purchase price, costs, and sell price to get your instant verdict.';
+    return;
+  }
+
+  const passCount = criteria.filter(c => c.pass).length;
+
+  if (profit >= 400 && hourlyRate >= 15 && roi >= 15) {
+    verdictBox.className = 'verdict-box build';
+    verdictLabel.textContent = '✓ FLIP IT';
+    verdictText.textContent  = `This one stacks up. You're looking at ${fmt(profit)} profit at ${fmtHr(hourlyRate)} — that's a solid return. The numbers work. Make the offer.`;
+  } else if (profit >= 200 && profit < 400) {
+    verdictBox.className = 'verdict-box tweak';
+    verdictLabel.textContent = '⚠ TWEAK IT';
+    verdictText.textContent  = `Marginal flip. ${fmt(profit)} profit isn't bad but you need more cushion. Can you negotiate the price down by £${Math.round((400 - profit) + 100)}? Or find costs to cut? Adjust and re-run.`;
+  } else if (profit < 200 && profit > 0) {
+    verdictBox.className = 'verdict-box skip';
+    verdictLabel.textContent = '✗ LOW MARGIN';
+    verdictText.textContent  = `Only ${fmt(profit)} profit. Too tight — one unexpected repair wipes this out. Either negotiate the price down significantly or move on to a better car.`;
+  } else if (profit <= 0) {
+    verdictBox.className = 'verdict-box skip';
+    verdictLabel.textContent = '✗ SKIP IT';
+    verdictText.textContent  = `You'd lose ${fmt(Math.abs(profit))} on this flip. The numbers don't work. Walk away — there's always another car.`;
+  } else {
+    verdictBox.className = 'verdict-box tweak';
+    verdictLabel.textContent = '⚠ CHECK YOUR NUMBERS';
+    verdictText.textContent  = `${passCount} of 4 criteria pass. Review what's failing and either renegotiate the purchase price or cut costs before committing.`;
+  }
+}
+
+function resetAll() {
+  ['purchase','sellTarget','sellRealistic','costMech','costCosmetic',
+   'costMOT','costAds','costFuel','costOther','timeBuy','timePrep','timeSell']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('costHPI').value = '10';
+  document.getElementById('daysToSell').value = '14';
+  calc();
+}
+
+// Init
+calc();
+</script>
+</body>
+</html>
