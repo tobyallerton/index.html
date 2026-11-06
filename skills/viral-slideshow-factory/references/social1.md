@@ -29,7 +29,7 @@ Seen in a screen recording from November 2026; confirm on first run:
 - Results are paged (1, 2 … 5) at the bottom.
 - Where to filter to slideshows only: _unknown, fill in_
 - Where full-size product images are: _unknown, fill in_ (fallback: open the TikTok Shop product page)
-- Gotchas: _none recorded yet_
+- Gotchas: from a cloud server (Playwright, headless) Social1 shows a "Vercel Security Checkpoint — Failed to verify your browser (Code 29)" page instead of the login form. Social1 research needs Claude in Chrome on the user's own computer; in the cloud, only mode B (user gives the slideshow link) can run.
 
 ## Kalodata (if the user uses it instead)
 - _unknown, fill in on first use_

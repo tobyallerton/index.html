@@ -22,6 +22,7 @@ const CODE_BOXES = ['input[autocomplete="one-time-code"]', 'input[name*=code i]'
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await sleep(2500);
     const emailBox = await firstVisible(page, ['input[type=email]', 'input[name*=email i]', 'input[placeholder*=email i]', 'input[autocomplete=username]', 'input[autocomplete=email]']);
+    if (!emailBox && /Security Checkpoint|verify your browser/i.test(await page.content())) { console.log("BLOCKED_BY_BOT_CHECK: Social1 refused this browser (Vercel security checkpoint). Use Claude in Chrome on your own computer."); return; }
     if (!emailBox) { console.log('NO_LOGIN_FORM: probably already logged in. Current URL: ' + page.url()); return; }
     await emailBox.fill(email);
     const send = await firstVisible(page, ['button:has-text("Send code")', 'button:has-text("Get code")', 'button:has-text("Continue")', 'button:has-text("Next")', 'button:has-text("Log in")', 'button:has-text("Sign in")', 'button[type=submit]'], 3000);
