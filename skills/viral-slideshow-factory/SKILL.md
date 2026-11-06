@@ -20,6 +20,15 @@ Each remake keeps the *idea* of a proven winner (hook angle, slide structure, se
 | Output folder | `Slideshows/<YYYY-MM-DD>/` in the current working directory |
 | Research window | Last 7 days, falling back to 30 days if there are fewer than about 10 slideshows |
 
+## Daily batch (scheduled morning runs)
+
+When this runs as the scheduled morning batch (the prompt says so), these override the settings above:
+- **Count:** the number the prompt asks for (e.g. 20). Prefer screenshot formats (chat, email, comment reply) and memes where only one or two photos are needed, because ChatGPT Plus limits how many images can be made in a few hours. On `RATE_LIMITED`, stop generating, finish every slideshow whose images are done, and report how many were made and how many were planned.
+- **Commission:** it can't be checked (not on Social1, and TikTok Shop pages block scripts), so don't wait for the user. Only pick products priced **£8 or more**, and in the report list every product with "commission: check in the affiliate app before posting".
+- **No repeats:** before picking, read the folder names of earlier runs (`Slideshows/*/`) on the `daily-slideshows` branch and on `main`, and don't repeat a product made in the last 14 days.
+- **Logins:** the saved logins don't survive between sessions, so expect to ask the user for the Social1 code and then the ChatGPT code. Ask in one short message each and keep the scripts waiting (they wait 10 minutes).
+- **Output:** commit the finished folders (not `_research/` or `_build/original/`, which `.gitignore` already skips) and push to the `daily-slideshows` branch, then send the user each slideshow's `comparison.png` and the `report.md`.
+
 ## Pick the mode
 
 - **A. Trending ("make me N slideshows")**: research Social1, pick N winners, remake each. This is the default.
@@ -35,7 +44,8 @@ The user can mix them, for example "5 trending ones plus one for this product".
 1. **Claude in Chrome (preferred when its tools are available).** It uses the user's own Chrome, which is already logged into Social1 and ChatGPT, so there are no login codes. Load the chrome-browser skill first if it exists. Work in a new tab and never close the user's tabs. Use it to browse Social1 and TikTok and to read pages. For ChatGPT image generation it must be able to attach the product photo and save the result to disk. If it can't do either, use the script below for that one step.
 2. **Bundled Playwright scripts** (any computer, including cloud sessions). Scripts live in `scripts/` next to this file; call that folder `$S`.
    - First time: `cd $S && npm install && npx playwright install chromium`. If Google Chrome is installed, `BROWSER_CHANNEL=chrome` makes the sites less likely to block the browser.
-   - **In a cloud session** Social1 and ChatGPT turn away a hidden (headless) browser. Run every script in real Chrome on a virtual screen: `HEADED=1 BROWSER_CHANNEL=chrome xvfb-run -a -s "-screen 0 1400x1000x24" node $S/<script> ...`. If the session's safety check refuses this, tell the user and let them decide (for example by switching the session out of Auto mode); don't look for other ways round a site's bot check.
+   - **In a cloud session** Social1 and ChatGPT turn away a hidden (headless) browser. Run every browser script through the launcher, which uses real Chrome on a virtual screen: `skills/viral-slideshow-factory/scripts/run-chrome.sh <script.js> [args]` (from the repo root), for example `skills/viral-slideshow-factory/scripts/run-chrome.sh social1_login.js --shot /tmp/s1.png`. The repo's `.claude/settings.json` allows this launcher. If a session's safety check still refuses it, tell the user and let them decide; don't look for other ways round a site's bot check.
+   - Only one browser script can use a site's saved profile at a time. Never run two scripts for the same site at once.
    - Credentials come only from environment variables: `SOCIAL1_EMAIL`, `CHATGPT_EMAIL`, `CHATGPT_PASSWORD`. Never write them into a file, report or chat. If they're missing, ask the user to set them.
    - Sessions are saved in `~/.tiktok-shop-slideshows/profiles/` (shared with the older tiktok-shop-slideshows skill), so logins only re-run when a session expires.
    - `node $S/social1_login.js --shot /tmp/s1.png` **in the background**. If it prints `NEEDS_CODE`, ask: "Social1 has just emailed you a login code. What is it?" and write it with `echo 123456 > ~/.tiktok-shop-slideshows/social1_code.txt` (or the whole link, if they got a link). Wait for `LOGGED_IN` or `NO_LOGIN_FORM`.
@@ -112,6 +122,8 @@ Read `references/recreate.md` and follow it. In short:
 - Get a clean product photo into `_build/product/`, ideally a packshot from the TikTok Shop listing. For mode B/C, the user's photo is fine if it's clear.
 
 Add a per-slide plan: the image prompt, the text, its position and style (`outline` or `box`, matching the original).
+
+**The last slide always ends with a call to action**, even if the original didn't have one: a short line such as "linked in the basket", "tap the orange basket" or "it's in the basket below". Keep it soft: no fake urgency like "sale ends soon" unless the listing really shows an end date. `finish.py` refuses a slideshow whose last slide has none.
 
 ## 5. Make the images (ChatGPT)
 

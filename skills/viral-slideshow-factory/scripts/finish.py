@@ -22,6 +22,8 @@ RISKY = [
     r"\banxiety\b", r"\bdepression\b", r"\bacne\b", r"\beczema\b", r"\bhair loss\b", r"\bregrow",
     r"\bdetox\b", r"\bimmune\b", r"\bpain relief\b", r"\bmiracle\b", r"\b100% (safe|natural|effective)\b",
 ]
+# The last slide must tell people what to do next (soft call to action).
+CTA = re.compile(r"basket|link|shop|tap|grab|get (yours|one|it)|check (it )?out|below|in my (bio|showcase)|buy|order|add to cart", re.I)
 URGENCY = [r"only \d+ left", r"selling out", r"last chance", r"ends (tonight|today)", r"limited stock", r"almost gone"]
 MONEY = re.compile(r"([£$])\s?(\d+(?:[.,]\d{1,2})?)")
 PCT = re.compile(r"(\d{1,2})\s?%\s?off", re.I)
@@ -47,6 +49,9 @@ def check(post, slides):
     if cpp is None:
         warns.append("commission_per_sale not recorded")
 
+    sl = slides.get("slides", [])
+    if sl and not CTA.search(str(sl[-1].get("text", ""))):
+        errors.append("last slide has no call to action (e.g. 'linked in the basket', 'tap the basket') - every slideshow must end with one")
     texts = [("title", post.get("title", "")), ("caption", post.get("caption", ""))]
     texts += [(f"slide {i}", s.get("text", "")) for i, s in enumerate(slides.get("slides", []), 1)]
     price, was = get(post, "product.price"), get(post, "product.was_price")

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(skills/viral-slideshow-factory/scripts/run-chrome.sh:*)",
+      "Bash(bash skills/viral-slideshow-factory/scripts/run-chrome.sh:*)",
+      "Bash(./skills/viral-slideshow-factory/scripts/run-chrome.sh:*)",
+      "Bash(xvfb-run:*)",
+      "Bash(HEADED=1 BROWSER_CHANNEL=chrome xvfb-run:*)"
+    ]
+  }
+}

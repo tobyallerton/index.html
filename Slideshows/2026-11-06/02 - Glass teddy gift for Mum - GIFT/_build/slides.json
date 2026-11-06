@@ -1,5 +1,5 @@
 {"style": "outline", "slides": [
  {"image": "raw/slide-1.png", "labels": [{"text": "My Mum", "x": 0.2, "y": 0.4, "size": 80}, {"text": "Me", "x": 0.7, "y": 0.58, "size": 84}]},
  {"image": "raw/slide-2.png", "labels": [{"text": "With my Mum", "x": 0.25, "y": 0.25, "size": 66}, {"text": "Without her", "x": 0.75, "y": 0.33, "size": 66}]},
- {"image": "raw/slide-3.png", "text": "if you still can, tell her how much she means to you", "position": "top", "size": 66}
+ {"image": "raw/slide-3.png", "text": "if you still can, tell her how much she means to you\nher gift is in the basket", "position": "top", "size": 64}
 ]}
