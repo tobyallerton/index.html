@@ -1,0 +1,36 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "our family secret santa emails got out of hand",
+   "position": "bottom",
+   "size": 60
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "she did NOT take that well",
+   "position": "bottom",
+   "size": 60
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "auntie linda wasn't done",
+   "position": "bottom",
+   "size": 60
+  },
+  {
+   "image": "raw/slide-4.png",
+   "text": "the final reply all",
+   "position": "bottom",
+   "size": 60
+  },
+  {
+   "image": "raw/slide-5.png",
+   "text": "the £10 bag that\nstarted all of this\nit's in the basket",
+   "position": "top",
+   "style": "outline",
+   "size": 64
+  }
+ ]
+}

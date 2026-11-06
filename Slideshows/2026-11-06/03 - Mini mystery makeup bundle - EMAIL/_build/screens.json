@@ -1,0 +1,78 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "email",
+   "out": "slide-1.png",
+   "subject": "Family Secret Santa",
+   "sender": "Auntie Linda",
+   "initials": "AL",
+   "colour": "#7b2d3b",
+   "to": "Family Secret Santa",
+   "date": "4 Dec, 18:02",
+   "body": [
+    "Megan,",
+    "We all agreed the Secret Santa limit was £10 this year.",
+    "Your gift for Grandma is a full Made by Mitchell makeup bag. Everyone else gave her a candle and now they look like they didn't try.",
+    "Can you explain why the limit didn't apply to you?",
+    "Linda"
+   ],
+   "time": "18:03"
+  },
+  {
+   "type": "email",
+   "out": "slide-2.png",
+   "reply": true,
+   "subject": "Family Secret Santa",
+   "sender": "Megan Price",
+   "initials": "MP",
+   "colour": "#2d5b8c",
+   "to": "Family Secret Santa",
+   "date": "4 Dec, 18:09",
+   "body": [
+    "Hi Linda,",
+    "Before you email all fourteen of us again, maybe just ask me what it cost?",
+    "Also Grandma was meant to find out who her Secret Santa was on Christmas Day. Not on a Tuesday.",
+    "Megan"
+   ],
+   "time": "18:10"
+  },
+  {
+   "type": "email",
+   "out": "slide-3.png",
+   "reply": true,
+   "subject": "Family Secret Santa",
+   "sender": "Auntie Linda",
+   "initials": "AL",
+   "colour": "#7b2d3b",
+   "to": "Family Secret Santa",
+   "date": "4 Dec, 18:15",
+   "body": [
+    "Megan,",
+    "There is no way a bag that full came in at £10.",
+    "Rules are rules. Either swap it for something within budget or tell everyone what you really spent.",
+    "Linda"
+   ],
+   "time": "18:16"
+  },
+  {
+   "type": "email",
+   "out": "slide-4.png",
+   "reply": true,
+   "subject": "Family Secret Santa",
+   "sender": "Megan Price",
+   "initials": "MP",
+   "colour": "#2d5b8c",
+   "to": "Family Secret Santa",
+   "date": "4 Dec, 18:21",
+   "body": [
+    "Linda,",
+    "It was £10 on TikTok Shop. Exactly on budget. It just looks expensive.",
+    "Next time, check the price before you put Grandma's present on blast.",
+    "Looking forward to your apology. Reply all, please.",
+    "Megan"
+   ],
+   "time": "18:22"
+  }
+ ]
+}

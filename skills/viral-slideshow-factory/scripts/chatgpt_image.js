@@ -29,6 +29,7 @@ const { openProfile, arg, args, sleep, firstVisible } = require('./lib');
   };
   try {
     await page.goto(chatUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await sleep(3000);
     const box = await firstVisible(page, ['#prompt-textarea', 'div[contenteditable="true"]', 'textarea'], 30000);
     if (!box) return fail('No prompt box: not logged in? Run chatgpt_login.js.');
     if (await page.locator('[data-testid="login-button"]').first().isVisible().catch(() => false)) return fail('NOT_LOGGED_IN');
@@ -37,13 +38,18 @@ const { openProfile, arg, args, sleep, firstVisible } = require('./lib');
     const before = fetchOnly ? new Set() : new Set(await page.$$eval('img', (els) => els.map((e) => e.currentSrc || e.src)));
 
     if (!fetchOnly && refs.length) {
-      const input = page.locator('input[type=file]').first();
+      // Use the general "attach files" field (multiple, no accept filter). The first image-only field belongs to
+      // another feature and replaces the message box.
+      let input = page.locator('input[type=file][multiple]:not([accept])').first();
+      if (!(await input.count())) input = page.locator('input[type=file][multiple]').first();
       await input.setInputFiles(refs);
       // wait for upload thumbnails to finish
       await sleep(3000 + refs.length * 2500);
     }
     if (!fetchOnly) {
-    await box.click();
+    const box2 = await firstVisible(page, ['#prompt-textarea', 'div[contenteditable="true"]', 'textarea'], 15000);
+    if (!box2) return fail('Prompt box disappeared after attaching the reference image.');
+    await box2.click();
     // A line break in the ChatGPT box acts as Enter and sends early, so send the prompt as one paragraph.
     await page.keyboard.insertText(prompt.replace(/\s*\n+\s*/g, ' ').trim());
     await sleep(800);

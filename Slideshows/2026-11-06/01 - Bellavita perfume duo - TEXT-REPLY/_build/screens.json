@@ -1,0 +1,11 @@
+{"out_dir": "raw", "screens": [
+ {"type": "chat", "out": "slide-2.png", "time": "09:12", "contact": "Callum", "unread": 3,
+  "messages": [
+   {"from": "them", "text": "ok this is random but"},
+   {"from": "them", "text": "what perfume were you wearing last night"},
+   {"from": "me", "text": "why??"},
+   {"from": "them", "text": "my jacket still smells like you and i keep sniffing it like a weirdo"},
+   {"from": "me", "text": "stoppp"},
+   {"from": "them", "text": "genuinely need the name"},
+   {"from": "me", "text": "absolutely not, it's my signature now"}],
+  "read": "Read 09:14"}]}
