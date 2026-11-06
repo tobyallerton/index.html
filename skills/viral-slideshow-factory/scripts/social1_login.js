@@ -60,8 +60,11 @@ const CODE_BOXES = ['input[autocomplete="one-time-code"]', 'input[name*=code i]'
         const singleDigitBoxes = await page.locator('input[maxlength="1"]').count();
         if (singleDigitBoxes > 1) { await box.click(); await page.keyboard.type(code, { delay: 80 }); }
         else await box.fill(code);
-        const verify = await firstVisible(page, ['[role=dialog] button[type=submit]', '[role=dialog] button:has-text("Verify")', '[role=dialog] button:has-text("Login")', 'button:has-text("Verify")', 'button:has-text("Confirm")', 'button:has-text("Continue")', 'button:has-text("Log in")', 'button:has-text("Sign in")', 'button[type=submit]'], 3000);
-        if (verify) await verify.click().catch(() => {});
+        // Submit the code form itself. Never click the sidebar "Sign In" here: it re-opens the login dialog.
+        await page.keyboard.press('Enter').catch(() => {});
+        await sleep(2500);
+        const verify = await firstVisible(page, ['form button[type=submit]', 'button:has-text("Verify")', 'button:has-text("Confirm")', 'form button:has-text("Sign In")', 'form button:has-text("Continue")'], 3000);
+        if (verify && !(await page.locator('[role=dialog]').first().isVisible().catch(() => false))) await verify.click().catch(() => {});
       }
     }
     await page.waitForLoadState('networkidle', { timeout: 30000 }).catch(() => {});
