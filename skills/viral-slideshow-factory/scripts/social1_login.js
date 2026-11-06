@@ -14,18 +14,29 @@ const CODE_BOXES = ['input[autocomplete="one-time-code"]', 'input[name*=code i]'
 
 (async () => {
   const email = need('SOCIAL1_EMAIL');
-  const url = arg('url', process.env.SOCIAL1_LOGIN_URL || 'https://www.social1.ai/login');
+  const url = arg('url', process.env.SOCIAL1_LOGIN_URL || 'https://www.social1.ai/');
   const codeFile = path.join(HOME, 'social1_code.txt');
   try { fs.unlinkSync(codeFile); } catch {}
   const { ctx, page } = await openProfile('social1');
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await sleep(2500);
-    const emailBox = await firstVisible(page, ['input[type=email]', 'input[name*=email i]', 'input[placeholder*=email i]', 'input[autocomplete=username]', 'input[autocomplete=email]']);
+    const EMAIL_BOXES = ['input[type=email]', 'input[name*=email i]', 'input[placeholder*=email i]', 'input[autocomplete=username]', 'input[autocomplete=email]'];
+    let emailBox = await firstVisible(page, EMAIL_BOXES, 4000);
+    if (!emailBox) {
+      // Social1 has no /login page any more: sign-in is a "Sign In" item in the left sidebar.
+      if (/404|could not be found/i.test(await page.content())) {
+        await page.goto('https://www.social1.ai/', { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await sleep(2500);
+      }
+      const signIn = await firstVisible(page, [':text-is("Sign In")', 'a:has-text("Sign In")', 'button:has-text("Sign In")', '[href*="sign-in" i]', '[href*="signin" i]', '[href*="login" i]', ':text-is("Log in")'], 15000);
+      if (signIn) { await signIn.click().catch(() => {}); await sleep(3000); emailBox = await firstVisible(page, EMAIL_BOXES, 10000); }
+      else if (!/Security Checkpoint|verify your browser/i.test(await page.content())) { console.log('NO_LOGIN_FORM: no Sign In button, so probably already logged in. Current URL: ' + page.url()); return; }
+    }
     if (!emailBox && /Security Checkpoint|verify your browser/i.test(await page.content())) { console.log("BLOCKED_BY_BOT_CHECK: Social1 refused this browser (Vercel security checkpoint). Use Claude in Chrome on your own computer."); return; }
     if (!emailBox) { console.log('NO_LOGIN_FORM: probably already logged in. Current URL: ' + page.url()); return; }
     await emailBox.fill(email);
-    const send = await firstVisible(page, ['button:has-text("Send code")', 'button:has-text("Get code")', 'button:has-text("Continue")', 'button:has-text("Next")', 'button:has-text("Log in")', 'button:has-text("Sign in")', 'button[type=submit]'], 3000);
+    const send = await firstVisible(page, ['[role=dialog] button[type=submit]', '[role=dialog] button:has-text("Login")', '[role=dialog] button:has-text("Continue")', 'button:has-text("Send code")', 'button:has-text("Get code")', 'button:has-text("Continue")', 'button:has-text("Next")', 'button:has-text("Log in")', 'button:has-text("Sign in")', 'button[type=submit]'], 3000);
     if (send) await send.click(); else await emailBox.press('Enter');
     await sleep(3000);
 
@@ -49,7 +60,7 @@ const CODE_BOXES = ['input[autocomplete="one-time-code"]', 'input[name*=code i]'
         const singleDigitBoxes = await page.locator('input[maxlength="1"]').count();
         if (singleDigitBoxes > 1) { await box.click(); await page.keyboard.type(code, { delay: 80 }); }
         else await box.fill(code);
-        const verify = await firstVisible(page, ['button:has-text("Verify")', 'button:has-text("Confirm")', 'button:has-text("Continue")', 'button:has-text("Log in")', 'button:has-text("Sign in")', 'button[type=submit]'], 3000);
+        const verify = await firstVisible(page, ['[role=dialog] button[type=submit]', '[role=dialog] button:has-text("Verify")', '[role=dialog] button:has-text("Login")', 'button:has-text("Verify")', 'button:has-text("Confirm")', 'button:has-text("Continue")', 'button:has-text("Log in")', 'button:has-text("Sign in")', 'button[type=submit]'], 3000);
         if (verify) await verify.click().catch(() => {});
       }
     }

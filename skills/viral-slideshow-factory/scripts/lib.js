@@ -53,7 +53,7 @@ async function firstVisible(page, selectors, timeout = 8000) {
   const end = Date.now() + timeout;
   while (Date.now() < end) {
     for (const s of selectors) {
-      const loc = page.locator(s).first();
+      const loc = page.locator(s + ' >> visible=true').first();
       if (await loc.isVisible().catch(() => false)) return loc;
     }
     await sleep(250);
