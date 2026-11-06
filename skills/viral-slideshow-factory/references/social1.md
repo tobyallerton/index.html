@@ -20,16 +20,22 @@ Name, shop, category, sale price and crossed-out price, commission rate and/or c
 - Skip products whose only photos are tiny or heavily edited.
 
 ## Navigation notes (update these each run)
-
-Seen in a screen recording from November 2026; confirm on first run:
-- Site: https://www.social1.ai/ . Login: https://www.social1.ai/login (emailed code).
-- Left sidebar: **Videos**, **Products**, **Creators**.
-- **Videos** page: header filters "Viral content from", "Performance", "Filter by category", "Filter by product", and a region/flag selector top right (UK/US).
-- Each video card shows: rank (#1, #2 …) with views gained, a "$ Ad" badge on some, product thumbnail and name with "Save Product", creator handle and age of post, **Creator GMV (30D)**, then views / likes / comments / growth, and buttons **AI Insights** and **Transcribe**. Top-right icons on the card: bookmark, **open in new tab** (goes to the TikTok post), share.
-- Results are paged (1, 2 … 5) at the bottom.
-- Where to filter to slideshows only: _unknown, fill in_
-- Where full-size product images are: _unknown, fill in_ (fallback: open the TikTok Shop product page)
-- Gotchas: from a cloud server (Playwright, headless) Social1 shows a "Vercel Security Checkpoint — Failed to verify your browser (Code 29)" page instead of the login form. Social1 research needs Claude in Chrome on the user's own computer; in the cloud, only mode B (user gives the slideshow link) can run.
+- Confirmed 2026-11-03 and 2026-11-06.
+- **Cloud sessions:** Social1 (Vercel checkpoint) and ChatGPT block headless Chromium. Run every script as `HEADED=1 BROWSER_CHANNEL=chrome xvfb-run -a -s "-screen 0 1400x1000x24" node ...` (this is the same real Chrome a person uses, shown on a virtual screen).
+- Login: /login is a 404. Sign-in is a pop-up from "Sign In" in the left sidebar of https://www.social1.ai/ : email box, then "Login", then a 6-digit emailed code (`social1_login.js` handles it). Logged in = the sidebar shows the user's first name instead of "Sign In".
+- Home = Videos list; region selector top right (UK).
+- Filters are URL params, so go straight to:
+  `https://www.social1.ai/?tsStart=<YYYY-MM-DD, 7 days ago>&tsEnd=<today>&perf=topConverters&isSlideshow=true`
+  - Date: Today / Last 3 / 7 / 30 days. Performance (`perf`): trending, biggestHits, recentlyPosted, topCreators, topConverters.
+  - The funnel button (`button:has(svg.lucide-funnel)`) opens Ad Type / AI Content / Content Type (All, Videos only, Slideshows only = `isSlideshow=true`) / Sort By / Posted within. 12 cards per page.
+- Best data: the page's own document response (RSC payload; capture with `page.on('response')` on the page URL) contains JSON per post: video_id, handle, views, likes, **gmv (per post)**, time_posted, is_slideshow, product_data {product_id, name, price_value, units_sold, img_url}, thumbnail, video_url. The card's "Creator GMV (30D)" is the creator's total, not the post's. **Commission isn't in this payload** — ask the user to confirm commission for the shortlisted products if it can't be found.
+- Each card's external-link button opens the TikTok post.
+- Product image: `https://social-listening-images.s3.us-east-2.amazonaws.com/products/<product_id>.jpg` (800x800 main listing image; can have text or infographics, so crop it).
+- Slides: TikTok post HTML (`__UNIVERSAL_DATA_FOR_REHYDRATION__` → webapp.video-detail.itemInfo.itemStruct.imagePost.images[].imageURL.urlList) has every slide plus live stats; images are on `*.tiktokcdn-us.com` / `*.tiktokcdn-eu.com`.
+- Top Products: https://www.social1.ai/products (price, 32-day GMV, views, videos, sold; all content types).
+- TikTok Shop product pages (tiktok.com/shop/uk/pdp/<id>) show a "Security Check" captcha to scripts, so the price check may need the user.
+- ChatGPT: `ws.chatgpt.com` may be blocked, so replies don't stream; reload the chat to pick up a finished image.
+- Cloud network allowlist needed: social1.ai, www.social1.ai, d1lj461v9v7c81.cloudfront.net, social-listening-images.s3.us-east-2.amazonaws.com, tiktok.com hosts, tiktokcdn-eu.com / tiktokcdn-us.com hosts, chatgpt.com, oaistatic.com / oaiusercontent.com hosts, auth.openai.com.
 
 ## Kalodata (if the user uses it instead)
 - _unknown, fill in on first use_
