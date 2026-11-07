@@ -62,3 +62,6 @@ Write the size into `_build/plan.md` for each product.
 
 ## Screenshot hooks (chat, email, comments)
 No extra text box on top: the screenshot is the hook. Mix light and dark mode chats. Put comment threads over the video (`"bg": "raw/slide-2.png"` in screens.json) like the TikTok app does. Set `"no_text": true` on that slide in slides.json.
+
+## 9:16 framing
+ChatGPT can only make 2:3 photos (1024×1536). `make_slides.py` trims the sides to 9:16, so add to every prompt: "keep people's faces and the product within the middle 85% of the width; nothing important near the left or right edge." Only ever post the finished `slide-N.png` files (1080×1920), never the raw ChatGPT images.
