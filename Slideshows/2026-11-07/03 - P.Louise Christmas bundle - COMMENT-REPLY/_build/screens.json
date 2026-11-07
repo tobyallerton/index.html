@@ -1,0 +1,32 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "2,618",
+   "comments": [
+    {
+     "user": "chloe.bxx",
+     "text": "is the obsessed bundle actually worth it or is it just pretty packaging",
+     "likes": "6,105",
+     "ago": "2d"
+    },
+    {
+     "user": "allterca",
+     "text": "opened mine last night. it's a whole year of skincare in one box",
+     "likes": "4,372",
+     "ago": "2d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "tash.m",
+     "text": "getting this for my sister",
+     "likes": "519",
+     "ago": "1d"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "09:33",
+   "contact": "Mia",
+   "unread": 3,
+   "read": "Read 09:34",
+   "messages": [
+    {
+     "from": "them",
+     "text": "why are your makeup brushes in a pint glass"
+    },
+    {
+     "from": "me",
+     "text": "not anymore"
+    },
+    {
+     "from": "me",
+     "text": "got a 13 piece set and it comes with its own bag"
+    },
+    {
+     "from": "them",
+     "text": "how much"
+    },
+    {
+     "from": "me",
+     "text": "£8.08"
+    },
+    {
+     "from": "them",
+     "text": "ordering one, mine are falling apart"
+    }
+   ]
+  }
+ ]
+}

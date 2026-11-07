@@ -22,6 +22,10 @@ Each remake keeps the *idea* of a proven winner (hook angle, slide structure, se
 
 ## Daily batch (scheduled morning runs)
 
+**The user's standing rules (apply to every run):**
+- **Never use Made by Mitchell products** (any product whose name or shop contains "Made By Mitchell" / "MBM"), even if they're top sellers.
+- **Always include the P.Louise Christmas bundle** ("Obsessed For Bad Bitch Bundle Christmas Edition", product 1729946120903826144) while it's still selling on Social1: at least one slideshow a day, in a format not used for it the day before.
+
 When this runs as the scheduled morning batch (the prompt says so), these override the settings above:
 - **Count:** the number the prompt asks for (e.g. 20). Prefer screenshot formats (chat, email, comment reply) and memes where only one or two photos are needed, because ChatGPT Plus limits how many images can be made in a few hours. On `RATE_LIMITED`, stop generating, finish every slideshow whose images are done, and report how many were made and how many were planned.
 - **Commission:** it can't be checked (not on Social1, and TikTok Shop pages block scripts), so don't wait for the user. Only pick products priced **£8 or more**, and in the report list every product with "commission: check in the affiliate app before posting".
