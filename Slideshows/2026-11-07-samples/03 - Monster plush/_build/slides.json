@@ -1,0 +1,18 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "my boyfriend said these were a waste of money… then stole the black one 😭",
+   "style": "box",
+   "position": "bottom",
+   "size": 48
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "they're so cheap rn 😭\nboth in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  }
+ ]
+}

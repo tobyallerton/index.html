@@ -1,0 +1,25 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "PARENTS PLEASE… THE SQUISHY ADVENT CALENDARS ARE BACK AND THE PRICE IS ACTUALLY INSANE RN 😭😭",
+   "style": "outline",
+   "position": "middle",
+   "size": 52
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "grabbed 2 for my kids before they sell out again 😭",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "they're actually so cheap rn 😭\nit's in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  }
+ ]
+}

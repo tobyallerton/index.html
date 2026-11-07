@@ -45,6 +45,13 @@ def main():
         if not os.path.exists(src):
             sys.exit(f"ERROR: slide {i} image not found: {src}")
         out = os.path.join(folder, f"slide-{i}.png")
+        if not s.get("no_text") and s.get("phoneify", spec.get("phoneify", True)):
+            # Photo slides get the phone-camera finish so they don't look like glossy AI renders.
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            from phoneify import phoneify
+            tmp = os.path.join(folder, f".phone-{i}.png")
+            phoneify(Image.open(src), s.get("phone_strength", 0.85), seed=i).save(tmp)
+            src = tmp
         cmd = [sys.executable, overlay, "--in", src, "--out", out, "--text", s.get("text", ""),
                "--position", s.get("position", "top"), "--style", s.get("style", spec.get("style", "outline")),
                "--size", str(s.get("size", 54)), "--fit", s.get("fit", "crop")] + (["--y", str(s["y"])] if s.get("y") is not None else [])
