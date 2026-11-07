@@ -1,0 +1,20 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "i left my mum's present out early… and she cried 😭🎄",
+   "style": "outline",
+   "position": "middle",
+   "size": 54,
+   "phoneify": false
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "over 14,000 sold 😭 tell her what she means to you this christmas\nit's in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44,
+   "phone_strength": 0.35
+  }
+ ]
+}

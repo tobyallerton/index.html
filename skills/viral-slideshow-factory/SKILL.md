@@ -23,6 +23,7 @@ Each remake keeps the *idea* of a proven winner (hook angle, slide structure, se
 ## Daily batch (scheduled morning runs)
 
 **The user's standing rules (apply to every run):**
+- **Slide format:** follow "THE STANDARD SLIDESHOW" in `references/recreate.md` (aesthetic hook photo + don't-miss-out product reveal with real sales numbers).
 - **No exact prices on slides, titles or captions** (the user doesn't like it). End with a casual "it's cheap right now" line plus the basket, varied each time, e.g. "they're sooo cheap atm 😭 / it's in the basket ⬇️", "honestly such a good price rn", "bargain rn, grab it in the basket ⬇️". Still record the checked price in post.json for the user.
 - **Never use Made by Mitchell products** (any product whose name or shop contains "Made By Mitchell" / "MBM"), even if they're top sellers.
 - **Always include the P.Louise Christmas bundle** ("Obsessed For Bad Bitch Bundle Christmas Edition", product 1729946120903826144) while it's still selling on Social1: at least one slideshow a day, in a format not used for it the day before.

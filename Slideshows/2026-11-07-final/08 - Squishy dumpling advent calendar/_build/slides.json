@@ -1,0 +1,20 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "STOCKING FILLER ALERT 🚨 PARENTS PLEASE LOOK AT THIS",
+   "style": "outline",
+   "position": "middle",
+   "size": 54,
+   "phoneify": false
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "24 little surprises in one calendar 😭 over 5,000 sold\nit's in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44,
+   "phone_strength": 0.35
+  }
+ ]
+}

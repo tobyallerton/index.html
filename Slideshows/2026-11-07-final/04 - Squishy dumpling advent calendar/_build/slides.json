@@ -1,0 +1,20 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "PARENTS… THIS IS THE ADVENT CALENDAR EVERY KID IS ASKING FOR THIS YEAR 😭🎄",
+   "style": "outline",
+   "position": "middle",
+   "size": 54,
+   "phoneify": false
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "over 5,000 sold already 😭 don't be the parent who missed out\nit's in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44,
+   "phone_strength": 0.35
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "TO ALL THE PARENTS… IF YOUR KIDS LOVE SQUISHIES YOU NEED TO SEE THIS BEFORE CHRISTMAS 😭🎄",
+   "style": "outline",
+   "position": "middle",
+   "size": 52,
+   "phoneify": false
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "over 5,000 already sold 😭 everyone's kids are getting these this year",
+   "style": "box",
+   "position": "top",
+   "size": 46,
+   "phone_strength": 0.35
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "order today so it's here before christmas 🎄\nso cheap atm, it's in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 46,
+   "phone_strength": 0.35
+  }
+ ]
+}

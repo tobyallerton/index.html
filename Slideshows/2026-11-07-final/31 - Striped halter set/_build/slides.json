@@ -1,0 +1,20 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "the holiday set everyone keeps asking me about 🩵",
+   "style": "outline",
+   "position": "middle",
+   "size": 54,
+   "phoneify": false
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "over 11,000 sold 😭 grab it before your winter sun trip\nit's in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44,
+   "phone_strength": 0.35
+  }
+ ]
+}

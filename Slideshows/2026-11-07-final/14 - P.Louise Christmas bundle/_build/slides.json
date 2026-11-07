@@ -1,0 +1,20 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "lads, this is your sign to sort her christmas present 🎁",
+   "style": "outline",
+   "position": "middle",
+   "size": 54,
+   "phoneify": false
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "over 14,000 girls already have theirs 😭\ndon't leave it too late ⬇️ it's in the basket",
+   "style": "box",
+   "position": "top",
+   "size": 44,
+   "phone_strength": 0.35
+  }
+ ]
+}

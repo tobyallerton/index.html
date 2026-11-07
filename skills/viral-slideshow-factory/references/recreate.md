@@ -65,3 +65,12 @@ No extra text box on top: the screenshot is the hook. Mix light and dark mode ch
 
 ## 9:16 framing
 ChatGPT can only make 2:3 photos (1024×1536). `make_slides.py` trims the sides to 9:16, so add to every prompt: "keep people's faces and the product within the middle 85% of the width; nothing important near the left or right edge." Only ever post the finished `slide-N.png` files (1080×1920), never the raw ChatGPT images.
+
+## THE STANDARD SLIDESHOW (user-approved 7 Nov — use this by default)
+1. **Slide 1 = aesthetic hook.** A beautiful, Pinterest-worthy, real-looking phone photo that sets the mood (glowing Christmas living room, dreamy pink bedroom, snowy lit-up street, candlelit vanity, cosy gaming setup). Usually no product and no faces. Big hook text in the middle, in the viral voice: talk straight to a person ("TO ALL THE PARENTS…", "lads…", "psa: if she loves skincare…", "mums…"), emotional, a mini-story or a strong claim. `"phoneify": false` on this slide.
+2. **Last slide = product reveal that makes people feel they'll miss out today.** Attractive product shot (manicured hand, warm light, product sharp). Text = honest FOMO + basket:
+   - real social proof from Social1 `units_sold` ("over 14,000 girls already have theirs 😭"), rounded down;
+   - Christmas timing ("december 1st is coming, order today so it's here in time", "don't leave it too late before christmas");
+   - "it's so cheap atm" style lines are fine; never an exact price, never invented scarcity ("only 3 left", "sale ends tonight").
+   `"phone_strength": 0.35` on product slides.
+3. Optional middle slide (advent calendars): the inside/contents.
