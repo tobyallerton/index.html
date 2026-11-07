@@ -3,17 +3,18 @@
   {
    "image": "raw/slide-1.png",
    "text": "the stocking filler for anyone who lives on energy drinks 😭⚡️",
-   "style": "outline",
+   "style": "classic",
    "position": "middle",
-   "size": 54,
-   "phoneify": false
+   "size": 66,
+   "phoneify": false,
+   "color": "yellow"
   },
   {
    "image": "raw/slide-2.png",
    "text": "over 9,000 sold 😭 grab them before christmas\nit's in the basket ⬇️",
    "style": "box",
    "position": "top",
-   "size": 44,
+   "size": 48,
    "phone_strength": 0.35
   }
  ]

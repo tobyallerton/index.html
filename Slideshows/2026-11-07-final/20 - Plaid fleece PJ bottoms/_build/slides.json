@@ -3,17 +3,18 @@
   {
    "image": "raw/slide-1.png",
    "text": "pj bottoms i'll be living in all winter 🤎",
-   "style": "outline",
+   "style": "classic",
    "position": "middle",
-   "size": 54,
-   "phoneify": false
+   "size": 66,
+   "phoneify": false,
+   "color": "white"
   },
   {
    "image": "raw/slide-2.png",
    "text": "over 32,000 sold 😭 they're SO soft\nit's in the basket ⬇️",
    "style": "box",
    "position": "top",
-   "size": 44,
+   "size": 48,
    "phone_strength": 0.35
   }
  ]

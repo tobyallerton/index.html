@@ -130,7 +130,7 @@ Read `references/recreate.md` and follow it. In short:
 - Write 3 hook options, score them, use the best and list the other two in `plan.md`.
 - Get a clean product photo into `_build/product/`, ideally a packshot from the TikTok Shop listing. For mode B/C, the user's photo is fine if it's clear.
 
-Add a per-slide plan: the image prompt, the text, its position and style (`outline` or `box`, matching the original).
+Add a per-slide plan: the image prompt, the text, its position and style (`classic` or `box`, matching the original; `--color yellow` when the original uses TikTok yellow).
 
 **The last slide always ends with a call to action**, even if the original didn't have one: a short line such as "linked in the basket", "tap the orange basket" or "it's in the basket below". Keep it soft: no fake urgency like "sale ends soon" unless the listing really shows an end date. `finish.py` refuses a slideshow whose last slide has none.
 
@@ -150,7 +150,7 @@ node $S/chatgpt_image.js --prompt-file _build/slide-1.prompt.txt --ref _build/pr
 
 No slide ships without on-screen text. Write `_build/slides.json`:
 ```json
-{"style": "outline", "slides": [
+{"style": "classic", "slides": [
   {"image": "raw/slide-1.png", "text": "POV: your hair finally grows", "position": "top", "size": 84},
   {"image": "raw/slide-2.png", "text": "2 sprays every morning"}
 ]}

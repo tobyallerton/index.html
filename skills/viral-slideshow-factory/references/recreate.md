@@ -51,7 +51,7 @@ Staged, tidy, product-centred images read as AI ads. Every photo prompt should a
 Never copy the face, hair or room of a model in the listing photo.
 
 ## On-screen text
-Use TikTok Sans (in `fonts/`, used automatically) with emoji, lower-case and casual, the way a creator types ("my dad every single christmas 😭🙄"). Default size 52–56. Use `box` (black on white rounded boxes) on screenshots and busy photos, `outline` on photos with a plain area. Keep text off faces and off the product.
+FONT (user-approved 7 Nov): viral slideshows use TikTok's in-app "Classic" text, a Proxima Nova-style font. We use Figtree SemiBold (`fonts/Figtree-Variable.ttf`, used automatically), the closest free match. Style `classic` (default): white text, soft drop shadow, NO outline, centred in a narrow column (about 62% of the width), hooks size ~66 and other slides ~58. Use `"color": "yellow"` (TikTok yellow) on dark photos or when the original used yellow. Use `box` (black on white rounded boxes, same font) for reveal/CTA lines over busy product photos. Don't use the heavy `outline` style. Write with emoji, lower-case and casual, the way a creator types ("my dad every single christmas 😭🙄"); ALL CAPS only when the original hook was in caps. Keep text off faces and off the product.
 
 ## True product size (the user's feedback, 7 Nov)
 AI photos get scale wrong (plushes drawn pillow-sized when they're hand-sized; Celebrations minis drawn like full-size bars when each is only 4-5cm, thumb-sized). Food minis, keyrings, jewellery and figures are the usual offenders. For every product:

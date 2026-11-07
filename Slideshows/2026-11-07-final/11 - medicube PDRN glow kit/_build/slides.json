@@ -3,17 +3,18 @@
   {
    "image": "raw/slide-1.png",
    "text": "mums of skincare-obsessed daughters… this one's for you 🎄😍",
-   "style": "outline",
+   "style": "classic",
    "position": "middle",
-   "size": 54,
-   "phoneify": false
+   "size": 66,
+   "phoneify": false,
+   "color": "white"
   },
   {
    "image": "raw/slide-2.png",
    "text": "the brand new mini medicube glow kit 😍 don't leave it too late before christmas\nit's in the basket ⬇️",
    "style": "box",
    "position": "top",
-   "size": 44,
+   "size": 48,
    "phone_strength": 0.35
   }
  ]

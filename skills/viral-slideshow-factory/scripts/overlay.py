@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Turn a generated image into a 1080x1920 TikTok slide with TikTok-style text (TikTok Sans + colour emoji).
+"""Turn a generated image into a 1080x1920 TikTok slide with TikTok-style text (Figtree + colour emoji).
+
+Font: viral slideshows use TikTok's in-app "Classic" text, a Proxima Nova-style font. Figtree SemiBold
+(fonts/Figtree-Variable.ttf, OFL) is the closest free match: narrow letters, single-storey g, two-storey a.
 
 Usage:
   python overlay.py --in raw.png --out slide.png --text "POV: you finally found it 😭" \
-      [--position top|middle|bottom] [--y 0.3] [--style outline|box|plain] [--size 54] [--fit crop|pad]
+      [--position top|middle|bottom] [--y 0.3] [--style classic|outline|box|plain] [--color white|yellow|cream] [--size 60] [--width 0.62] [--fit crop|pad]
 
 Styles (match the original winner):
+  classic  (default) coloured text with only a faint soft shadow, no outline: how most viral hooks look.
+           Use --color yellow (TikTok yellow) or cream on busy/dark photos, white on darker plain photos.
   outline  white text, thin dark edge and soft shadow: TikTok's default look on photos
   box      black text on white rounded boxes, one box per line: TikTok's "background" style
   plain    white text with a soft shadow only (for darker photos)
@@ -24,10 +29,16 @@ FALLBACK = ["/System/Library/Fonts/Supplemental/Arial Bold.ttf", "C:/Windows/Fon
             "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"]
 EMOJI = re.compile("((?:[\U0001F000-\U0001FAFF\u2600-\u27BF\u2B00-\u2BFF\u2300-\u23FF](?:\uFE0F)?(?:\u200D[\U0001F000-\U0001FAFF\u2600-\u27BF](?:\uFE0F)?)*|[\U0001F1E6-\U0001F1FF]{2}))")
 
-def font(path, size, weight="Bold"):
-    for p in ([path] if path else []) + [os.path.join(FONT_DIR, f"TikTokSans-{weight}.ttf")] + FALLBACK:
+COLORS = {"white": (255, 255, 255), "yellow": (244, 208, 85), "cream": (250, 242, 160)}
+
+def font(path, size, weight=600):
+    for p in ([path] if path else []) + [os.path.join(FONT_DIR, "Figtree-Variable.ttf"),
+                                          os.path.join(FONT_DIR, "TikTokSans-Bold.ttf")] + FALLBACK:
         if p and os.path.exists(p):
-            return ImageFont.truetype(p, size)
+            f = ImageFont.truetype(p, size)
+            try: f.set_variation_by_axes([weight])
+            except Exception: pass
+            return f
     return ImageFont.load_default(size)
 
 _emoji_font = None
@@ -105,8 +116,10 @@ def main():
     ap.add_argument("--text", default="")
     ap.add_argument("--position", default="top", choices=["top", "middle", "bottom"])
     ap.add_argument("--y", type=float, default=None, help="top of the text block as a fraction of the height")
-    ap.add_argument("--style", default="outline", choices=["outline", "box", "plain"])
-    ap.add_argument("--size", type=int, default=54)
+    ap.add_argument("--style", default="classic", choices=["classic", "outline", "box", "plain"])
+    ap.add_argument("--color", default="white", choices=list(COLORS))
+    ap.add_argument("--size", type=int, default=60)
+    ap.add_argument("--width", type=float, default=0.62, help="max line width as a fraction of the slide (viral hooks wrap narrow)")
     ap.add_argument("--fit", default="crop", choices=["crop", "pad"])
     ap.add_argument("--font")
     a = ap.parse_args()
@@ -114,12 +127,12 @@ def main():
     base = fit_canvas(Image.open(a.inp), a.fit).convert("RGBA")
     text = a.text.strip()
     if text:
-        f = font(a.font, a.size, "Bold" if a.style != "box" else "Bold")
+        f = font(a.font, a.size, 620 if a.style != "box" else 600)
         em = a.size * 0.95
-        max_w = int(W * 0.78)
+        max_w = int(W * (max(a.width, 0.80) if a.style == "box" else a.width))
         lines = wrap(text, f, em, max_w)
         asc, desc = f.getmetrics()
-        lh = int((asc + desc) * (1.32 if a.style == "box" else 1.14))
+        lh = int((asc + desc) * (1.30 if a.style == "box" else 1.08))
         block_h = lh * len(lines)
         safe_top, safe_bottom = int(H * 0.12), int(H * 0.79)
         y = int(H * a.y) if a.y is not None else {"top": int(H * 0.17), "middle": (H - block_h) // 2, "bottom": safe_bottom - block_h}[a.position]
@@ -136,14 +149,15 @@ def main():
                 draw_line(layer, x, y + i * lh, line, f, em, fill=(0, 0, 0, 255))
         else:
             shadow = Image.new("RGBA", base.size, (0, 0, 0, 0))
+            sh_a = 150 if a.style == "classic" else 170
             for i, line in enumerate(lines):
                 lw = line_width(line, f, em); x = (W - lw) / 2 - 18
-                draw_line(shadow, x + 2, y + i * lh + 3, line, f, em, fill=(0, 0, 0, 170),
-                          stroke=max(2, a.size // 16) if a.style == "outline" else 0, stroke_fill=(0, 0, 0, 170))
-            layer = Image.alpha_composite(layer, shadow.filter(ImageFilter.GaussianBlur(3)))
+                draw_line(shadow, x + 1, y + i * lh + 2, line, f, em, fill=(0, 0, 0, sh_a),
+                          stroke=max(2, a.size // 16) if a.style == "outline" else 0, stroke_fill=(0, 0, 0, sh_a))
+            layer = Image.alpha_composite(layer, shadow.filter(ImageFilter.GaussianBlur(5 if a.style == "classic" else 3)))
             for i, line in enumerate(lines):
                 lw = line_width(line, f, em); x = (W - lw) / 2 - 18
-                draw_line(layer, x, y + i * lh, line, f, em, fill=(255, 255, 255, 255),
+                draw_line(layer, x, y + i * lh, line, f, em, fill=COLORS[a.color] + (255,),
                           stroke=max(2, a.size // 22) if a.style == "outline" else 0, stroke_fill=(20, 20, 20, 255))
         base = Image.alpha_composite(base, layer)
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)

@@ -3,17 +3,18 @@
   {
    "image": "raw/slide-1.png",
    "text": "the perfume combo everyone at the gym asks me about 😮‍💨",
-   "style": "outline",
+   "style": "classic",
    "position": "middle",
-   "size": 54,
-   "phoneify": false
+   "size": 66,
+   "phoneify": false,
+   "color": "yellow"
   },
   {
    "image": "raw/slide-2.png",
    "text": "over 51,000 sold 😭 honey oud first, white oud on top\nit's in the basket ⬇️",
    "style": "box",
    "position": "top",
-   "size": 44,
+   "size": 48,
    "phone_strength": 0.35
   }
  ]

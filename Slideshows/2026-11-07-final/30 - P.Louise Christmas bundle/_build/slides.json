@@ -3,17 +3,18 @@
   {
    "image": "raw/slide-1.png",
    "text": "she told me not to get her anything this year 🙄",
-   "style": "outline",
+   "style": "classic",
    "position": "middle",
-   "size": 54,
-   "phoneify": false
+   "size": 66,
+   "phoneify": false,
+   "color": "white"
   },
   {
    "image": "raw/slide-2.png",
    "text": "too late bestie 😭 over 14,000 sold\nit's in the basket ⬇️",
    "style": "box",
    "position": "top",
-   "size": 44,
+   "size": 48,
    "phone_strength": 0.35
   }
  ]

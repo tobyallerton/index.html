@@ -3,7 +3,8 @@
 
 slides.json (in the slideshow folder):
 {
-  "style": "outline",              # or "box"
+  "style": "classic",              # classic (viral default: Figtree, soft shadow, no outline), box, outline or plain
+  "color": "white",                # classic text colour: white, yellow (TikTok yellow) or cream
   "slides": [
     {"image": "_raw/slide-1.png", "text": "POV: your skin finally behaves", "position": "top", "size": 68},
     {"image": "_raw/slide-2.png", "text": "it took 2 weeks to notice", "position": "top"},
@@ -53,8 +54,9 @@ def main():
             phoneify(Image.open(src), s.get("phone_strength", 0.85), seed=i).save(tmp)
             src = tmp
         cmd = [sys.executable, overlay, "--in", src, "--out", out, "--text", s.get("text", ""),
-               "--position", s.get("position", "top"), "--style", s.get("style", spec.get("style", "outline")),
-               "--size", str(s.get("size", 54)), "--fit", s.get("fit", "crop")] + (["--y", str(s["y"])] if s.get("y") is not None else [])
+               "--position", s.get("position", "top"), "--style", s.get("style", spec.get("style", "classic")),
+               "--color", s.get("color", spec.get("color", "white")), "--width", str(s.get("width", spec.get("width", 0.62))),
+               "--size", str(s.get("size", 60)), "--fit", s.get("fit", "crop")] + (["--y", str(s["y"])] if s.get("y") is not None else [])
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
         if s.get("labels"):
             draw_labels(out, s["labels"])
