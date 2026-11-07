@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "mums, if your daughter is obsessed with skincare, this is her christmas present sorted 🎄😍",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "got her the mini medicube glow kit and she's been using it every night 😍\nit's in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44
+  }
+ ]
+}

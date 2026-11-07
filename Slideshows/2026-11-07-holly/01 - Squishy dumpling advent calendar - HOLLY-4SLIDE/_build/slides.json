@@ -1,0 +1,33 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "PARENTS PLEASE GRAB YOUR LITTLE ONES ONE OF THESE SQUISHY ADVENT CALENDARS BEFORE THEY SELL OUT 😭🎄",
+   "style": "outline",
+   "position": "middle",
+   "size": 52
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "picked up two of these for my little ones, the price was too good to leave 😍",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "24 limited edition christmas squishy dumplings inside 🥟",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-4.png",
+   "text": "they're £10.54 right now and they're in the basket 😍⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  }
+ ]
+}
