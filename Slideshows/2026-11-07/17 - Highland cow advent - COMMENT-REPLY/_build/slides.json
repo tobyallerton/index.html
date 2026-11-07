@@ -3,10 +3,10 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "24 little highland cows until christmas 🐄🎄",
    "position": "bottom",
    "style": "box",
-   "size": 52
+   "size": 52,
+   "no_text": true
   },
   {
    "image": "raw/slide-2.png",

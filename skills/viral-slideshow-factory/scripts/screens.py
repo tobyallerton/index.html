@@ -66,10 +66,12 @@ def status_bar(d, time, fg):
         d.arc([cx - r, cy - r, cx + r, cy + r], 225, 315, fill=fg, width=5)
 
 def chat(s):
-    bg, fg = (0, 0, 0), (255, 255, 255)
+    light = s.get("theme") == "light"
+    bg, fg = ((255, 255, 255), (0, 0, 0)) if light else ((0, 0, 0), (255, 255, 255))
+    them_bg, them_fg = ((233, 233, 235), (0, 0, 0)) if light else ((38, 38, 40), (255, 255, 255))
     img = Image.new("RGB", (W, H), bg); d = ImageDraw.Draw(img)
     status_bar(d, s.get("time", "21:47"), fg)
-    d.rectangle([0, 120, W, 330], fill=(22, 22, 24))
+    d.rectangle([0, 120, W, 330], fill=(246, 246, 246) if light else (22, 22, 24))
     blue = (10, 132, 255)
     d.line([(60, 205), (38, 228), (60, 251)], fill=blue, width=7, joint="curve")
     if s.get("unread"):
@@ -79,7 +81,7 @@ def chat(s):
     name = EMOJI.sub("", s.get("contact", "Sam")).strip()
     d.ellipse([W / 2 - 52, 140, W / 2 + 52, 244], fill=(110, 110, 118))
     d.text((W / 2, 192), name[:1].upper(), font=font("medium", 54), fill=fg, anchor="mm")
-    d.text((W / 2, 285), name + "  ›", font=font("regular", 30), fill=(200, 200, 205), anchor="mm")
+    d.text((W / 2, 285), name + "  ›", font=font("regular", 30), fill=(90, 90, 96) if light else (200, 200, 205), anchor="mm")
     d.rounded_rectangle([W - 120, 196, W - 64, 232], radius=8, outline=blue, width=5)  # video icon
     d.polygon([(W - 64, 214), (W - 40, 200), (W - 40, 228)], fill=blue)
     f = font("regular", 40); y = 380; max_w = 640
@@ -92,13 +94,13 @@ def chat(s):
         lh = 52; bh = len(lines) * lh + 34; bw = tw + 56
         y += 14 if prev == mine else 30
         x0 = W - 40 - bw if mine else 40
-        d.rounded_rectangle([x0, y, x0 + bw, y + bh], radius=40, fill=blue if mine else (38, 38, 40))
+        d.rounded_rectangle([x0, y, x0 + bw, y + bh], radius=40, fill=blue if mine else them_bg)
         for i, l in enumerate(lines):
-            d.text((x0 + 28, y + 14 + i * lh), l, font=f, fill=fg)
+            d.text((x0 + 28, y + 14 + i * lh), l, font=f, fill=(255, 255, 255) if mine else them_fg)
         y += bh; prev = mine
     if s.get("read"):
         d.text((W - 44, y + 14), s["read"], font=font("medium", 28), fill=(140, 140, 146), anchor="ra")
-    d.rounded_rectangle([40, H - 150, W - 40, H - 70], radius=40, outline=(60, 60, 64), width=3)
+    d.rounded_rectangle([40, H - 150, W - 40, H - 70], radius=40, outline=(205, 205, 210) if light else (60, 60, 64), width=3)
     d.text((80, H - 110), "iMessage", font=font("regular", 36), fill=(100, 100, 106), anchor="lm")
     return img
 
@@ -139,12 +141,21 @@ def comments(s):
     """TikTok comment thread: {"type":"comments","count":"1,284","comments":[{"user":"jess.m","text":"...","likes":"2,301","ago":"2d"},
        {"user":"you","text":"...","creator":true,"reply":true}]}"""
     bg, fg, sub = (18, 18, 18), (240, 240, 242), (140, 140, 146)
-    img = Image.new("RGB", (W, H), bg); d = ImageDraw.Draw(img)
+    img = Image.new("RGB", (W, H), bg)
+    top = 200
+    if s.get("bg") and os.path.exists(s["bg"]):
+        # The video keeps playing above the comments panel, as in the TikTok app.
+        from PIL import ImageEnhance, ImageOps as IO
+        top = int(H * 0.36)
+        v = IO.fit(Image.open(s["bg"]).convert("RGB"), (W, top + 40), Image.LANCZOS, centering=(0.5, 0.6))
+        img.paste(ImageEnhance.Brightness(v).enhance(0.85), (0, 0))
+    d = ImageDraw.Draw(img)
     status_bar(d, s.get("time", "20:41"), fg)
-    d.rounded_rectangle([0, 200, W, H + 40], radius=36, fill=(30, 30, 32))
-    d.text((W / 2, 262), s.get("count", "1,284") + " comments", font=font("semibold", 34), fill=fg, anchor="mm")
-    d.text((W - 60, 262), "×", font=font("regular", 52), fill=sub, anchor="mm")
-    y = 340
+    d.rounded_rectangle([0, top, W, H + 40], radius=36, fill=(30, 30, 32))
+    y0 = top - 200
+    d.text((W / 2, 262 + y0), s.get("count", "1,284") + " comments", font=font("semibold", 34), fill=fg, anchor="mm")
+    d.text((W - 60, 262 + y0), "×", font=font("regular", 52), fill=sub, anchor="mm")
+    y = 340 + y0
     palette = [(214, 120, 160), (110, 160, 220), (230, 170, 90), (130, 190, 140), (170, 130, 210), (220, 110, 100)]
     for i, c in enumerate(s["comments"]):
         x = 150 if c.get("reply") else 40
@@ -175,6 +186,7 @@ def comments(s):
 def main():
     spec_path = os.path.abspath(sys.argv[1])
     spec = json.load(open(spec_path, encoding="utf-8"))
+    os.chdir(os.path.dirname(spec_path))
     out_dir = os.path.join(os.path.dirname(spec_path), spec.get("out_dir", "."))
     os.makedirs(out_dir, exist_ok=True)
     outs = []

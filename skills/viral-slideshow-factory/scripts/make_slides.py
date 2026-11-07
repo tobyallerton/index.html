@@ -10,7 +10,7 @@ slides.json (in the slideshow folder):
     {"image": "_raw/slide-3.png", "labels": [{"text": "My Mum", "x": 0.3, "y": 0.5}, {"text": "Me", "x": 0.7, "y": 0.45}]}
   ]
 }
-Every slide must have text, or meme "labels" placed on the picture. The script stops with an error if any text is missing, so a slide can't go out blank.
+Every slide must have text, meme "labels", or "no_text": true (only for screenshot hooks, whose text is the screenshot itself). The script stops with an error if any text is missing, so a slide can't go out blank.
 
 Usage: python make_slides.py <slideshow-folder>
 Writes <folder>/slide-1.png ... and <folder>/preview.png (all slides side by side).
@@ -35,7 +35,7 @@ def main():
     folder = os.path.abspath(sys.argv[1])
     spec = json.load(open(os.path.join(folder, "slides.json")))
     slides = spec["slides"]
-    missing = [i + 1 for i, s in enumerate(slides) if not str(s.get("text", "")).strip() and not s.get("labels")]
+    missing = [i + 1 for i, s in enumerate(slides) if not str(s.get("text", "")).strip() and not s.get("labels") and not s.get("no_text")]
     if missing:
         sys.exit(f"ERROR: slides {missing} have no text. Every slide needs on-screen text.")
     overlay = os.path.join(os.path.dirname(os.path.abspath(__file__)), "overlay.py")

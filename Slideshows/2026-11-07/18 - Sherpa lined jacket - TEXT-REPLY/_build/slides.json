@@ -3,10 +3,10 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "my mate couldn't believe where my jacket was from 🥶",
    "position": "bottom",
    "style": "box",
-   "size": 52
+   "size": 52,
+   "no_text": true
   },
   {
    "image": "raw/slide-2.png",

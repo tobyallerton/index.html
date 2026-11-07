@@ -142,7 +142,7 @@ node $S/chatgpt_image.js --prompt-file _build/slide-1.prompt.txt --ref _build/pr
 - Ask for a **vertical 2:3 portrait**, real phone-photo look, with no text, captions, watermarks or other logos.
 - `RATE_LIMITED`: stop, tell the user how far you got, and keep the plan so the run can continue later. `REFUSED_BY_CHATGPT`: rephrase within policy. `NOT_LOGGED_IN`: log in again. Other errors: read the `.error.png`.
 
-**Check every image yourself** against the product photo: shape, colours, label layout, logo, cap or pump, and realistic size. Also check hands, fake-looking text and anything uncanny. If the product is wrong, regenerate in the same chat with a short correction. After 3 tries, flag the slide instead of shipping a wrong product.
+**Get the product's real size first** and put a SIZE line in every prompt (see `references/recreate.md`). **Check every image yourself** (including scale against hands and everyday objects) against the product photo: shape, colours, label layout, logo, cap or pump, and realistic size. Also check hands, fake-looking text and anything uncanny. If the product is wrong, regenerate in the same chat with a short correction. After 3 tries, flag the slide instead of shipping a wrong product.
 
 ## 6. Add the text
 
