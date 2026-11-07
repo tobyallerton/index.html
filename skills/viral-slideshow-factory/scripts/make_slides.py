@@ -47,7 +47,7 @@ def main():
         out = os.path.join(folder, f"slide-{i}.png")
         cmd = [sys.executable, overlay, "--in", src, "--out", out, "--text", s.get("text", ""),
                "--position", s.get("position", "top"), "--style", s.get("style", spec.get("style", "outline")),
-               "--size", str(s.get("size", 72)), "--fit", s.get("fit", "crop")]
+               "--size", str(s.get("size", 54)), "--fit", s.get("fit", "crop")] + (["--y", str(s["y"])] if s.get("y") is not None else [])
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
         if s.get("labels"):
             draw_labels(out, s["labels"])

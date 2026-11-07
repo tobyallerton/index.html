@@ -3,16 +3,17 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "my dad every christmas:",
+   "text": "my dad every single christmas 😭🙄",
    "position": "bottom",
    "style": "box",
-   "size": 58
+   "size": 52
   },
   {
    "image": "raw/slide-2.png",
-   "text": "pick your flavour in the basket",
+   "text": "bag of 50 of ur fave is in the basket 🍫👇",
    "position": "top",
-   "size": 68
+   "size": 54,
+   "style": "outline"
   }
  ]
 }

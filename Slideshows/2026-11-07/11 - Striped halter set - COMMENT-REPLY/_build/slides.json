@@ -3,16 +3,17 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "the holiday set everyone keeps asking about",
+   "text": "the set everyone keeps asking about 🩵",
    "position": "bottom",
    "style": "box",
-   "size": 58
+   "size": 52
   },
   {
    "image": "raw/slide-2.png",
-   "text": "the set is in the basket",
-   "position": "top",
-   "size": 68
+   "text": "it's in the basket, thank me later 🫶",
+   "position": "bottom",
+   "size": 54,
+   "style": "outline"
   }
  ]
 }

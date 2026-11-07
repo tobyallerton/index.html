@@ -41,3 +41,14 @@ Real TikTok slideshows look like phone photos: natural light, a bit of clutter, 
 - Middle slides: one benefit each, concrete and taken from the product listing.
 - Last slide: soft CTA ("linked in the orange basket", "the shop link is on this post").
 - Benefits only: no invented personal results or medical claims.
+
+## Make it look genuine (the user's feedback, 7 Nov)
+Staged, tidy, product-centred images read as AI ads. Every photo prompt should ask for:
+- a genuine, unedited phone photo a normal person posted: candid, slightly tilted, imperfect framing, mixed home lighting (lamp, phone flash), a little grain;
+- an ordinary lived-in background with some mess (unmade bed, mug, charger, clothes on a chair);
+- a person or hand in shot where it makes sense: mirror selfies with the phone covering the face for clothes, a hand holding the product close to the camera for small items.
+**The product must be clearly visible and in focus** (about a third of the frame): open lids fully, show the actual item, not just its box. Clothing is worn, never laid flat.
+Never copy the face, hair or room of a model in the listing photo.
+
+## On-screen text
+Use TikTok Sans (in `fonts/`, used automatically) with emoji, lower-case and casual, the way a creator types ("my dad every single christmas 😭🙄"). Default size 52–56. Use `box` (black on white rounded boxes) on screenshots and busy photos, `outline` on photos with a plain area. Keep text off faces and off the product.
