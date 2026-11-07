@@ -110,7 +110,14 @@ a{color:var(--ink)}
 .done{display:flex;gap:10px;align-items:center;font-weight:600}
 .done input{width:22px;height:22px;accent-color:var(--done)}
 .note{font-size:13px;color:var(--muted);margin:0}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600}
+.viewer{position:fixed;inset:0;z-index:20;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  padding:calc(12px + env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px))}
+.viewer img{max-width:100%;max-height:calc(100% - 120px);object-fit:contain;border-radius:8px;-webkit-touch-callout:default;user-select:auto}
+.viewer p{color:#fff;margin:0;font-weight:600;text-align:center}
+.viewer .vrow{display:flex;gap:10px}
+.viewer button{background:#222;color:#fff;border-color:#444}
+.slide img{cursor:zoom-in}
+.toast{position:fixed;z-index:30;left:50%;bottom:calc(20px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600}
 @media (prefers-reduced-motion: reduce){.bar i{transition:none}}
 </style>
 <div class="wrap">
@@ -119,8 +126,13 @@ a{color:var(--ink)}
     <p id="sub"></p>
     <div class="progress"><div class="bar"><i id="bar"></i></div><span id="count"></span></div>
   </header>
-  <p class="rules">For each one: save the slides, post them in order, paste the caption, add the product link and sound, and switch on <b>AI-generated content</b>. Check the price and commission in your affiliate app first.</p>
+  <p class="rules">To save a slide: tap it, then press and hold and choose Save to Photos. For each one: save the slides, post them in order, paste the caption, add the product link and sound, and switch on <b>AI-generated content</b>. Check the price and commission in your affiliate app first.</p>
   <div id="list" class="wrap"></div>
+</div>
+<div class="viewer" id="viewer" hidden>
+  <p>Press and hold the slide, then choose Save to Photos</p>
+  <img id="vimg" alt="">
+  <div class="vrow"><button type="button" id="vprev">Previous</button><span id="vpos" style="color:#fff;align-self:center"></span><button type="button" id="vnext">Next</button><button type="button" id="vclose">Close</button></div>
 </div>
 <div class="toast" id="toast" hidden></div>
 <script>
@@ -136,12 +148,18 @@ async function copy(text, btn){
   catch(e){ const pre = btn.closest(".copy")?.querySelector("pre"); if (pre){ const r=document.createRange(); r.selectNodeContents(pre); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast("Selected: tap Copy"); } }
 }
 async function saveOne(path, name){
-  if (!downloads) { toast("Press and hold the slide to save it"); return false; }
+  if (!downloads) { toast("Tap the slide, then press and hold it to save"); return false; }
   const blob = await (await fetch(path)).blob();
   try { await downloads.save({ filename: name, data: blob }); return true; }
-  catch(e){ if (e && e.code === "declined") return false; if (e && e.code === "rate_limited") { toast("One at a time: try again"); return false; } toast("Saving isn't available here: press and hold the slide"); return false; }
+  catch(e){ if (e && e.code === "declined") return false; if (e && e.code === "rate_limited") { toast("One at a time: try again"); return false; } toast("Couldn't save (" + ((e && e.code) || "unknown") + "). Tap the slide, then press and hold it."); return false; }
 }
 function el(tag, attrs={}, kids=[]){ const e=document.createElement(tag); for (const [k,v] of Object.entries(attrs)) { if (k==="text") e.textContent=v; else e.setAttribute(k,v); } for (const k of kids) e.append(k); return e; }
+let V = { list: [], i: 0 };
+function showViewer(list, i){ V = { list, i }; $("#vimg").src = list[i]; $("#vimg").alt = "Slide " + (i+1); $("#vpos").textContent = (i+1) + " / " + list.length; $("#viewer").hidden = false; }
+$("#vprev").onclick = () => showViewer(V.list, (V.i - 1 + V.list.length) % V.list.length);
+$("#vnext").onclick = () => showViewer(V.list, (V.i + 1) % V.list.length);
+$("#vclose").onclick = () => { $("#viewer").hidden = true; };
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("#viewer").hidden = true; });
 function render(){
   const posted = getPosted(); const list = $("#list"); list.textContent="";
   DATA.items.forEach((it, i) => {
@@ -155,7 +173,9 @@ function render(){
     it.slides.forEach((s, k) => {
       const b = el("button",{type:"button",text:"Save "+(k+1)});
       b.onclick = () => saveOne(s, `${String(i+1).padStart(2,"0")}-slide-${k+1}.jpg`).then(ok => ok && toast("Saved slide "+(k+1)));
-      strip.append(el("div",{class:"slide"},[el("img",{src:s,alt:"Slide "+(k+1)+" of "+it.slides.length,loading:"lazy"}), b]));
+      const im = el("img",{src:s,alt:"Slide "+(k+1)+" of "+it.slides.length,loading:"lazy"});
+      im.onclick = () => showViewer(it.slides, k);
+      strip.append(el("div",{class:"slide"},[im, b]));
     });
     art.append(strip);
     const all = el("button",{type:"button",class:"primary",text:`Save all ${it.slides.length} slides`});
