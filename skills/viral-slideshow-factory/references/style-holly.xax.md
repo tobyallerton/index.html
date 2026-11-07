@@ -5,7 +5,7 @@
 **Structure:** 2 slides (skincare/bundles) or 4–5 slides (advent calendars).
 1. **Hook photo, no product:** moody, real-life scene. A dark living room with a lit Christmas tree, a mum-and-daughter selfie, a couple's mirror selfie (face hidden by phone), snowy night street.
 2. **Product slides:** product held in one hand over a rumpled cream or grey duvet, shot from above. Dark cherry nails, knit jumper sleeve. Close-ups of what's inside (open tray, minis in palm).
-3. **Last slide:** price + basket line, sometimes a tiny note at the bottom ("hopefully the sale is still on whilst you're seeing this ⬇️").
+3. **Last slide:** basket line (her posts show prices, but the user doesn't want exact prices: leave them out), sometimes a tiny note at the bottom ("hopefully the sale is still on whilst you're seeing this ⬇️").
 
 **Text:**
 - Hooks talk straight to the buyer: "TO ALL MY PARENTS…", "To all of my MUMS who don't know what to get their daughter…", "psa don't get this for her unless…". Often ALL CAPS on the tree photos, centred, white with a dark edge; on people photos a white box or yellow text.
