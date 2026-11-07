@@ -1,0 +1,39 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "18:27",
+   "contact": "Bestie 🎀",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "them",
+     "text": "please don't get me anything this year x"
+    },
+    {
+     "from": "them",
+     "text": "money's tight for everyone"
+    },
+    {
+     "from": "me",
+     "text": "too late"
+    },
+    {
+     "from": "them",
+     "text": "what have you done"
+    },
+    {
+     "from": "me",
+     "text": "you'll see on the 25th"
+    },
+    {
+     "from": "them",
+     "text": "I hate you (I love you)"
+    }
+   ],
+   "read": "Read 18:28"
+  }
+ ]
+}

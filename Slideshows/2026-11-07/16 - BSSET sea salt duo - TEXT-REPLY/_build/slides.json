@@ -1,0 +1,18 @@
+{
+ "style": "outline",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "my mate asked how my hair looks like this now",
+   "position": "bottom",
+   "style": "box",
+   "size": 58
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "both are in the basket",
+   "position": "top",
+   "size": 68
+  }
+ ]
+}

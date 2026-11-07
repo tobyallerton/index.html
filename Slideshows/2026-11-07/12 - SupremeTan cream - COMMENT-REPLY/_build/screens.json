@@ -1,0 +1,32 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "2,309",
+   "comments": [
+    {
+     "user": "jade.lou",
+     "text": "your tan in november?? what are you using",
+     "likes": "3,642",
+     "ago": "1d"
+    },
+    {
+     "user": "allterca",
+     "text": "this one, every few days after the shower",
+     "likes": "2,150",
+     "ago": "1d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "kirsty_x",
+     "text": "it smells like vanilla too",
+     "likes": "512",
+     "ago": "20h"
+    }
+   ]
+  }
+ ]
+}

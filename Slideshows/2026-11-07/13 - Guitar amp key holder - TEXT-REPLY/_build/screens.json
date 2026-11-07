@@ -1,0 +1,39 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "12:10",
+   "contact": "Dad",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "them",
+     "text": "Why are my keys plugged into an amp"
+    },
+    {
+     "from": "me",
+     "text": "it's a key holder"
+    },
+    {
+     "from": "them",
+     "text": "It's brilliant"
+    },
+    {
+     "from": "them",
+     "text": "Where did you get it"
+    },
+    {
+     "from": "me",
+     "text": "early christmas present"
+    },
+    {
+     "from": "them",
+     "text": "Your uncle wants one now"
+    }
+   ],
+   "read": "Read 12:11"
+  }
+ ]
+}

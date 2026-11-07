@@ -1,0 +1,35 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "13:05",
+   "contact": "Lewis",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "them",
+     "text": "where's your coat from, you looked toasty last night"
+    },
+    {
+     "from": "me",
+     "text": "tiktok shop"
+    },
+    {
+     "from": "them",
+     "text": "no way"
+    },
+    {
+     "from": "me",
+     "text": "fully fleece lined, hood and all"
+    },
+    {
+     "from": "them",
+     "text": "sending link to the group"
+    }
+   ],
+   "read": "Read 13:06"
+  }
+ ]
+}

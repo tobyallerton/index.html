@@ -1,0 +1,35 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "17:52",
+   "contact": "Nan",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "them",
+     "text": "What is the little house on your windowsill doing"
+    },
+    {
+     "from": "me",
+     "text": "it's a diffuser nan"
+    },
+    {
+     "from": "them",
+     "text": "The chimney is SMOKING"
+    },
+    {
+     "from": "me",
+     "text": "it's meant to, it smells like christmas"
+    },
+    {
+     "from": "them",
+     "text": "Can you get me one"
+    }
+   ],
+   "read": "Read 17:53"
+  }
+ ]
+}

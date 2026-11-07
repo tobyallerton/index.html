@@ -1,0 +1,39 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "07:58",
+   "contact": "Mum",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "them",
+     "text": "Did you leave something on my bedside table??"
+    },
+    {
+     "from": "me",
+     "text": "maybe"
+    },
+    {
+     "from": "them",
+     "text": "I've been crying for twenty minutes"
+    },
+    {
+     "from": "them",
+     "text": "Your dad thinks I've gone mad"
+    },
+    {
+     "from": "me",
+     "text": "it's so you can keep me with you"
+    },
+    {
+     "from": "them",
+     "text": "Best present I've ever had. Love you x"
+    }
+   ],
+   "read": "Read 08:02"
+  }
+ ]
+}

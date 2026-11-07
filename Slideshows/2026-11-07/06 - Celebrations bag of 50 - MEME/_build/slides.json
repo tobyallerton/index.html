@@ -1,0 +1,22 @@
+{
+ "style": "outline",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "labels": [
+    {
+     "text": "the tub on Boxing Day",
+     "x": 0.5,
+     "y": 0.18,
+     "size": 70
+    }
+   ]
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "me this year with a bag of 50\nit's in the basket",
+   "position": "top",
+   "size": 68
+  }
+ ]
+}

@@ -12,7 +12,7 @@ async function isLoggedIn(page) {
   // Logged out pages show a "Log in" button; logged-in pages show the account menu / Library / Projects.
   const loginBtn = await page.locator('[data-testid="login-button"], button:has-text("Log in") >> visible=true').first().isVisible().catch(() => false);
   if (loginBtn) return false;
-  return await page.locator('[data-testid="profile-button"], [data-testid="accounts-profile-button"], nav :text("Library"), nav :text("Projects"), #prompt-textarea').first().isVisible().catch(() => false);
+  return await page.locator('[data-testid="profile-button"], [data-testid="accounts-profile-button"], :text-is("Library"), :text-is("Projects"), :text-is("New chat")').first().isVisible().catch(() => false);
 }
 
 (async () => {

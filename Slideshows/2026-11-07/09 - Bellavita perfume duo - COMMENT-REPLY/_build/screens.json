@@ -1,0 +1,32 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "1,812",
+   "comments": [
+    {
+     "user": "gymgirl.kay",
+     "text": "why do you always smell so good at the gym, it's annoying",
+     "likes": "5,330",
+     "ago": "2d"
+    },
+    {
+     "user": "allterca",
+     "text": "I layer these two. honey oud first, white oud on top",
+     "likes": "4,016",
+     "ago": "2d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "amelia.x",
+     "text": "need the names now",
+     "likes": "620",
+     "ago": "1d"
+    }
+   ]
+  }
+ ]
+}

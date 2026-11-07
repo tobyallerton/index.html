@@ -1,0 +1,32 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "1,026",
+   "comments": [
+    {
+     "user": "hollie.mxx",
+     "text": "where is that set from, I need it for my holiday",
+     "likes": "2,977",
+     "ago": "2d"
+    },
+    {
+     "user": "allterca",
+     "text": "tiktok shop and it comes as a full set",
+     "likes": "1,885",
+     "ago": "2d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "ab.sun",
+     "text": "the colour is unreal",
+     "likes": "301",
+     "ago": "1d"
+    }
+   ]
+  }
+ ]
+}

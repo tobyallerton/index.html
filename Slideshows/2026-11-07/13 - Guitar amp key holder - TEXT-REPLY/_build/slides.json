@@ -1,0 +1,18 @@
+{
+ "style": "outline",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "bought my dad this for christmas and now his whole band wants one",
+   "position": "bottom",
+   "style": "box",
+   "size": 58
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "the key holder is in the basket",
+   "position": "top",
+   "size": 68
+  }
+ ]
+}

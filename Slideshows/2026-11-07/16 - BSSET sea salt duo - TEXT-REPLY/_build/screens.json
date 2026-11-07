@@ -1,0 +1,35 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "08:47",
+   "contact": "Ryan",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "them",
+     "text": "how is your hair doing that now"
+    },
+    {
+     "from": "me",
+     "text": "sea salt spray then a bit of pomade"
+    },
+    {
+     "from": "them",
+     "text": "that's it?"
+    },
+    {
+     "from": "me",
+     "text": "damp hair, few sprays, scrunch, done"
+    },
+    {
+     "from": "them",
+     "text": "send it"
+    }
+   ],
+   "read": "Read 08:48"
+  }
+ ]
+}

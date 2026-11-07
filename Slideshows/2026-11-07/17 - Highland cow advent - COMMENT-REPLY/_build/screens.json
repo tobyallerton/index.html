@@ -1,0 +1,32 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "1,377",
+   "comments": [
+    {
+     "user": "cowgirl.bec",
+     "text": "a new highland cow every day until christmas??",
+     "likes": "2,451",
+     "ago": "1d"
+    },
+    {
+     "user": "allterca",
+     "text": "24 of them. day 1 is already my favourite",
+     "likes": "1,733",
+     "ago": "1d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "nat.h",
+     "text": "buying for my mum who is obsessed",
+     "likes": "390",
+     "ago": "18h"
+    }
+   ]
+  }
+ ]
+}

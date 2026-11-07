@@ -1,0 +1,18 @@
+{
+ "style": "outline",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "the gift for anyone who lives on energy drinks",
+   "position": "bottom",
+   "style": "box",
+   "size": 58
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "grab them in the basket",
+   "position": "top",
+   "size": 68
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "10:21",
+   "contact": "Mum",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "them",
+     "text": "What advent calendar do you want this year"
+    },
+    {
+     "from": "me",
+     "text": "if it's not the twinings one don't bother"
+    },
+    {
+     "from": "them",
+     "text": "The tea one??"
+    },
+    {
+     "from": "me",
+     "text": "24 days of different teas mum"
+    },
+    {
+     "from": "them",
+     "text": "Fine I'll get one each"
+    }
+   ],
+   "read": "Read 10:22"
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "688",
+   "comments": [
+    {
+     "user": "mumof2.liv",
+     "text": "best advent calendar for a little one that isn't chocolate?",
+     "likes": "1,442",
+     "ago": "2d"
+    },
+    {
+     "user": "allterca",
+     "text": "this. a Pooh story every night before bed",
+     "likes": "1,120",
+     "ago": "2d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "grace.reads",
+     "text": "my daughter would love this",
+     "likes": "203",
+     "ago": "1d"
+    }
+   ]
+  }
+ ]
+}

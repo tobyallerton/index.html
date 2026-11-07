@@ -1,0 +1,35 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "16:30",
+   "contact": "Dad",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "them",
+     "text": "Who has eaten all the Maltesers out of the Celebrations tub"
+    },
+    {
+     "from": "them",
+     "text": "There are only Bountys left"
+    },
+    {
+     "from": "me",
+     "text": "not me"
+    },
+    {
+     "from": "them",
+     "text": "Every single year"
+    },
+    {
+     "from": "me",
+     "text": "relax I ordered a bag of 50 of just your favourite"
+    }
+   ],
+   "read": "Read 16:31"
+  }
+ ]
+}

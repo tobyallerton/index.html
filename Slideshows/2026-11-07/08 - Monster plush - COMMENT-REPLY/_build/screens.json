@@ -1,0 +1,38 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "3,507",
+   "comments": [
+    {
+     "user": "kieran_tt",
+     "text": "who is actually buying a plush energy drink",
+     "likes": "4,980",
+     "ago": "1d"
+    },
+    {
+     "user": "allterca",
+     "text": "me. look at him",
+     "likes": "6,224",
+     "ago": "1d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "chlo.ann",
+     "text": "the white one is so cute omg",
+     "likes": "741",
+     "ago": "20h"
+    },
+    {
+     "user": "ryanb",
+     "text": "getting this for my brother's stocking",
+     "likes": "88",
+     "ago": "8h"
+    }
+   ]
+  }
+ ]
+}

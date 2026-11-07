@@ -1,0 +1,32 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "905",
+   "comments": [
+    {
+     "user": "jake.fits",
+     "text": "fit check? where's the jacket from",
+     "likes": "1,622",
+     "ago": "1d"
+    },
+    {
+     "user": "allterca",
+     "text": "washed black windbreaker, tiktok shop",
+     "likes": "1,080",
+     "ago": "1d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "tom_k",
+     "text": "goes with everything",
+     "likes": "177",
+     "ago": "16h"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comments",
+   "out": "slide-1.png",
+   "count": "2,140",
+   "comments": [
+    {
+     "user": "lauren.kx",
+     "text": "what do you even buy a mum who says she wants nothing",
+     "likes": "8,912",
+     "ago": "3d"
+    },
+    {
+     "user": "allterca",
+     "text": "this. she cried for ten minutes",
+     "likes": "3,104",
+     "ago": "3d",
+     "creator": true,
+     "reply": true
+    },
+    {
+     "user": "bethanyrose",
+     "text": "ok adding to basket",
+     "likes": "412",
+     "ago": "2d"
+    },
+    {
+     "user": "soph.amelia",
+     "text": "bought one for my nan too",
+     "likes": "96",
+     "ago": "1d"
+    }
+   ]
+  }
+ ]
+}

@@ -76,7 +76,7 @@ def chat(s):
         t = str(s["unread"]); f = font("semibold", 30); tw = d.textlength(t, font=f)
         d.rounded_rectangle([80, 205, 80 + tw + 36, 251], radius=23, fill=blue)
         d.text((98, 210), t, font=f, fill=fg)
-    name = s.get("contact", "Sam")
+    name = EMOJI.sub("", s.get("contact", "Sam")).strip()
     d.ellipse([W / 2 - 52, 140, W / 2 + 52, 244], fill=(110, 110, 118))
     d.text((W / 2, 192), name[:1].upper(), font=font("medium", 54), fill=fg, anchor="mm")
     d.text((W / 2, 285), name + "  ›", font=font("regular", 30), fill=(200, 200, 205), anchor="mm")
@@ -135,6 +135,43 @@ def email(s):
         d.text((x0 + bw / 2, y + 46), label, font=font("medium", 32), fill=fg, anchor="mm")
     return img
 
+def comments(s):
+    """TikTok comment thread: {"type":"comments","count":"1,284","comments":[{"user":"jess.m","text":"...","likes":"2,301","ago":"2d"},
+       {"user":"you","text":"...","creator":true,"reply":true}]}"""
+    bg, fg, sub = (18, 18, 18), (240, 240, 242), (140, 140, 146)
+    img = Image.new("RGB", (W, H), bg); d = ImageDraw.Draw(img)
+    status_bar(d, s.get("time", "20:41"), fg)
+    d.rounded_rectangle([0, 200, W, H + 40], radius=36, fill=(30, 30, 32))
+    d.text((W / 2, 262), s.get("count", "1,284") + " comments", font=font("semibold", 34), fill=fg, anchor="mm")
+    d.text((W - 60, 262), "×", font=font("regular", 52), fill=sub, anchor="mm")
+    y = 340
+    palette = [(214, 120, 160), (110, 160, 220), (230, 170, 90), (130, 190, 140), (170, 130, 210), (220, 110, 100)]
+    for i, c in enumerate(s["comments"]):
+        x = 150 if c.get("reply") else 40
+        r = 36 if c.get("reply") else 46
+        col = palette[sum(map(ord, c["user"])) % len(palette)]
+        d.ellipse([x, y, x + 2 * r, y + 2 * r], fill=col)
+        d.text((x + r, y + r), c["user"][:1].upper(), font=font("semibold", 34), fill=(255, 255, 255), anchor="mm")
+        tx = x + 2 * r + 24
+        name = c["user"]
+        d.text((tx, y), name, font=font("medium", 30), fill=sub)
+        if c.get("creator"):
+            nw = d.textlength(name, font=font("medium", 30))
+            d.rounded_rectangle([tx + nw + 12, y + 2, tx + nw + 132, y + 38], radius=8, fill=(254, 44, 85))
+            d.text((tx + nw + 72, y + 20), "Creator", font=font("semibold", 24), fill=(255, 255, 255), anchor="mm")
+        ty = y + 44
+        f = font("regular", 38)
+        for l in wrap(d, EMOJI.sub("", c["text"]).strip(), f, W - tx - 150):
+            d.text((tx, ty), l, font=f, fill=fg); ty += 52
+        d.text((tx, ty + 6), c.get("ago", "1d") + "     Reply", font=font("medium", 28), fill=sub)
+        hx = W - 80
+        d.text((hx, y + 40), "♡", font=font("regular", 40), fill=sub, anchor="mm")
+        d.text((hx, y + 86), c.get("likes", ""), font=font("regular", 26), fill=sub, anchor="mm")
+        y = ty + 80
+    d.rounded_rectangle([40, H - 150, W - 40, H - 70], radius=40, fill=(44, 44, 48))
+    d.text((80, H - 110), "Add comment...", font=font("regular", 34), fill=sub, anchor="lm")
+    return img
+
 def main():
     spec_path = os.path.abspath(sys.argv[1])
     spec = json.load(open(spec_path, encoding="utf-8"))
@@ -142,7 +179,7 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     outs = []
     for s in spec["screens"]:
-        img = {"chat": chat, "email": email}[s["type"]](s)
+        img = {"chat": chat, "email": email, "comments": comments}[s["type"]](s)
         p = os.path.join(out_dir, s["out"]); img.save(p); outs.append(p)
     print(json.dumps({"screens": outs}))
 

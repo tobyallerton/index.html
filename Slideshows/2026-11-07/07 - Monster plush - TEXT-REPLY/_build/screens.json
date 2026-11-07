@@ -1,0 +1,39 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "chat",
+   "out": "slide-1.png",
+   "time": "22:03",
+   "contact": "Josh 🫶",
+   "unread": 2,
+   "messages": [
+    {
+     "from": "me",
+     "text": "look what I got"
+    },
+    {
+     "from": "them",
+     "text": "is that a monster can with a face"
+    },
+    {
+     "from": "me",
+     "text": "it's a PLUSH"
+    },
+    {
+     "from": "them",
+     "text": "you have 6 actual monster cans on your desk"
+    },
+    {
+     "from": "me",
+     "text": "and now they have friends"
+    },
+    {
+     "from": "them",
+     "text": "ok it's quite cute"
+    }
+   ],
+   "read": "Read 22:04"
+  }
+ ]
+}
