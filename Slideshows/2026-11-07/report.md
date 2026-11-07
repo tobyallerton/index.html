@@ -39,3 +39,4 @@ Skipped: Rosemary hair-growth spray, probiotic gummies, teeth whitening (health 
 - 11 Striped halter set: the first photo copied the listing model's face, so it was redone as a flat lay.
 
 - Changed on request: no Made by Mitchell products (both mystery makeup slideshows removed); P.Louise Christmas bundle now has two slideshows (03 and 10). Slide 10's chat was reworded so it no longer echoes the original's "money is tight" line.
+- Redone on request: all photos now in a genuine phone-photo style (candid, lived-in, product sharp and visible; clothes worn, faces hidden by phones), and all on-screen text in TikTok Sans with emoji.

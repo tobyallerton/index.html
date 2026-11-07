@@ -3,16 +3,17 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "my mate asked how my hair looks like this now",
+   "text": "my mate asked how my hair looks like this now 💈",
    "position": "bottom",
    "style": "box",
-   "size": 58
+   "size": 52
   },
   {
    "image": "raw/slide-2.png",
-   "text": "both are in the basket",
+   "text": "spray + pomade, both in the basket 💈👇",
    "position": "top",
-   "size": 68
+   "size": 54,
+   "style": "outline"
   }
  ]
 }

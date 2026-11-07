@@ -3,16 +3,17 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "the advent calendar that isn't chocolate",
+   "text": "the advent calendar that isn't chocolate 🍯📖",
    "position": "bottom",
    "style": "box",
-   "size": 58
+   "size": 52
   },
   {
    "image": "raw/slide-2.png",
-   "text": "the calendar is in the basket",
+   "text": "a story every night, it's in the basket 🍯",
    "position": "top",
-   "size": 68
+   "size": 54,
+   "style": "outline"
   }
  ]
 }

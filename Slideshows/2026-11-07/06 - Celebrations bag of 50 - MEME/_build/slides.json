@@ -5,18 +5,19 @@
    "image": "raw/slide-1.png",
    "labels": [
     {
-     "text": "the tub on Boxing Day",
+     "text": "the tub on boxing day",
      "x": 0.5,
-     "y": 0.18,
-     "size": 70
+     "y": 0.2,
+     "size": 64
     }
    ]
   },
   {
    "image": "raw/slide-2.png",
-   "text": "me this year with a bag of 50\nit's in the basket",
+   "text": "me this year with a bag of 50 of my fave 🍫\nit's in the basket 👇",
    "position": "top",
-   "size": 68
+   "size": 54,
+   "style": "outline"
   }
  ]
 }

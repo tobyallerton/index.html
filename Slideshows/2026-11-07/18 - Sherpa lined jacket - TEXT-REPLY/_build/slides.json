@@ -3,16 +3,17 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "my mate couldn't believe where my jacket was from",
+   "text": "my mate couldn't believe where my jacket was from 🥶",
    "position": "bottom",
    "style": "box",
-   "size": 58
+   "size": 52
   },
   {
    "image": "raw/slide-2.png",
-   "text": "the jacket is in the basket",
-   "position": "top",
-   "size": 68
+   "text": "fleece lined everything. it's in the basket 🧥",
+   "position": "bottom",
+   "size": 50,
+   "style": "box"
   }
  ]
 }

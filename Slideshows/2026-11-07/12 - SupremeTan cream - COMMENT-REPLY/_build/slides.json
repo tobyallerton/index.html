@@ -3,16 +3,17 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "how my tan looks like this in november",
+   "text": "how my tan looks like this in november 🤎",
    "position": "bottom",
    "style": "box",
-   "size": 58
+   "size": 52
   },
   {
    "image": "raw/slide-2.png",
-   "text": "the cream is in the basket",
+   "text": "the vanilla one is in the basket 🤎👇",
    "position": "top",
-   "size": 68
+   "size": 54,
+   "style": "outline"
   }
  ]
 }

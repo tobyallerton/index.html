@@ -3,16 +3,17 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "for the mum who 'doesn't want anything'",
+   "text": "for the mum who 'doesn't want anything' 🥹",
    "position": "bottom",
    "style": "box",
-   "size": 58
+   "size": 52
   },
   {
    "image": "raw/slide-2.png",
-   "text": "her gift is in the basket",
+   "text": "her glass teddy is in the basket 🧸🤍",
    "position": "top",
-   "size": 68
+   "size": 54,
+   "style": "outline"
   }
  ]
 }
