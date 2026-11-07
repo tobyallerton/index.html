@@ -2,17 +2,19 @@
  "slides": [
   {
    "image": "raw/slide-1.png",
-   "text": "lads… if your girlfriend loves skincare and you haven't got her this yet, we need to talk 😭🎀",
+   "text": "psa: if she loves skincare, this is the only present she actually wants 🎀",
    "style": "outline",
    "position": "middle",
-   "size": 52
+   "size": 54,
+   "phoneify": false
   },
   {
    "image": "raw/slide-2.png",
-   "text": "the p.louise christmas bundle 🎀 so cheap atm\nit's in the basket ⬇️",
+   "text": "over 14,000 girls already have theirs 😭\ndon't leave it too late before christmas ⬇️ it's in the basket",
    "style": "box",
    "position": "top",
-   "size": 46
+   "size": 44,
+   "phone_strength": 0.35
   }
  ]
 }
