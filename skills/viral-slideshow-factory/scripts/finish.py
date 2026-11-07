@@ -23,7 +23,7 @@ RISKY = [
     r"\bdetox\b", r"\bimmune\b", r"\bpain relief\b", r"\bmiracle\b", r"\b100% (safe|natural|effective)\b",
 ]
 # The last slide must tell people what to do next (soft call to action).
-CTA = re.compile(r"basket|link|shop|tap|grab|get (yours|one|it)|check (it )?out|below|in my (bio|showcase)|buy|order|add to cart", re.I)
+CTA = re.compile(r"basket|cheap|bargain|link|shop|tap|grab|get (yours|one|it)|check (it )?out|below|in my (bio|showcase)|buy|order|add to cart", re.I)
 URGENCY = [r"only \d+ left", r"selling out", r"last chance", r"ends (tonight|today)", r"limited stock", r"almost gone"]
 MONEY = re.compile(r"([£$])\s?(\d+(?:[.,]\d{1,2})?)")
 PCT = re.compile(r"(\d{1,2})\s?%\s?off", re.I)
