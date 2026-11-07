@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "my boyfriend picked this for me and honestly he nailed it 💗",
+   "style": "outline",
+   "position": "middle",
+   "size": 54
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "he got me the treat trio, £14.50 in the basket 💗⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "big sisters, this is the gift for the little sister who's obsessed with skincare 🎀",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "got her the mini medicube glow kit, it's £18 in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "the 2 perfumes i layer every single day 😮‍💨",
+   "style": "outline",
+   "position": "middle",
+   "size": 56
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "honey oud + white oud 🤍 they're £30.78 in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "the vanilla perfume combo that gets compliments all winter 🤍",
+   "style": "outline",
+   "position": "middle",
+   "size": 54
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "honey oud first, white oud on top 🤍 £30.78 in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44
+  }
+ ]
+}

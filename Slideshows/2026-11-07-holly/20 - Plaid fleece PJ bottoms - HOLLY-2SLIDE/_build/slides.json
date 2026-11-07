@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "pj bottoms i'll be living in all winter 🤎",
+   "style": "outline",
+   "position": "top",
+   "size": 54
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "they're £8.07 in the basket, so cosy ⬇️",
+   "style": "box",
+   "position": "bottom",
+   "size": 46
+  }
+ ]
+}

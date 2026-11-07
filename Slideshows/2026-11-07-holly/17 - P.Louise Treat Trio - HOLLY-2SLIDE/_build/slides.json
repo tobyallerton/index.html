@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "psa: get her this and watch her face light up 😭💗",
+   "style": "outline",
+   "position": "middle",
+   "size": 54
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "the p.louise treat trio, it's £14.50 in the basket 💗⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44
+  }
+ ]
+}

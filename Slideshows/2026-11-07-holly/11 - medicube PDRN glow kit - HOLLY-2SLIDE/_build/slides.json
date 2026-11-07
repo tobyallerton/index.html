@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "mums of skincare-obsessed daughters, this one's for you 🎄😍",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "she's going to love this, £18 in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44
+  }
+ ]
+}

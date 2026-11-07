@@ -1,0 +1,26 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "OMG PARENTS RUN DON'T WALK FOR THESE SQUISHY ADVENT CALENDARS 😭😭",
+   "style": "outline",
+   "position": "middle",
+   "size": 50
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "my kids saw this and screamed 😭",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "they're £10.54 and in the basket while they last ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  }
+ ]
+}

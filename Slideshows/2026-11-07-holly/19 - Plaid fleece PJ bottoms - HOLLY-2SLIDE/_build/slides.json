@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "the comfiest christmas pj bottoms 🤎",
+   "style": "outline",
+   "position": "top",
+   "size": 54
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "fleece lined and £8.07 in the basket ⬇️",
+   "style": "box",
+   "position": "bottom",
+   "size": 46
+  }
+ ]
+}

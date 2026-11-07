@@ -1,0 +1,26 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "MUMS AND DADS THIS IS THE ADVENT CALENDAR YOUR KIDS WILL ACTUALLY FIGHT OVER 😭🎄",
+   "style": "outline",
+   "position": "middle",
+   "size": 50
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "got one for each of mine so there's no arguing 😅",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "24 squishy dumplings to open, they're £10.54 in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "if your bestie loves p.louise, stop scrolling 😭🎀",
+   "style": "box",
+   "position": "middle",
+   "size": 54
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "sorted my bestie's present, it's £29.93 in the basket 🎀⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 44
+  }
+ ]
+}

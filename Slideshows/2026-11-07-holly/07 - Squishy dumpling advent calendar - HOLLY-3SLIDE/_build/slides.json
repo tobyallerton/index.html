@@ -1,0 +1,26 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "THE ADVENT CALENDAR MY KIDS HAVE ASKED FOR 3 TIMES THIS WEEK 😅🎄",
+   "style": "outline",
+   "position": "middle",
+   "size": 50
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "finally caved and grabbed it, it's so cute 😍",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "it's £10.54 right now and it's in the basket ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  }
+ ]
+}

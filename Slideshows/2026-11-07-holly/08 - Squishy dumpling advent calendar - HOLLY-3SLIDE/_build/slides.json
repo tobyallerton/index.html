@@ -1,0 +1,26 @@
+{
+ "style": "box",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "STOCKING FILLER ALERT 🚨 PARENTS LISTEN UP 🎄",
+   "style": "outline",
+   "position": "middle",
+   "size": 50
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "24 little squishy dumplings in one calendar 🥟",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "£10.54 and it's in the basket, go go go ⬇️",
+   "style": "box",
+   "position": "top",
+   "size": 46
+  }
+ ]
+}
