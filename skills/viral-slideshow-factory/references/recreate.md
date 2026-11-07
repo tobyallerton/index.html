@@ -54,7 +54,7 @@ Never copy the face, hair or room of a model in the listing photo.
 Use TikTok Sans (in `fonts/`, used automatically) with emoji, lower-case and casual, the way a creator types ("my dad every single christmas 😭🙄"). Default size 52–56. Use `box` (black on white rounded boxes) on screenshots and busy photos, `outline` on photos with a plain area. Keep text off faces and off the product.
 
 ## True product size (the user's feedback, 7 Nov)
-AI photos get scale wrong (plushes drawn pillow-sized when they're hand-sized). For every product:
+AI photos get scale wrong (plushes drawn pillow-sized when they're hand-sized; Celebrations minis drawn like full-size bars when each is only 4-5cm, thumb-sized). Food minis, keyrings, jewellery and figures are the usual offenders. For every product:
 1. Find its real size: the listing title ("100ml", "250ml", "21.6cm", "keychain"), the listing's dimension pictures, and the original creator's photos where it sits next to a hand.
 2. Start every photo prompt with a SIZE line, e.g. "SIZE: about 20cm tall, roughly the length of an adult's hand, only a bit bigger than a drink can." Add a familiar object for scale (a hand, a can, a mug, a phone).
 3. When checking the result, compare the product with hands and furniture. If the scale is off, regenerate.
