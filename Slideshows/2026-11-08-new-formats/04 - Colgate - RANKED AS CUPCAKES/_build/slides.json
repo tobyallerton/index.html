@@ -2,8 +2,8 @@
  "slides": [
   {
    "text": "teeth whitening methods as cupcakes 🧁",
-   "style": "classic",
-   "size": 44,
+   "style": "box",
+   "size": 40,
    "y": 0.04,
    "phoneify": false,
    "extra": [
@@ -12,42 +12,48 @@
      "y": 0.27,
      "size": 28,
      "align": "left",
-     "x": 0.12
+     "x": 0.12,
+     "style": "box"
     },
     {
      "text": "charcoal powder",
      "y": 0.27,
      "size": 28,
      "align": "left",
-     "x": 0.6
+     "x": 0.6,
+     "style": "box"
     },
     {
      "text": "baking soda",
      "y": 0.58,
      "size": 28,
      "align": "left",
-     "x": 0.15
+     "x": 0.15,
+     "style": "box"
     },
     {
      "text": "lemon juice",
      "y": 0.58,
      "size": 28,
      "align": "left",
-     "x": 0.62
+     "x": 0.62,
+     "style": "box"
     },
     {
      "text": "cheap LED kit",
      "y": 0.89,
      "size": 28,
      "align": "left",
-     "x": 0.13
+     "x": 0.13,
+     "style": "box"
     },
     {
      "text": "Colgate Max White ✨",
      "y": 0.89,
      "size": 28,
      "align": "left",
-     "x": 0.55
+     "x": 0.55,
+     "style": "box"
     }
    ],
    "image": "raw/slide-1.png"

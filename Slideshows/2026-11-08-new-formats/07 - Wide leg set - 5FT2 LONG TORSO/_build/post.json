@@ -17,11 +17,11 @@
   "id": "1729736570762270869",
   "url": "https://www.tiktok.com/shop/uk/pdp/1729736570762270869",
   "currency": "GBP",
-  "price": null,
+  "price": 1.99,
   "was_price": null,
   "commission_rate": null,
   "checked_at": "2026-11-08",
-  "checked_on": "Social1 product data - re-check price and commission on the product page before posting"
+  "checked_on": "Social1 shows £1.99, which looks wrong - check the real price on the product page before posting"
  },
  "source": {
   "mode": "NEW-TO-UK",
