@@ -3,7 +3,7 @@
   {
    "text": "can you spot it? 🍓",
    "style": "classic",
-   "size": 56,
+   "size": 70,
    "y": 0.08,
    "phone_strength": 0.2,
    "image": "raw/slide-1.png"
@@ -11,7 +11,7 @@
   {
    "text": "the P.Louise Strawberry Shortcake bundle 🍓",
    "style": "classic",
-   "size": 48,
+   "size": 60,
    "y": 0.12,
    "phone_strength": 0.2,
    "image": "raw/slide-2.png"
@@ -19,14 +19,14 @@
   {
    "text": "all of this in one box 🎀",
    "style": "classic",
-   "size": 50,
+   "size": 62,
    "y": 0.12,
    "phone_strength": 0.2,
    "extra": [
     {
      "text": "it's in the basket ⬇️",
      "y": 0.72,
-     "size": 44
+     "size": 52
     }
    ],
    "image": "raw/slide-3.png"

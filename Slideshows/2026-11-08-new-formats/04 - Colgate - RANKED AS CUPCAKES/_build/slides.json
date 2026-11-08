@@ -3,14 +3,14 @@
   {
    "text": "teeth whitening methods as cupcakes 🧁",
    "style": "box",
-   "size": 40,
+   "size": 50,
    "y": 0.04,
    "phoneify": false,
    "extra": [
     {
      "text": "whitening strips",
      "y": 0.27,
-     "size": 28,
+     "size": 33,
      "align": "left",
      "x": 0.12,
      "style": "box"
@@ -18,7 +18,7 @@
     {
      "text": "charcoal powder",
      "y": 0.27,
-     "size": 28,
+     "size": 33,
      "align": "left",
      "x": 0.6,
      "style": "box"
@@ -26,7 +26,7 @@
     {
      "text": "baking soda",
      "y": 0.58,
-     "size": 28,
+     "size": 33,
      "align": "left",
      "x": 0.15,
      "style": "box"
@@ -34,7 +34,7 @@
     {
      "text": "lemon juice",
      "y": 0.58,
-     "size": 28,
+     "size": 33,
      "align": "left",
      "x": 0.62,
      "style": "box"
@@ -42,7 +42,7 @@
     {
      "text": "cheap LED kit",
      "y": 0.89,
-     "size": 28,
+     "size": 33,
      "align": "left",
      "x": 0.13,
      "style": "box"
@@ -50,7 +50,7 @@
     {
      "text": "Colgate Max White ✨",
      "y": 0.89,
-     "size": 28,
+     "size": 33,
      "align": "left",
      "x": 0.55,
      "style": "box"
@@ -61,14 +61,14 @@
   {
    "text": "the only one I'd actually use 😁",
    "style": "classic",
-   "size": 48,
+   "size": 60,
    "y": 0.12,
    "phone_strength": 0.25,
    "extra": [
     {
      "text": "the bundle's in the basket ⬇️",
      "y": 0.72,
-     "size": 42
+     "size": 50
     }
    ],
    "image": "raw/slide-2.png"

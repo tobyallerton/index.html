@@ -3,7 +3,7 @@
   {
    "text": "the power's out.",
    "style": "classic",
-   "size": 56,
+   "size": 70,
    "position": "middle",
    "phoneify": false,
    "image": "raw/slide-1.png"
@@ -11,7 +11,7 @@
   {
    "text": "the power's out.",
    "style": "classic",
-   "size": 56,
+   "size": 70,
    "position": "middle",
    "phone_strength": 0.25,
    "image": "raw/slide-2.png"
@@ -19,14 +19,14 @@
   {
    "text": "solar lanterns that turn into a torch 🔦",
    "style": "classic",
-   "size": 48,
+   "size": 60,
    "y": 0.12,
    "phone_strength": 0.25,
    "extra": [
     {
      "text": "it's in the basket ⬇️",
      "y": 0.72,
-     "size": 44
+     "size": 52
     }
    ],
    "image": "raw/slide-3.png"

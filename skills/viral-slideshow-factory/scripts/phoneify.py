@@ -12,10 +12,7 @@ def phoneify(img, strength=1.0, seed=None):
     rnd = random.Random(seed)
     img = img.convert("RGB")
     w, h = img.size
-    # Phone sensors and in-app compression lose fine detail: down-sample then up-sample.
-    f = 0.62 - 0.08 * (strength - 1)
-    img = img.resize((max(1, int(w * f)), max(1, int(h * f))), Image.BILINEAR).resize((w, h), Image.BICUBIC)
-    img = img.filter(ImageFilter.GaussianBlur(0.45 * strength))
+    # No down-sampling or blur any more: it made slides look soft and low quality on a phone screen.
     # AI images are too saturated and contrasty; phone shots in normal rooms are flatter.
     img = ImageEnhance.Color(img).enhance(1 - 0.10 * strength)
     img = ImageEnhance.Contrast(img).enhance(1 - 0.07 * strength)
@@ -28,14 +25,14 @@ def phoneify(img, strength=1.0, seed=None):
     luma = a.mean(axis=2, keepdims=True) / 255.0
     rng = np.random.default_rng(rnd.randint(0, 10**6))
     noise = rng.normal(0, 1, a.shape[:2] + (1,)).astype(np.float32)
-    a += noise * (3.0 + 6.0 * (1 - luma)) * strength
+    a += noise * (1.5 + 3.0 * (1 - luma)) * strength
     # Gentle vignette from a small lens.
     yy, xx = np.mgrid[0:h, 0:w]
     r = np.sqrt(((xx - w / 2) / (w / 2)) ** 2 + ((yy - h / 2) / (h / 2)) ** 2)
     a *= (1 - 0.10 * strength * np.clip(r - 0.5, 0, 1))[..., None]
     img = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
     # JPEG round-trip, as every phone photo has been through.
-    buf = io.BytesIO(); img.save(buf, "JPEG", quality=int(78 - 6 * (strength - 1))); buf.seek(0)
+    buf = io.BytesIO(); img.save(buf, "JPEG", quality=95); buf.seek(0)
     return Image.open(buf).convert("RGB")
 
 if __name__ == "__main__":

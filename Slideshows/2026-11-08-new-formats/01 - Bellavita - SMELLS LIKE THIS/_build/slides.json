@@ -3,7 +3,7 @@
   {
    "text": "a perfume that smells like this:",
    "style": "classic",
-   "size": 42,
+   "size": 52,
    "y": 0.47,
    "phoneify": false,
    "image": "raw/slide-1.png"
@@ -11,7 +11,7 @@
   {
    "text": "and one that smells like this:",
    "style": "classic",
-   "size": 42,
+   "size": 52,
    "y": 0.47,
    "phoneify": false,
    "image": "raw/slide-2.png"
@@ -19,14 +19,14 @@
   {
    "text": "Honey Oud + White Oud, both in one set 🍯🤍",
    "style": "classic",
-   "size": 46,
+   "size": 57,
    "y": 0.12,
    "phone_strength": 0.25,
    "extra": [
     {
      "text": "it's in the basket ⬇️",
      "y": 0.74,
-     "size": 42
+     "size": 50
     }
    ],
    "image": "raw/slide-3.png"

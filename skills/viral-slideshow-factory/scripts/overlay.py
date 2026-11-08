@@ -32,8 +32,9 @@ EMOJI = re.compile("((?:[\U0001F000-\U0001FAFF\u2600-\u27BF\u2B00-\u2BFF\u2300-\
 COLORS = {"white": (255, 255, 255), "yellow": (244, 208, 85), "cream": (250, 242, 160)}
 
 def font(path, size, weight=600):
-    for p in ([path] if path else []) + [os.path.join(FONT_DIR, "Figtree-Variable.ttf"),
-                                          os.path.join(FONT_DIR, "TikTokSans-Bold.ttf")] + FALLBACK:
+    # TikTok Sans Bold is the user's chosen font (8 Nov, after comparing it with Inter, Montserrat and Figtree).
+    for p in ([path] if path else []) + [os.path.join(FONT_DIR, "TikTokSans-Bold.ttf"),
+                                          os.path.join(FONT_DIR, "Figtree-Variable.ttf")] + FALLBACK:
         if p and os.path.exists(p):
             f = ImageFont.truetype(p, size)
             try: f.set_variation_by_axes([weight])
@@ -103,7 +104,8 @@ def draw_line(img, x, y, line, f, em, fill, stroke=0, stroke_fill=None):
 def fit_canvas(img, mode):
     img = ImageOps.exif_transpose(img).convert("RGB")
     if mode == "crop":
-        return ImageOps.fit(img, (W, H), Image.LANCZOS, centering=(0.5, 0.45))
+        # Generated photos are smaller than 1080x1920, so they get scaled up: sharpen afterwards so they stay crisp.
+        return ImageOps.fit(img, (W, H), Image.LANCZOS, centering=(0.5, 0.45)).filter(ImageFilter.UnsharpMask(radius=1.6, percent=70, threshold=2))
     bg = ImageOps.fit(img, (W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(40))
     fg = ImageOps.contain(img, (W, H), Image.LANCZOS)
     bg.paste(fg, ((W - fg.width) // 2, (H - fg.height) // 2))
