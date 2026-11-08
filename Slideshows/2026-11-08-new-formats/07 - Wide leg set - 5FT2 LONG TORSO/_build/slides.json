@@ -1,0 +1,36 @@
+{
+ "slides": [
+  {
+   "text": "\"I'm 5'2 with a long torso.\nWhat do I wear?\"",
+   "style": "classic",
+   "size": 50,
+   "y": 0.12,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "high-waisted wide legs = longer legs 🤍",
+   "style": "classic",
+   "size": 46,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "same colour top to toe = one long line, so you look taller",
+   "style": "classic",
+   "size": 44,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "the set's in the basket ⬇️",
+   "style": "classic",
+   "size": 46,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "image": "raw/slide-4.png"
+  }
+ ]
+}

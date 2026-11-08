@@ -1,0 +1,39 @@
+{
+ "slides": [
+  {
+   "text": "Mum at 30",
+   "style": "classic",
+   "size": 36,
+   "y": 0.7,
+   "align": "left",
+   "x": 0.14,
+   "phoneify": false,
+   "extra": [
+    {
+     "text": "Mum at 60",
+     "y": 0.7,
+     "size": 36,
+     "align": "left",
+     "x": 0.6
+    }
+   ],
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "she gave you everything.\nget her something just for her this year 🤍",
+   "style": "classic",
+   "size": 46,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "it's in the basket ⬇️",
+   "style": "classic",
+   "size": 46,
+   "y": 0.72,
+   "phone_strength": 0.25,
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+ "slides": [
+  {
+   "text": "you're always cold",
+   "style": "classic",
+   "size": 50,
+   "y": 0.36,
+   "phoneify": false,
+   "extra": [
+    {
+     "text": "get a heated throw",
+     "y": 0.86,
+     "size": 50
+    }
+   ],
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "faux fur AND it heats up 🥹",
+   "style": "classic",
+   "size": 50,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.72,
+     "size": 44
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}
