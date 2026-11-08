@@ -1,0 +1,29 @@
+{
+ "slides": [
+  {
+   "text": "I HAVE OFFICIALLY WON SECRET SANTA THIS YEAR BC OMG GIRLIES LOOK",
+   "style": "outline",
+   "size": 62,
+   "position": "middle",
+   "weight": 650,
+   "width": 0.62,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "medicube minis in a gift box & SO cheap rn!!",
+   "style": "outline",
+   "size": 46,
+   "y": 0.08,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.76,
+     "size": 42
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

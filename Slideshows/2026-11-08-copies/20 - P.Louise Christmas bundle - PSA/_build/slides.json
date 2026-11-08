@@ -1,0 +1,32 @@
+{
+ "slides": [
+  {
+   "text": "psa don't\nget this for\nher unless\nyou want\nher eyes to\nball out",
+   "style": "classic",
+   "color": "yellow",
+   "size": 50,
+   "y": 0.12,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "I got my daughter this as she's obsessed with skincare and makeup..!!💋",
+   "style": "box",
+   "color": "#e0263a",
+   "size": 44,
+   "y": 0.13,
+   "phone_strength": 0.25,
+   "extra": [
+    {
+     "text": "hopefully it's still this cheap\nfor all of you lot😘\n⬇️⬇️⬇️",
+     "y": 0.66,
+     "style": "box",
+     "size": 32,
+     "align": "left",
+     "x": 0.12
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

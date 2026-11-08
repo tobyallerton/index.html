@@ -1,0 +1,93 @@
+{
+ "slides": [
+  {
+   "text": "RED\nFOR NETFLIX 👀",
+   "style": "classic",
+   "color": "#ff4a4a",
+   "font": "Anton-Regular.ttf",
+   "size": 78,
+   "y": 0.27,
+   "align": "left",
+   "x": 0.08,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "TURQUOISE\nFOR THE BATHROOM.",
+   "style": "classic",
+   "color": "#62f3e3",
+   "font": "Anton-Regular.ttf",
+   "size": 78,
+   "y": 0.27,
+   "align": "left",
+   "x": 0.08,
+   "phoneify": false,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "YELLOW\nTO BE IN\nA GOOD MOOD.",
+   "style": "classic",
+   "color": "#ffd23f",
+   "font": "Anton-Regular.ttf",
+   "size": 78,
+   "y": 0.27,
+   "align": "left",
+   "x": 0.08,
+   "phoneify": false,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "PURPLE\nFOR RELAXATION.",
+   "style": "classic",
+   "color": "#c38dff",
+   "font": "Anton-Regular.ttf",
+   "size": 78,
+   "y": 0.27,
+   "align": "left",
+   "x": 0.08,
+   "phoneify": false,
+   "image": "raw/slide-4.png"
+  },
+  {
+   "text": "GREEN\nFOR LESS STRESS.",
+   "style": "classic",
+   "color": "#64f06c",
+   "font": "Anton-Regular.ttf",
+   "size": 78,
+   "y": 0.27,
+   "align": "left",
+   "x": 0.08,
+   "phoneify": false,
+   "image": "raw/slide-5.png"
+  },
+  {
+   "text": "BLUE\nTO RELAX.",
+   "style": "classic",
+   "color": "#5aa9ff",
+   "font": "Anton-Regular.ttf",
+   "size": 78,
+   "y": 0.27,
+   "align": "left",
+   "x": 0.08,
+   "phoneify": false,
+   "image": "raw/slide-6.png"
+  },
+  {
+   "text": "Cheaper than a pizza right now 😮‍💨",
+   "style": "classic",
+   "size": 50,
+   "y": 0.36,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "Link below\n👇👇👇👇",
+     "y": 0.68,
+     "align": "left",
+     "x": 0.1,
+     "size": 40
+    }
+   ],
+   "image": "raw/slide-7.png"
+  }
+ ]
+}

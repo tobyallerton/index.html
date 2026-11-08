@@ -1,0 +1,30 @@
+{
+ "slides": [
+  {
+   "text": "bf just gave me the ick\nbecause he said theyre\n\"too expensive\"",
+   "style": "classic",
+   "color": "yellow",
+   "size": 46,
+   "y": 0.5,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "THEYRE SO\nCUTEEEE😭😭",
+   "style": "classic",
+   "color": "yellow",
+   "size": 72,
+   "y": 0.4,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "(and theyre so cheap rn\nso he literally has no excuse) ⬇️",
+     "y": 0.53,
+     "color": "yellow",
+     "size": 34
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

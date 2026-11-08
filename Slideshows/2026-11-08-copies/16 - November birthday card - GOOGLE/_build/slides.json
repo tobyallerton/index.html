@@ -1,0 +1,28 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "",
+   "no_text": true,
+   "phone_strength": 0.25,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "",
+   "no_text": true,
+   "phone_strength": 0.25,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "linked 👇",
+   "style": "classic",
+   "size": 36,
+   "y": 0.74,
+   "phone_strength": 0.25,
+   "image": "raw/slide-4.png"
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "slides": [
+  {
+   "text": "How to\nunf*ck\nyour\nTEETH",
+   "style": "classic",
+   "color": "cream",
+   "size": 62,
+   "y": 0.36,
+   "align": "left",
+   "x": 0.33,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "Get RID of the\nwhitening strips 😭",
+   "style": "classic",
+   "color": "cream",
+   "size": 48,
+   "y": 0.3,
+   "extra": [
+    {
+     "text": "(save your money...)",
+     "y": 0.405,
+     "size": 28
+    }
+   ],
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "Invest in the Colgate Max White Bundle...",
+   "style": "classic",
+   "size": 40,
+   "y": 0.28,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "Purple serum 💜",
+     "y": 0.45,
+     "size": 30,
+     "align": "left",
+     "x": 0.15
+    },
+    {
+     "text": "Whitening\ntoothpaste",
+     "y": 0.43,
+     "size": 30,
+     "align": "left",
+     "x": 0.58
+    },
+    {
+     "text": "Powered\ntoothbrush ✨",
+     "y": 0.55,
+     "size": 30,
+     "align": "left",
+     "x": 0.1
+    }
+   ],
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "And no... it's not full price anymore\nthe FULL Max White bundle is SO cheap today 😳",
+   "style": "classic",
+   "size": 36,
+   "y": 0.25,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "Check the price!\n⬇️⬇️⬇️",
+     "y": 0.62,
+     "size": 36
+    }
+   ],
+   "image": "raw/slide-4.png"
+  }
+ ]
+}

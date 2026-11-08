@@ -1,0 +1,33 @@
+{
+ "slides": [
+  {
+   "text": "\"Never bought an advent calendar so fast...\"",
+   "style": "outline",
+   "size": 48,
+   "y": 0.15,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "",
+   "no_text": true,
+   "phone_strength": 0.3,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "24 little doors filled with classic stories & poems",
+   "style": "classic",
+   "size": 48,
+   "y": 0.12,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "(sooo magical) 🥹🎄💗\nit's in the basket ⬇️",
+     "y": 0.6,
+     "size": 42
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

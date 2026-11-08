@@ -1,0 +1,39 @@
+{
+ "title": "Do NOT look at the price",
+ "caption": "i warned you 👀",
+ "hashtags": [
+  "#earbuds",
+  "#techfinds",
+  "#giftideas",
+  "#tiktokshop"
+ ],
+ "sound": {
+  "name": "use the original post's sound (open the source link) or a trending one",
+  "url": "",
+  "why": "copying the winning post"
+ },
+ "product": {
+  "name": "Wireless Bluetooth-compatible Headphones, Earbud, Deep Noise Cancellation, Stylish Design, Low Latency Music, Daily Office Use, Waterproof, Chargeable",
+  "id": "1729842003037100875",
+  "url": "https://www.tiktok.com/shop/uk/pdp/1729842003037100875",
+  "currency": "GBP",
+  "price": 5.22,
+  "was_price": null,
+  "commission_rate": null,
+  "checked_at": "2026-11-08",
+  "checked_on": "Social1 product data - re-check price and commission on the product page before posting"
+ },
+ "source": {
+  "mode": "COPY",
+  "url": "https://www.tiktok.com/@ogshopdeals/photo/7698013357290294550",
+  "creator": "@ogshopdeals",
+  "views": "506600",
+  "gmv": "£9807.8",
+  "format": "DO NOT LOOK"
+ },
+ "hooks": {
+  "used": "Do NOT look at the price",
+  "score": 5,
+  "alternatives": []
+ }
+}

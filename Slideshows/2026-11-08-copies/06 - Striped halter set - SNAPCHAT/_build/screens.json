@@ -1,0 +1,23 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "snapchat",
+   "out": "slide-1.png",
+   "bg": "raw/snapbg.png",
+   "name": "Brooke",
+   "ago": "5m ago",
+   "captions": [
+    {
+     "text": "plotted...",
+     "y": 0.3,
+     "align": "left"
+    },
+    {
+     "text": "wait i need her set",
+     "y": 0.36
+    }
+   ]
+  }
+ ]
+}

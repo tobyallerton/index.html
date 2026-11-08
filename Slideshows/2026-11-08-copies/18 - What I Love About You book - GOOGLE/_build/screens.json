@@ -1,0 +1,21 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "google",
+   "out": "slide-1.png",
+   "dark": false,
+   "full": true,
+   "time": "22:53",
+   "query": "how many days until christmas",
+   "card": {
+    "label": "Duration › Day",
+    "big": "47 days",
+    "small": "8 November – 25 December 2026"
+   },
+   "overview": [
+    "You have just over six weeks to get him something special for everything he's done for you."
+   ]
+  }
+ ]
+}

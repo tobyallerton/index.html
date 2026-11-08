@@ -1,0 +1,13 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "notification",
+   "out": "slide-1.png",
+   "sender": "Mum X",
+   "initial": "M",
+   "ago": "now",
+   "text": "I heard you saw something on TikTok, please don't buy me anything for Christmas I don't want you spending money on me. Love you xx"
+  }
+ ]
+}

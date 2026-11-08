@@ -1,0 +1,60 @@
+{
+ "slides": [
+  {
+   "text": "THE",
+   "style": "classic",
+   "font": "Anton-Regular.ttf",
+   "size": 72,
+   "y": 0.3,
+   "phoneify": false,
+   "extra": [
+    {
+     "text": "perfect",
+     "y": 0.355,
+     "font": "PlayfairDisplay-Variable.ttf",
+     "size": 48
+    },
+    {
+     "text": "laced",
+     "y": 0.395,
+     "font": "PlayfairDisplay-Italic-Variable.ttf",
+     "color": "#f3b8c8",
+     "size": 60
+    },
+    {
+     "text": "KNEE HIGHS",
+     "y": 0.455,
+     "font": "Anton-Regular.ttf",
+     "size": 56
+    },
+    {
+     "text": "to pair with",
+     "y": 0.505,
+     "font": "PlayfairDisplay-Variable.ttf",
+     "size": 44
+    },
+    {
+     "text": "BOOTS",
+     "y": 0.545,
+     "font": "Anton-Regular.ttf",
+     "size": 72
+    }
+   ],
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "",
+   "no_text": true,
+   "phone_strength": 0.25,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "linked 👇",
+   "style": "classic",
+   "size": 36,
+   "y": 0.72,
+   "phone_strength": 0.25,
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "google",
+   "out": "slide-1.png",
+   "dark": true,
+   "query": "how many days left in november",
+   "card": {
+    "label": "Duration › Day",
+    "big": "22 days",
+    "small": "8 November – 30 November 2026"
+   }
+  }
+ ]
+}

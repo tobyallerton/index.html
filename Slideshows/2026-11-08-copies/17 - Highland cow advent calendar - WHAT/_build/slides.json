@@ -1,0 +1,46 @@
+{
+ "slides": [
+  {
+   "text": "\"Yeah so you get a different\nhighland cow 24 days in a row\"",
+   "style": "outline",
+   "size": 40,
+   "y": 0.36,
+   "phoneify": false,
+   "extra": [
+    {
+     "text": "\"WHAT !!??\"",
+     "y": 0.62,
+     "style": "outline",
+     "size": 46
+    }
+   ],
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "24 highland cow figures\nfor THAT price 😳",
+   "style": "box",
+   "size": 42,
+   "y": 0.08,
+   "phone_strength": 0.3,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "They're so cute",
+   "style": "box",
+   "size": 40,
+   "y": 0.48,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "Buy here 👇",
+     "y": 0.81,
+     "style": "box",
+     "size": 38,
+     "align": "left",
+     "x": 0.06
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

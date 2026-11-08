@@ -1,0 +1,28 @@
+{
+ "slides": [
+  {
+   "text": "cute set >>",
+   "style": "classic",
+   "font": "PlayfairDisplay-Variable.ttf",
+   "size": 40,
+   "y": 0.5,
+   "phone_strength": 0.25,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "",
+   "no_text": true,
+   "phone_strength": 0.25,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "set linked 👇",
+   "style": "classic",
+   "font": "PlayfairDisplay-Variable.ttf",
+   "size": 38,
+   "y": 0.66,
+   "phone_strength": 0.25,
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

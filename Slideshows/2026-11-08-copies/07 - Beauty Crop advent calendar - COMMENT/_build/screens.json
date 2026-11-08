@@ -1,0 +1,19 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "comment",
+   "out": "slide-1.png",
+   "user": "ellie.hghs",
+   "text": "im not paying that much for an advent calendar",
+   "likes": "1.8K",
+   "date": "11-06",
+   "reply": {
+    "user": "sophiee.wrd",
+    "text": "you dont have to!",
+    "likes": "67",
+    "date": "11-06"
+   }
+  }
+ ]
+}

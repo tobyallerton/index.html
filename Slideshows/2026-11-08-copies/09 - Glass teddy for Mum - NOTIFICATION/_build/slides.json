@@ -1,0 +1,30 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "Perfect present for mum this Christmas at an unbelievable price...😩🎁",
+   "style": "box",
+   "size": 40,
+   "y": 0.07,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "(Check the price)",
+     "y": 0.155,
+     "size": 30
+    },
+    {
+     "text": "Linked⬇️❤️",
+     "y": 0.62,
+     "align": "left",
+     "x": 0.02,
+     "size": 40
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

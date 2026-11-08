@@ -1,0 +1,40 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "Get him this.. 🥺❤️",
+   "style": "classic",
+   "size": 46,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "\"...\"",
+   "style": "classic",
+   "size": 46,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "\"...\"",
+   "style": "classic",
+   "size": 46,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "image": "raw/slide-4.png"
+  },
+  {
+   "text": "Do it for him 🫶\nit's in the basket ⬇️",
+   "style": "classic",
+   "size": 44,
+   "y": 0.12,
+   "phone_strength": 0.25,
+   "image": "raw/slide-5.png"
+  }
+ ]
+}

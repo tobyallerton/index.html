@@ -117,11 +117,13 @@ def main():
     ap.add_argument("--position", default="top", choices=["top", "middle", "bottom"])
     ap.add_argument("--y", type=float, default=None, help="top of the text block as a fraction of the height")
     ap.add_argument("--style", default="classic", choices=["classic", "outline", "box", "plain"])
-    ap.add_argument("--color", default="white", choices=list(COLORS))
+    ap.add_argument("--color", default="white", help="white, yellow, cream or a hex colour like #ff4040")
     ap.add_argument("--size", type=int, default=60)
     ap.add_argument("--width", type=float, default=0.62, help="max line width as a fraction of the slide (viral hooks wrap narrow)")
     ap.add_argument("--fit", default="crop", choices=["crop", "pad"])
     ap.add_argument("--font")
+    ap.add_argument("--align", default="center", choices=["center", "left"])
+    ap.add_argument("--x", type=float, default=0.08, help="left edge for --align left, as a fraction of the width")
     ap.add_argument("--weight", type=int, default=None, help="font weight 400-900 (default 620; 700 for a bolder hook like the original)")
     a = ap.parse_args()
 
@@ -143,22 +145,22 @@ def main():
             pad_x, pad_y, r = int(a.size * 0.36), int(a.size * 0.16), int(a.size * 0.30)
             d = ImageDraw.Draw(layer)
             for i, line in enumerate(lines):
-                lw = line_width(line, f, em); x = (W - lw) / 2 - 18
+                lw = line_width(line, f, em); x = (W - lw) / 2 - 18 if a.align == "center" else W * a.x
                 d.rounded_rectangle([x - pad_x, y + i * lh - pad_y, x + lw + pad_x, y + i * lh + asc + desc + pad_y * 0.6], radius=r, fill=(255, 255, 255, 255))
             for i, line in enumerate(lines):
-                lw = line_width(line, f, em); x = (W - lw) / 2 - 18
-                draw_line(layer, x, y + i * lh, line, f, em, fill=(0, 0, 0, 255))
+                lw = line_width(line, f, em); x = (W - lw) / 2 - 18 if a.align == "center" else W * a.x
+                draw_line(layer, x, y + i * lh, line, f, em, fill=(0, 0, 0, 255) if a.color == "white" else (COLORS[a.color] if a.color in COLORS else tuple(int(a.color.lstrip("#")[j:j + 2], 16) for j in (0, 2, 4))) + (255,))
         else:
             shadow = Image.new("RGBA", base.size, (0, 0, 0, 0))
             sh_a = 150 if a.style == "classic" else 170
             for i, line in enumerate(lines):
-                lw = line_width(line, f, em); x = (W - lw) / 2 - 18
+                lw = line_width(line, f, em); x = (W - lw) / 2 - 18 if a.align == "center" else W * a.x
                 draw_line(shadow, x + 1, y + i * lh + 2, line, f, em, fill=(0, 0, 0, sh_a),
                           stroke=max(2, a.size // 16) if a.style == "outline" else 0, stroke_fill=(0, 0, 0, sh_a))
             layer = Image.alpha_composite(layer, shadow.filter(ImageFilter.GaussianBlur(5 if a.style == "classic" else 3)))
             for i, line in enumerate(lines):
-                lw = line_width(line, f, em); x = (W - lw) / 2 - 18
-                draw_line(layer, x, y + i * lh, line, f, em, fill=COLORS[a.color] + (255,),
+                lw = line_width(line, f, em); x = (W - lw) / 2 - 18 if a.align == "center" else W * a.x
+                draw_line(layer, x, y + i * lh, line, f, em, fill=(COLORS[a.color] if a.color in COLORS else tuple(int(a.color.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))) + (255,),
                           stroke=max(2, a.size // 22) if a.style == "outline" else 0, stroke_fill=(20, 20, 20, 255))
         base = Image.alpha_composite(base, layer)
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)

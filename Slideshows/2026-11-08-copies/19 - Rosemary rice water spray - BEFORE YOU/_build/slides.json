@@ -1,0 +1,58 @@
+{
+ "slides": [
+  {
+   "text": "there was before you...💔",
+   "style": "classic",
+   "size": 40,
+   "y": 0.36,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "and there was during you...🤞",
+   "style": "classic",
+   "size": 40,
+   "y": 0.33,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "for some reason...😭",
+   "style": "classic",
+   "size": 40,
+   "y": 0.36,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "i never thought\nthere would be an after\nyou...😍",
+   "style": "classic",
+   "size": 40,
+   "y": 0.3,
+   "image": "raw/slide-4.png"
+  },
+  {
+   "text": "but there it was...🙏😮‍💨",
+   "style": "classic",
+   "size": 40,
+   "y": 0.08,
+   "phone_strength": 0.25,
+   "extra": [
+    {
+     "text": "the non greasy rosemary\nwater i use every day now",
+     "y": 0.3,
+     "size": 36,
+     "align": "left",
+     "x": 0.55,
+     "width": 0.42
+    },
+    {
+     "text": "it doesn't need washing\nout... it's in the basket ⬇️",
+     "y": 0.58,
+     "size": 36,
+     "align": "left",
+     "x": 0.5,
+     "width": 0.45
+    }
+   ],
+   "image": "raw/slide-5.png"
+  }
+ ]
+}

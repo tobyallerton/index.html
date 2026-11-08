@@ -1,0 +1,44 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "You can get 30 full-sized beauty products for WAY less than you think 😭😭",
+   "style": "box",
+   "size": 40,
+   "y": 0.05,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "BUTT...",
+     "y": 0.27,
+     "style": "box",
+     "size": 40,
+     "align": "left",
+     "x": 0.72
+    }
+   ],
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "They're selling fast, so I'd be quick ‼️",
+   "style": "box",
+   "size": 40,
+   "y": 0.08,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "Just check the price.\nTrust me 👇😉",
+     "y": 0.6,
+     "style": "box",
+     "size": 38,
+     "align": "left",
+     "x": 0.12
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

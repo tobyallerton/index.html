@@ -1,0 +1,40 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "AND FINALLY\nFOUND\nIT",
+   "style": "classic",
+   "color": "#2f5fae",
+   "font": "Anton-Regular.ttf",
+   "size": 60,
+   "y": 0.18,
+   "align": "left",
+   "x": 0.07,
+   "phone_strength": 0.25,
+   "extra": [
+    {
+     "text": "UR WELCOME 👇",
+     "y": 0.74,
+     "color": "#2f5fae",
+     "font": "Anton-Regular.ttf",
+     "size": 40,
+     "align": "left",
+     "x": 0.07
+    },
+    {
+     "text": "literally OBSESSED.",
+     "y": 0.75,
+     "color": "#555555",
+     "font": "PlayfairDisplay-Variable.ttf",
+     "size": 34,
+     "align": "left",
+     "x": 0.6
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "title": "im not paying that much for an advent calendar / you dont have to!",
+ "caption": "30 full size products 😭",
+ "hashtags": [
+  "#adventcalendar",
+  "#beauty",
+  "#makeup",
+  "#tiktokshop"
+ ],
+ "sound": {
+  "name": "use the original post's sound (open the source link) or a trending one",
+  "url": "",
+  "why": "copying the winning post"
+ },
+ "product": {
+  "name": "25 Day Advent Calendar - 30 full-sized beauty products worth Â£280  - The Beauty Crop",
+  "id": "1729913021708147293",
+  "url": "https://www.tiktok.com/shop/uk/pdp/1729913021708147293",
+  "currency": "GBP",
+  "price": 123.5,
+  "was_price": null,
+  "commission_rate": null,
+  "checked_at": "2026-11-08",
+  "checked_on": "Social1 product data - re-check price and commission on the product page before posting"
+ },
+ "source": {
+  "mode": "COPY",
+  "url": "https://www.tiktok.com/@findz4every1/photo/7705174981298195734",
+  "creator": "@findz4every1",
+  "views": "1100000",
+  "gmv": "£13585",
+  "format": "COMMENT"
+ },
+ "hooks": {
+  "used": "im not paying that much for an advent calendar / you dont have to!",
+  "score": 5,
+  "alternatives": []
+ }
+}

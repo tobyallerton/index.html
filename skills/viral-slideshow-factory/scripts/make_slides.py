@@ -56,8 +56,16 @@ def main():
         cmd = [sys.executable, overlay, "--in", src, "--out", out, "--text", s.get("text", ""),
                "--position", s.get("position", "top"), "--style", s.get("style", spec.get("style", "classic")),
                "--color", s.get("color", spec.get("color", "white")), "--width", str(s.get("width", spec.get("width", 0.62))),
-               "--size", str(s.get("size", 60)),] + (["--weight", str(s.get("weight", spec.get("weight")))] if s.get("weight", spec.get("weight")) else []) + [ "--fit", s.get("fit", "crop")] + (["--y", str(s["y"])] if s.get("y") is not None else [])
+               "--size", str(s.get("size", 60)),] + (["--weight", str(s.get("weight", spec.get("weight")))] if s.get("weight", spec.get("weight")) else []) + (["--font", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fonts", s["font"])] if s.get("font") else []) + ["--fit", s.get("fit", "crop"), "--align", s.get("align", "center"), "--x", str(s.get("x", 0.08))] + (["--y", str(s["y"])] if s.get("y") is not None else [])
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
+        for e in s.get("extra", []):
+            # Extra text blocks on the same slide (originals often have a hook up top and a small CTA lower down).
+            c2 = [sys.executable, overlay, "--in", out, "--out", out, "--text", e["text"], "--style", e.get("style", "classic"),
+                  "--color", e.get("color", "white"), "--size", str(e.get("size", 44)), "--width", str(e.get("width", 0.8)),
+                  "--y", str(e["y"]), "--align", e.get("align", "center"), "--x", str(e.get("x", 0.08))]
+            if e.get("weight"): c2 += ["--weight", str(e["weight"])]
+            if e.get("font"): c2 += ["--font", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fonts", e["font"])]
+            subprocess.run(c2, check=True, stdout=subprocess.DEVNULL)
         if s.get("labels"):
             draw_labels(out, s["labels"])
         outs.append(out)

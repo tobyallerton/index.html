@@ -1,0 +1,26 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "LAST CHANCE to grab it before advent starts😬🎄",
+   "style": "classic",
+   "size": 50,
+   "y": 0.15,
+   "phone_strength": 0.3,
+   "weight": 700,
+   "extra": [
+    {
+     "text": "Grab it\nHere\n⬇️⬇️⬇️",
+     "y": 0.66,
+     "align": "left",
+     "x": 0.02,
+     "size": 40
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

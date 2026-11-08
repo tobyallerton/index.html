@@ -1,0 +1,87 @@
+{
+ "slides": [
+  {
+   "text": "COOL SH*T\nYOU NEED IN\nYOUR ROOM",
+   "style": "classic",
+   "font": "Anton-Regular.ttf",
+   "size": 92,
+   "y": 0.12,
+   "align": "left",
+   "x": 0.07,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "YELLOW\nTO BE IN\nA GOOD MOOD.",
+   "style": "classic",
+   "font": "Anton-Regular.ttf",
+   "size": 82,
+   "y": 0.12,
+   "align": "left",
+   "x": 0.07,
+   "phoneify": false,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "BLUE\nTO RELAX.",
+   "style": "classic",
+   "font": "Anton-Regular.ttf",
+   "size": 82,
+   "y": 0.12,
+   "align": "left",
+   "x": 0.07,
+   "phoneify": false,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "GREEN\nFOR LESS STRESS.",
+   "style": "classic",
+   "font": "Anton-Regular.ttf",
+   "size": 82,
+   "y": 0.12,
+   "align": "left",
+   "x": 0.07,
+   "phoneify": false,
+   "image": "raw/slide-4.png"
+  },
+  {
+   "text": "RED\nFOR MOVIE NIGHTS.",
+   "style": "classic",
+   "font": "Anton-Regular.ttf",
+   "size": 82,
+   "y": 0.12,
+   "align": "left",
+   "x": 0.07,
+   "phoneify": false,
+   "image": "raw/slide-5.png"
+  },
+  {
+   "text": "PURPLE\nFOR LATE NIGHT VIBES.",
+   "style": "classic",
+   "font": "Anton-Regular.ttf",
+   "size": 82,
+   "y": 0.12,
+   "align": "left",
+   "x": 0.07,
+   "phoneify": false,
+   "image": "raw/slide-6.png"
+  },
+  {
+   "text": "Cheaper than a takeaway right now 😭",
+   "style": "classic",
+   "size": 46,
+   "y": 0.25,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "Buy here ⬇️",
+     "y": 0.58,
+     "align": "left",
+     "x": 0.12,
+     "size": 44
+    }
+   ],
+   "image": "raw/slide-7.png"
+  }
+ ]
+}

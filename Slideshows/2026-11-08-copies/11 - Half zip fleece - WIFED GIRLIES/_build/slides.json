@@ -1,0 +1,33 @@
+{
+ "slides": [
+  {
+   "text": "TO ALL MY WIFED GIRLIES MAKE SURE YOU GET YOUR MAN THIS HALF ZIP THIS CHRISTMAS BECAUSE WTF ARE THESE PRICES",
+   "style": "classic",
+   "color": "cream",
+   "size": 46,
+   "y": 0.18,
+   "width": 0.5,
+   "align": "left",
+   "x": 0.45,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "It is NEVER too early\nfor stocking fillers🤭🎅",
+   "style": "classic",
+   "size": 44,
+   "y": 0.22,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "Just be quick, it's selling fast 👇",
+     "y": 0.74,
+     "size": 30,
+     "align": "left",
+     "x": 0.12
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

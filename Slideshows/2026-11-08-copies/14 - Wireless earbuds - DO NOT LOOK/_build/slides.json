@@ -1,0 +1,38 @@
+{
+ "slides": [
+  {
+   "text": "Do NOT look at the price",
+   "style": "classic",
+   "color": "cream",
+   "size": 40,
+   "y": 0.33,
+   "align": "left",
+   "x": 0.1,
+   "width": 0.4,
+   "phone_strength": 0.25,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "I'm warning you...",
+   "style": "classic",
+   "color": "cream",
+   "size": 40,
+   "y": 0.33,
+   "align": "left",
+   "x": 0.1,
+   "phone_strength": 0.25,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "check price here 👇",
+   "style": "classic",
+   "color": "cream",
+   "size": 40,
+   "y": 0.7,
+   "align": "left",
+   "x": 0.1,
+   "phone_strength": 0.25,
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

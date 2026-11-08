@@ -1,0 +1,21 @@
+{
+ "slides": [
+  {
+   "text": "wait... since when could you get a full bag of your favourite flavour celebration...😩😍",
+   "style": "classic",
+   "size": 50,
+   "y": 0.17,
+   "width": 0.78,
+   "extra": [
+    {
+     "text": "Link here\n⬇️⬇️",
+     "y": 0.62,
+     "align": "left",
+     "x": 0.08,
+     "size": 40
+    }
+   ],
+   "image": "raw/slide-1.png"
+  }
+ ]
+}
