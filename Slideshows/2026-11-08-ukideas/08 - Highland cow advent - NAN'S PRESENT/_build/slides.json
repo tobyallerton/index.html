@@ -1,0 +1,34 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "found her a highland cow advent calendar 😭",
+   "style": "box",
+   "size": 44,
+   "y": 0.1,
+   "phone_strength": 0.3,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "24 little highland cows, one every day 🐮",
+   "style": "box",
+   "size": 42,
+   "y": 0.1,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "linked ⬇️",
+     "y": 0.78,
+     "style": "box",
+     "size": 40,
+     "align": "left",
+     "x": 0.08
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

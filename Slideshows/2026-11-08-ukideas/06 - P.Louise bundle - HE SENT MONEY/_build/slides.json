@@ -1,0 +1,24 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "he's a keeper 😭🎀",
+   "style": "classic",
+   "size": 56,
+   "y": 0.14,
+   "phone_strength": 0.3,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "over 14,000 girls already have theirs… it's in the basket ⬇️",
+   "style": "classic",
+   "size": 48,
+   "y": 0.12,
+   "phone_strength": 0.3,
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

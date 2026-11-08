@@ -1,0 +1,41 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "groupchat",
+   "out": "slide-1.png",
+   "title": "Jake 🤍",
+   "members": 1,
+   "light": true,
+   "time": "21:03",
+   "messages": [
+    {
+     "from": "them",
+     "name": "Jake",
+     "text": "what do you want for christmas"
+    },
+    {
+     "from": "me",
+     "text": "honestly nothing"
+    },
+    {
+     "from": "them",
+     "name": "Jake",
+     "text": "you've sent me that pink box 4 times"
+    },
+    {
+     "from": "them",
+     "name": "Jake",
+     "kind": "payment",
+     "bank": "You've received money",
+     "note": "get the one you keep showing me x"
+    },
+    {
+     "from": "me",
+     "text": "JAKE"
+    }
+   ],
+   "read": "Read 21:04"
+  }
+ ]
+}

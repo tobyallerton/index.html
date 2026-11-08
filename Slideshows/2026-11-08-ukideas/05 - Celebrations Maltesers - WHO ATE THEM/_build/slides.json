@@ -1,0 +1,24 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "so I got her her own bag of 50 Maltesers 😭",
+   "style": "classic",
+   "size": 52,
+   "y": 0.14,
+   "phone_strength": 0.3,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "you can pick your favourite flavour… 50 in a bag 🙌\nit's in the basket ⬇️",
+   "style": "classic",
+   "size": 50,
+   "y": 0.14,
+   "phone_strength": 0.3,
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

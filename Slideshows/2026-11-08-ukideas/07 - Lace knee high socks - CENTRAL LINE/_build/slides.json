@@ -1,0 +1,24 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "text": "I found ittt 🤍",
+   "style": "classic",
+   "size": 56,
+   "y": 0.42,
+   "phone_strength": 0.25,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "black and white, 2 pairs 🖤🤍\nlinked ⬇️",
+   "style": "classic",
+   "size": 50,
+   "y": 0.14,
+   "phone_strength": 0.25,
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

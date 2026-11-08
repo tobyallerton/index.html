@@ -1,0 +1,39 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "groupchat",
+   "out": "slide-1.png",
+   "title": "Cousins 🐮",
+   "members": 4,
+   "light": true,
+   "time": "18:27",
+   "messages": [
+    {
+     "from": "them",
+     "name": "Amy",
+     "text": "who's sorting nan's present this year"
+    },
+    {
+     "from": "them",
+     "name": "Josh",
+     "text": "not me i did the slippers last year"
+    },
+    {
+     "from": "them",
+     "name": "Amy",
+     "text": "she literally only likes highland cows"
+    },
+    {
+     "from": "me",
+     "text": "say less"
+    },
+    {
+     "from": "them",
+     "name": "Josh",
+     "text": "what does that mean"
+    }
+   ]
+  }
+ ]
+}

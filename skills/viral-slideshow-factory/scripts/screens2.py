@@ -191,6 +191,142 @@ def snapchat(s):
             d.text((W / 2, y + 41), c["text"], font=f, fill="white", anchor="mm")
     return img
 
+def groupchat(s):
+    """iMessage-style chat that also supports group sender names and a bank-transfer bubble.
+    {"type":"groupchat","title":"The Fam 🎄","members":5,"light":true,"time":"19:42","messages":[
+       {"from":"them","name":"Aunt Sue","text":"..."}, {"from":"me","text":"..."},
+       {"from":"them","name":"Jake","kind":"payment","bank":"You've received money","note":"get the one you keep showing me"}]}"""
+    light = s.get("light", True)
+    bg, fg = ((255, 255, 255), (0, 0, 0)) if light else ((0, 0, 0), (255, 255, 255))
+    them_bg, them_fg = ((233, 233, 235), (0, 0, 0)) if light else ((38, 38, 40), (255, 255, 255))
+    sub = (140, 140, 146)
+    img = Image.new("RGB", (W, H), bg); d = ImageDraw.Draw(img)
+    status_bar(d, s.get("time", "19:42"), fg)
+    d.rectangle([0, 120, W, 340], fill=(246, 246, 246) if light else (22, 22, 24))
+    blue = (10, 132, 255)
+    d.line([(60, 205), (38, 228), (60, 251)], fill=blue, width=7, joint="curve")
+    n = s.get("members", 1)
+    cols = [(176, 140, 120), (120, 150, 180), (190, 160, 130), (150, 120, 140), (130, 160, 140)]
+    if n > 1:
+        for i in range(min(n, 4)):
+            cx = W / 2 - 75 + i * 50
+            d.ellipse([cx - 40, 150 + (i % 2) * 12, cx + 40, 230 + (i % 2) * 12], fill=cols[i], outline=bg, width=4)
+    else:
+        d.ellipse([W / 2 - 52, 140, W / 2 + 52, 244], fill=(110, 110, 118))
+        d.text((W / 2, 192), s["title"][:1].upper(), font=font("medium", 54), fill=fg, anchor="mm")
+    text_emoji(img, (W / 2, 268), s["title"] + "  ›", font("regular", 30), (60, 60, 66) if light else (210, 210, 215), anchor_center=True)
+    d.rounded_rectangle([W - 120, 196, W - 64, 232], radius=8, outline=blue, width=5)
+    d.polygon([(W - 64, 214), (W - 40, 200), (W - 40, 228)], fill=blue)
+    d.text((W / 2, 380), s.get("stamp", "Today " + s.get("time", "19:42")), font=font("medium", 26), fill=sub, anchor="mm")
+    f = font("regular", 40); y = 420; max_w = 640; prev = None
+    for m in s["messages"]:
+        mine = m.get("from") == "me"
+        if not mine and n > 1 and m.get("name") and (prev != m.get("name")):
+            y += 20; d.text((150, y), m["name"], font=font("regular", 26), fill=sub); y += 34
+        else:
+            y += 14 if prev == (m.get("name") if not mine else "me") else 30
+        if m.get("kind") == "payment":
+            bw, bh = 560, 230; x0 = W - 40 - bw if mine else (130 if n > 1 else 40)
+            d.rounded_rectangle([x0, y, x0 + bw, y + bh], radius=36, fill=them_bg if not mine else blue)
+            tc = them_fg if not mine else (255, 255, 255)
+            d.ellipse([x0 + 30, y + 30, x0 + 96, y + 96], fill=(0, 180, 120)); d.text((x0 + 63, y + 63), "£", font=font("semibold", 40), fill="white", anchor="mm")
+            d.text((x0 + 116, y + 34), m.get("bank", "You've received money"), font=font("semibold", 34), fill=tc)
+            d.text((x0 + 116, y + 80), "Bank transfer", font=font("regular", 28), fill=sub)
+            for i, l in enumerate(wrap(d, m.get("note", ""), font("regular", 32), bw - 60)[:2]):
+                d.text((x0 + 30, y + 130 + i * 42), l, font=font("regular", 32), fill=tc)
+        else:
+            lines = wrap(d, EMOJI.sub("", m["text"]).strip(), f, max_w)
+            tw = max(d.textlength(l, font=f) for l in lines); lh = 52; bh = len(lines) * lh + 34; bw = tw + 56
+            x0 = W - 40 - bw if mine else (130 if n > 1 else 40)
+            d.rounded_rectangle([x0, y, x0 + bw, y + bh], radius=40, fill=blue if mine else them_bg)
+            for i, l in enumerate(lines):
+                d.text((x0 + 28, y + 14 + i * lh), l, font=f, fill=(255, 255, 255) if mine else them_fg)
+        if not mine and n > 1:
+            ci = sum(map(ord, m.get("name", "x"))) % len(cols)
+            d.ellipse([40, y + bh - 70, 110, y + bh], fill=cols[ci])
+            d.text((75, y + bh - 35), m.get("name", "x")[:1], font=font("medium", 30), fill="white", anchor="mm")
+        y += bh; prev = m.get("name") if not mine else "me"
+    if s.get("read"):
+        d.text((W - 44, y + 14), s["read"], font=font("medium", 28), fill=sub, anchor="ra")
+    d.rounded_rectangle([130, H - 150, W - 40, H - 70], radius=40, outline=(205, 205, 210) if light else (60, 60, 64), width=3)
+    d.text((170, H - 110), "iMessage", font=font("regular", 36), fill=(130, 130, 136), anchor="lm")
+    d.ellipse([40, H - 145, 110, H - 75], fill=(233, 233, 235) if light else (44, 44, 48)); d.text((75, H - 110), "+", font=font("regular", 50), fill=sub, anchor="mm")
+    return img
+
+def facebook(s):
+    """Facebook text post, light, shown on white. {"type":"facebook","name":"Kerry B","date":"14 Nov","text":"\"reminder to ...\"...","reacts":"You, Sarah Jones and 1.5K others"}"""
+    p = Image.new("RGB", (W, 760), (255, 255, 255)); d = ImageDraw.Draw(p)
+    d.line([(46, 70), (26, 90), (46, 110)], fill=(30, 30, 30), width=6)
+    d.ellipse([70, 40, 170, 140], fill=(150, 120, 100))
+    d.text((190, 50), s["name"], font=font("semibold", 36), fill=(5, 5, 5))
+    d.text((190, 98), s.get("date", "14 Nov") + " · 🌐".replace("🌐", "◍"), font=font("regular", 28), fill=(101, 103, 107))
+    d.text((W - 50, 80), "•••", font=font("semibold", 30), fill=(60, 60, 60), anchor="mm")
+    y = 190
+    for l in wrap(d, s["text"], font("regular", 46), W - 100):
+        d.text((50, y), l, font=font("regular", 46), fill=(5, 5, 5)); y += 62
+    y += 40; d.line([(40, y), (W - 40, y)], fill=(220, 222, 226), width=2); y += 26
+    for i, t in enumerate(["👍 Like", "💬 Comment", "➤ Send", "↪ Share"]):
+        text_emoji(p, (60 + i * 255, y), t, font("regular", 30), (101, 103, 107))
+    y += 70; d.line([(40, y), (W - 40, y)], fill=(220, 222, 226), width=2); y += 26
+    text_emoji(p, (50, y), "😆❤️👍 " + s.get("reacts", "You and 1.5K others"), font("regular", 30), (60, 60, 60))
+    p = p.crop((0, 0, W, y + 70))
+    img = Image.new("RGB", (W, H), (255, 255, 255)); img.paste(p, (0, 200))
+    return img
+
+def tweet(s):
+    """X/Twitter post with optional photo and reply. {"type":"tweet","name":"Ellie 🎀","handle":"@ellie_x","ago":"8h","text":"...","photo":"raw/x.png","stats":["437","1.2K","12K","620K"],
+        "reply":{"name":"mads","handle":"@madds_lee","ago":"7h","text":"let me know when you find out","stats":["9","15","412","27K"]}}"""
+    img = Image.new("RGB", (W, H), (255, 255, 255)); d = ImageDraw.Draw(img)
+    def post(y, t, photo=None):
+        d.ellipse([40, y, 140, y + 100], fill=(150, 120, 110))
+        x = 165
+        w = text_emoji(img, (x, y + 4), t["name"], font("semibold", 34), (15, 20, 25))
+        d.text((x + w + 12, y + 6), f"{t['handle']} · {t.get('ago', '8h')}", font=font("regular", 32), fill=(83, 100, 113))
+        ty = y + 54
+        for l in wrap(d, t["text"], font("regular", 36), W - x - 50):
+            text_emoji(img, (x, ty), l, font("regular", 36), (15, 20, 25)); ty += 48
+        if photo:
+            ph = ImageOps.fit(Image.open(photo).convert("RGB"), (W - x - 50, 760), Image.LANCZOS)
+            m = Image.new("L", ph.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, ph.width, ph.height], radius=30, fill=255)
+            img.paste(ph, (x, ty + 14), m); ty += 790
+        sx = x
+        for icon, v in zip(["◯", "⇄", "♡", "▥"], t.get("stats", ["437", "1.2K", "12K", "620K"])):
+            d.text((sx, ty + 12), f"{icon} {v}", font=font("regular", 28), fill=(83, 100, 113)); sx += 190
+        return ty + 80
+    y = post(120, s, s.get("photo"))
+    if s.get("reply"):
+        d.line([(90, 230), (90, y - 30)], fill=(207, 217, 222), width=4)
+        post(y, s["reply"])
+    return img
+
+def pastel(s):
+    """Text-only slide on a soft pastel background, serif type, like the US parenting-book lists.
+    {"type":"pastel","bg":"#f6d5c8","title":"#1","head":"Once a month...","body":["line", "line"]} or {"type":"pastel","cover":"Christmas Traditions ..."}"""
+    from PIL import ImageFont
+    bg = s.get("bg", "#f6d5c8")
+    img = Image.new("RGB", (W, H), bg)
+    glow = Image.new("L", (W, H), 0); ImageDraw.Draw(glow).ellipse([-200, 300, W + 200, H - 300], fill=70)
+    img = Image.composite(Image.new("RGB", (W, H), "#fff3ec"), img, glow.filter(ImageFilter.GaussianBlur(160)))
+    d = ImageDraw.Draw(img)
+    serif = lambda w, sz: (lambda f: (f.set_variation_by_axes([w]), f)[1])(ImageFont.truetype(os.path.join(FONTS, "PlayfairDisplay-Variable.ttf"), sz))
+    col = (40, 30, 30)
+    if s.get("cover"):
+        lines = wrap(d, s["cover"], serif(400, 62), W - 220); y = H / 2 - len(lines) * 40
+        for l in lines: d.text((W / 2, y), l, font=serif(400, 62), fill=col, anchor="mm"); y += 80
+    else:
+        y = 700
+        d.text((W / 2, y), s["title"], font=serif(700, 48), fill=col, anchor="mm"); y += 80
+        for l in wrap(d, s["head"], serif(700, 54), W - 240):
+            d.text((W / 2, y), l, font=serif(700, 54), fill=col, anchor="mm"); y += 70
+        y += 40
+        for para in s.get("body", []):
+            for l in wrap(d, para, serif(400, 40), W - 300):
+                d.text((W / 2, y), l, font=serif(400, 40), fill=col, anchor="mm"); y += 54
+            y += 34
+    for i in range(6):
+        text_emoji(img, (60 + i * 190, H - 120), "🤍", font("regular", 40), col)
+    return img
+
 def main():
     spec_path = os.path.abspath(sys.argv[1])
     spec = json.load(open(spec_path, encoding="utf-8"))
@@ -199,7 +335,7 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     outs = []
     for s in spec["screens"]:
-        img = {"notification": notification, "instagram": instagram, "google": google, "comment": comment, "snapchat": snapchat}[s["type"]](s)
+        img = {"notification": notification, "instagram": instagram, "google": google, "comment": comment, "snapchat": snapchat, "groupchat": groupchat, "facebook": facebook, "tweet": tweet, "pastel": pastel}[s["type"]](s)
         p = os.path.join(out_dir, s["out"]); img.convert("RGB").save(p); outs.append(p)
     print(json.dumps({"screens": outs}))
 

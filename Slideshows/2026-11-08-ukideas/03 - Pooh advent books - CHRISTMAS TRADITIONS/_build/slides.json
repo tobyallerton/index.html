@@ -1,0 +1,40 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "no_text": true
+  },
+  {
+   "image": "raw/slide-2.png",
+   "no_text": true
+  },
+  {
+   "image": "raw/slide-3.png",
+   "no_text": true
+  },
+  {
+   "image": "raw/slide-4.png",
+   "no_text": true
+  },
+  {
+   "image": "raw/slide-5.png",
+   "no_text": true
+  },
+  {
+   "image": "raw/slide-6.png",
+   "no_text": true
+  },
+  {
+   "image": "raw/slide-7.png",
+   "no_text": true
+  },
+  {
+   "text": "the Pooh advent books are in the basket ⬇️🎄",
+   "style": "classic",
+   "size": 48,
+   "y": 0.12,
+   "phone_strength": 0.3,
+   "image": "raw/slide-8.png"
+  }
+ ]
+}

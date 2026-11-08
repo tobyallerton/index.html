@@ -1,0 +1,51 @@
+{
+ "slides": [
+  {
+   "text": "The government says every UK household should have an emergency kit at home…",
+   "style": "classic",
+   "size": 54,
+   "position": "middle",
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "So I checked the list… a torch? a radio? We had neither 😬",
+   "style": "classic",
+   "size": 52,
+   "y": 0.16,
+   "phone_strength": 0.3,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "That's why I got these solar lanterns. They charge in the sun, so you're not relying on candles",
+   "style": "classic",
+   "size": 48,
+   "y": 0.12,
+   "phone_strength": 0.3,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "Push one down and it's a torch, pull it up and it lights the whole room",
+   "style": "classic",
+   "size": 48,
+   "y": 0.12,
+   "phone_strength": 0.3,
+   "image": "raw/slide-4.png"
+  },
+  {
+   "text": "Don't wait until the power goes out to sort it. Grab a set while you still can ⬇️",
+   "style": "classic",
+   "size": 48,
+   "y": 0.12,
+   "phone_strength": 0.3,
+   "extra": [
+    {
+     "text": "(they're in the basket)",
+     "y": 0.29,
+     "size": 36
+    }
+   ],
+   "image": "raw/slide-5.png"
+  }
+ ]
+}

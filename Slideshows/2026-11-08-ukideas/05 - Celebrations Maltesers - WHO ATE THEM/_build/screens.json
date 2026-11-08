@@ -1,0 +1,44 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "groupchat",
+   "out": "slide-1.png",
+   "title": "The Fam 🎄",
+   "members": 5,
+   "light": true,
+   "time": "20:14",
+   "messages": [
+    {
+     "from": "them",
+     "name": "Mum",
+     "text": "ok who ate all the maltesers out the celebrations tub"
+    },
+    {
+     "from": "them",
+     "name": "Dad",
+     "text": "Nan"
+    },
+    {
+     "from": "them",
+     "name": "Ellie",
+     "text": "Nan"
+    },
+    {
+     "from": "them",
+     "name": "Uncle Rob",
+     "text": "Nan"
+    },
+    {
+     "from": "them",
+     "name": "Nan",
+     "text": "I want a solicitor"
+    },
+    {
+     "from": "me",
+     "text": "nan i'm crying"
+    }
+   ]
+  }
+ ]
+}

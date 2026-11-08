@@ -1,0 +1,70 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "pastel",
+   "out": "slide-1.png",
+   "cover": "Christmas Traditions That Will Give Your Kids A Childhood They Never Forget…"
+  },
+  {
+   "type": "pastel",
+   "out": "slide-2.png",
+   "title": "#1",
+   "head": "A Christmas Eve box.",
+   "body": [
+    "New pyjamas, a Christmas film and a hot chocolate.",
+    "The night before the magic starts."
+   ]
+  },
+  {
+   "type": "pastel",
+   "out": "slide-3.png",
+   "title": "#2",
+   "head": "A story every night in December.",
+   "body": [
+    "24 little books of the original Winnie-the-Pooh stories and poems, one each night.",
+    "They'll ask for it before bed, every single night."
+   ]
+  },
+  {
+   "type": "pastel",
+   "out": "slide-4.png",
+   "title": "#3",
+   "head": "Matching pyjamas for the Christmas photo.",
+   "body": [
+    "Even the dog.",
+    "You'll laugh at those photos for years."
+   ]
+  },
+  {
+   "type": "pastel",
+   "out": "slide-5.png",
+   "title": "#4",
+   "head": "A note for Father Christmas.",
+   "body": [
+    "A mince pie for him, a carrot for Rudolph.",
+    "Then watch their faces in the morning."
+   ]
+  },
+  {
+   "type": "pastel",
+   "out": "slide-6.png",
+   "title": "#5",
+   "head": "Christmas morning, no phones.",
+   "body": [
+    "Just pyjamas, paper everywhere and too much chocolate.",
+    "Be there for all of it."
+   ]
+  },
+  {
+   "type": "pastel",
+   "out": "slide-7.png",
+   "title": "#6",
+   "head": "One new decoration every year.",
+   "body": [
+    "Let them choose it.",
+    "One day they'll hang them on their own tree and think of you."
+   ]
+  }
+ ]
+}

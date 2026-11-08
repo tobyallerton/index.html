@@ -1,0 +1,32 @@
+{
+ "out_dir": "raw",
+ "screens": [
+  {
+   "type": "tweet",
+   "out": "slide-1.png",
+   "name": "Ellie 🎀",
+   "handle": "@elliebxo",
+   "ago": "8h",
+   "photo": "raw/tubephoto.png",
+   "text": "I've been going insane trying to figure out where the girl on the Central line this morning got her lace socks from",
+   "stats": [
+    "437",
+    "1.2K",
+    "12K",
+    "620K"
+   ],
+   "reply": {
+    "name": "mads",
+    "handle": "@madds_lee",
+    "ago": "7h",
+    "text": "let me know when you find out",
+    "stats": [
+     "9",
+     "15",
+     "412",
+     "27K"
+    ]
+   }
+  }
+ ]
+}
