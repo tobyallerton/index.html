@@ -1,0 +1,66 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "imagine a storm knocks the power out for days this winter… would your house actually be ready? 😨",
+   "style": "classic",
+   "color": "white",
+   "position": "middle",
+   "size": 66,
+   "phoneify": false
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "pitch black by 4pm. phone on 4%. no wifi. and you're feeling around the kitchen for candles 😬",
+   "style": "classic",
+   "color": "white",
+   "position": "top",
+   "size": 58,
+   "phone_strength": 0.35
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "that's why I keep 2 of these solar lanterns in the cupboard. a lantern AND a torch in one 🔦",
+   "style": "classic",
+   "color": "white",
+   "position": "top",
+   "size": 58,
+   "phone_strength": 0.35
+  },
+  {
+   "image": "raw/slide-4.png",
+   "text": "the clever bit? they charge in the sun on the windowsill, or run off batteries, so you don't need a plug when the power's gone ☀️",
+   "style": "classic",
+   "color": "white",
+   "position": "top",
+   "size": 56,
+   "phone_strength": 0.35
+  },
+  {
+   "image": "raw/slide-5.png",
+   "text": "push it down and it turns into a torch… perfect for finding the fuse box in the dark",
+   "style": "classic",
+   "color": "white",
+   "position": "top",
+   "size": 58,
+   "phone_strength": 0.35
+  },
+  {
+   "image": "raw/slide-6.png",
+   "text": "magnetic base, fold-out hook AND you can dim them, so you can stick or hang them anywhere",
+   "style": "classic",
+   "color": "white",
+   "position": "top",
+   "size": 58,
+   "phone_strength": 0.35
+  },
+  {
+   "image": "raw/slide-7.png",
+   "text": "I'd rather have these sat in a drawer and never need them than be stuck in the dark without them 🕯️\n6,500+ sold already, you get 2 and they're really cheap atm ⬇️ it's in the basket",
+   "style": "box",
+   "position": "top",
+   "size": 48,
+   "phone_strength": 0.35
+  }
+ ]
+}
