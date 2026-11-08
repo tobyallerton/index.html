@@ -34,15 +34,16 @@
   },
   {
    "text": "Don't wait until the power goes out to sort it. Grab a set while you still can ⬇️",
-   "style": "classic",
-   "size": 48,
-   "y": 0.12,
+   "style": "box",
+   "size": 40,
+   "y": 0.08,
    "phone_strength": 0.3,
    "extra": [
     {
-     "text": "(they're in the basket)",
-     "y": 0.29,
-     "size": 36
+     "text": "they're in the basket ⬇️",
+     "y": 0.27,
+     "style": "box",
+     "size": 38
     }
    ],
    "image": "raw/slide-5.png"

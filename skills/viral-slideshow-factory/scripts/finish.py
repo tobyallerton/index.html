@@ -50,10 +50,11 @@ def check(post, slides):
         warns.append("commission_per_sale not recorded")
 
     sl = slides.get("slides", [])
-    if sl and not CTA.search(str(sl[-1].get("text", ""))):
+    alltext = lambda x: " ".join([str(x.get("text", ""))] + [str(e.get("text", "")) for e in x.get("extra", [])])
+    if sl and not CTA.search(alltext(sl[-1])):
         errors.append("last slide has no call to action (e.g. 'linked in the basket', 'tap the basket') - every slideshow must end with one")
     texts = [("title", post.get("title", "")), ("caption", post.get("caption", ""))]
-    texts += [(f"slide {i}", s.get("text", "")) for i, s in enumerate(slides.get("slides", []), 1)]
+    texts += [(f"slide {i}", alltext(s)) for i, s in enumerate(slides.get("slides", []), 1)]
     price, was = get(post, "product.price"), get(post, "product.was_price")
     sym = SYM.get(str(get(post, "product.currency") or "").upper())
     allowed = [p for p in (price, was) if isinstance(p, (int, float))]
