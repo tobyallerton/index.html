@@ -56,7 +56,7 @@ def main():
         cmd = [sys.executable, overlay, "--in", src, "--out", out, "--text", s.get("text", ""),
                "--position", s.get("position", "top"), "--style", s.get("style", spec.get("style", "classic")),
                "--color", s.get("color", spec.get("color", "white")), "--width", str(s.get("width", spec.get("width", 0.62))),
-               "--size", str(s.get("size", 60)), "--fit", s.get("fit", "crop")] + (["--y", str(s["y"])] if s.get("y") is not None else [])
+               "--size", str(s.get("size", 60)),] + (["--weight", str(s.get("weight", spec.get("weight")))] if s.get("weight", spec.get("weight")) else []) + [ "--fit", s.get("fit", "crop")] + (["--y", str(s["y"])] if s.get("y") is not None else [])
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
         if s.get("labels"):
             draw_labels(out, s["labels"])

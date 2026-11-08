@@ -122,12 +122,13 @@ def main():
     ap.add_argument("--width", type=float, default=0.62, help="max line width as a fraction of the slide (viral hooks wrap narrow)")
     ap.add_argument("--fit", default="crop", choices=["crop", "pad"])
     ap.add_argument("--font")
+    ap.add_argument("--weight", type=int, default=None, help="font weight 400-900 (default 620; 700 for a bolder hook like the original)")
     a = ap.parse_args()
 
     base = fit_canvas(Image.open(a.inp), a.fit).convert("RGBA")
     text = a.text.strip()
     if text:
-        f = font(a.font, a.size, 620 if a.style != "box" else 600)
+        f = font(a.font, a.size, a.weight or (620 if a.style != "box" else 600))
         em = a.size * 0.95
         max_w = int(W * (max(a.width, 0.80) if a.style == "box" else a.width))
         lines = wrap(text, f, em, max_w)
