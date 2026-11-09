@@ -1,0 +1,29 @@
+{
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "if she's been hinting about the Elemis cleansing balm… get her ALL 5 this christmas 😭🎁",
+   "style": "classic",
+   "color": "yellow",
+   "size": 64,
+   "y": 0.12,
+   "phoneify": false
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "the Elemis Cleansing Balm Collection 🤍\noriginal, rose, black cherry, green fig & fragrance-free",
+   "style": "box",
+   "size": 44,
+   "y": 0.08,
+   "phone_strength": 0.1,
+   "extra": [
+    {
+     "text": "it's really cheap atm, it's in the basket ⬇️",
+     "y": 0.25,
+     "style": "box",
+     "size": 42
+    }
+   ]
+  }
+ ]
+}
