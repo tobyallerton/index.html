@@ -1,0 +1,35 @@
+{
+ "slides": [
+  {
+   "text": "if your nan has highland cow EVERYTHING… you need to see this 🐮",
+   "size": 60,
+   "y": 0.1,
+   "phoneify": false,
+   "style": "classic",
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "a highland cow advent calendar. 24 doors, 24 little cows",
+   "size": 56,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "style": "classic",
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "every single one is different 😭 she'll have them lined up on the windowsill by the 5th",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.76,
+     "size": 54
+    }
+   ],
+   "style": "classic",
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

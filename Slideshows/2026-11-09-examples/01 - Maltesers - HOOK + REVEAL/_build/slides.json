@@ -1,0 +1,27 @@
+{
+ "slides": [
+  {
+   "text": "every christmas the maltesers are gone by 11am and the bounties are still there in february 😭",
+   "size": 58,
+   "y": 0.1,
+   "phoneify": false,
+   "style": "classic",
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "so this year I'm not sharing. you can get a whole bag of 50 of just your favourite 😍",
+   "size": 56,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.76,
+     "size": 54
+    }
+   ],
+   "style": "classic",
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

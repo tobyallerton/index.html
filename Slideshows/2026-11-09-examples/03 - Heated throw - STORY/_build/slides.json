@@ -1,0 +1,60 @@
+{
+ "slides": [
+  {
+   "text": "spending christmas at my boyfriend's parents and nobody warned me about one thing…",
+   "size": 60,
+   "y": 0.1,
+   "phoneify": false,
+   "style": "classic",
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "his dad treats the heating like it costs £100 a click 😭",
+   "size": 60,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "style": "classic",
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "I've been sleeping in my coat. his mum lent me her bobble hat",
+   "size": 58,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "style": "classic",
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "so I did what any girlfriend would do…",
+   "size": 62,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "style": "classic",
+   "image": "raw/slide-4.png"
+  },
+  {
+   "text": "brought my own heated throw 😌",
+   "size": 64,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "style": "classic",
+   "image": "raw/slide-5.png"
+  },
+  {
+   "text": "and now his DAD keeps stealing it 😭",
+   "size": 64,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "style": "classic",
+   "image": "raw/slide-6.png"
+  },
+  {
+   "text": "his mum's ordered two. it's in the basket ⬇️",
+   "size": 62,
+   "y": 0.1,
+   "phone_strength": 0.12,
+   "style": "classic",
+   "image": "raw/slide-7.png"
+  }
+ ]
+}
