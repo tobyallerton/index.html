@@ -9,6 +9,17 @@ Turns what is selling on TikTok Shop right now into **new** slideshows the user 
 
 Each remake keeps the *idea* of a proven winner (hook angle, slide structure, selling point). It must look like a different post by a different creator, and the **product must be the real product**: same packaging, colours, shape, logo and label.
 
+## MAIN MODE: remake a slideshow the user sends (user's choice, 9 Nov)
+
+This is how the user works now. They send a TikTok slideshow (a link, often a vm.tiktok.com share link, or screenshots of the slides) and sometimes the product (a link or screenshots of the listing). You recreate it **pretty much the same**: same concept, same slide order and number of slides, same kind of photo on each slide (scene, framing, props, mood), same text placement, style and colour, and nearly the same words. Change it **slightly** so it reads as a different post: a different (AI) person, a slightly different angle, room and props, and lightly reworded text that still says the same thing. Don't "improve" the story, add slides or invent a new angle: the user wants the proven winner, not a new idea.
+
+1. **Get the original.** Link: `scripts/run-chrome.sh tt_fetch.js --url <link> --out <run>/_research/orig` saves every slide, the caption, the sound and stats (meta.json). Screenshots: copy the uploaded images into the same folder. Look at every slide at full size.
+2. **Get the product.** Use the product the user names or sends; otherwise the one tagged on the original (Social1 product page or `item.json` anchors). Save the listing photo as `_build/product/listing.jpg` (crop it from the user's screenshots if that's all you have). Note price, commission and sales from what the user sends.
+3. **Write it down slide by slide** before generating anything: for each slide, what the photo shows (scene, framing, props, light, who's in it and how), the exact text, its position, style (classic / box / yellow / outline) and size. This is your copy sheet.
+4. **Remake each slide.** Photos: ChatGPT prompts that describe the same scene with the small changes, with the product reference attached on every slide that shows the product. Never upload the original creator's images to ChatGPT, and never copy a real person's face: describe the scene instead. Screenshot-style slides (chats, emails, comments, Google, notifications, tweets, Instagram, Facebook): redraw them with `screens.py` / `screens2.py` with the same layout and the wording lightly changed. Text: TikTok Sans (the default), same position and style as the original.
+5. **Keep it honest.** Swap anything you can't stand behind: exact prices (use "really cheap atm"), "sale ends Thursday" or "last few left" (unless true), invented reviews, copyrighted characters or film stills (use a similar original image), real people's photos. Say in the reply what you changed and why.
+6. **Build, check, send**: make_slides.py, finish.py, look at every slide, then send the slides and post.txt as files. Put the original next to the remake (comparison.png) so the user can see it's the same idea.
+
 ## Settings (the user can override any of these in their request)
 
 | Setting | Default |
