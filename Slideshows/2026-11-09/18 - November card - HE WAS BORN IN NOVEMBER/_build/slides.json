@@ -1,0 +1,35 @@
+{
+ "slides": [
+  {
+   "text": "my brother was born in November.",
+   "style": "classic",
+   "size": 56,
+   "position": "middle",
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "my brother was born in November.",
+   "style": "classic",
+   "size": 56,
+   "y": 0.1,
+   "phone_strength": 0.1,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "for every November birthday you love (and roast) 😂",
+   "style": "classic",
+   "size": 52,
+   "y": 0.1,
+   "phone_strength": 0.1,
+   "extra": [
+    {
+     "text": "linked ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "slides": [
+  {
+   "text": "presents mum has PRETENDED to love, as cupcakes 🧁",
+   "style": "box",
+   "size": 44,
+   "y": 0.06,
+   "phoneify": false,
+   "extra": [
+    {
+     "text": "bath set #14",
+     "y": 0.4,
+     "x": 0.06,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    },
+    {
+     "text": "socks",
+     "y": 0.4,
+     "x": 0.42,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    },
+    {
+     "text": "'world's best mum' mug",
+     "y": 0.4,
+     "x": 0.64,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    },
+    {
+     "text": "a candle",
+     "y": 0.8,
+     "x": 0.18,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    },
+    {
+     "text": "this teddy 🧸",
+     "y": 0.8,
+     "x": 0.6,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    }
+   ],
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "the one she'll actually keep on her bedside 🥹",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

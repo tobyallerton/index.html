@@ -1,0 +1,35 @@
+{
+ "slides": [
+  {
+   "text": "my nan has 24 cows.",
+   "style": "classic",
+   "size": 62,
+   "position": "middle",
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "my nan has 24 cows.",
+   "style": "classic",
+   "size": 62,
+   "position": "middle",
+   "phone_strength": 0.15,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "one every day in December and she's obsessed 🐮",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

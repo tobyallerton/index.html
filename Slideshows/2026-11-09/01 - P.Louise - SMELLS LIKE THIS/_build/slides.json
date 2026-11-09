@@ -1,0 +1,35 @@
+{
+ "slides": [
+  {
+   "text": "a skincare bundle that smells like this:",
+   "style": "classic",
+   "size": 50,
+   "y": 0.47,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "the P.Louise Strawberry Shortcake bundle 🍓",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "she'll smell like dessert all winter 🎀",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

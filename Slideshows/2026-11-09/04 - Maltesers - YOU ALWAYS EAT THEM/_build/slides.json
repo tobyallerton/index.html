@@ -1,0 +1,34 @@
+{
+ "slides": [
+  {
+   "text": "you always eat all the Maltesers",
+   "style": "classic",
+   "size": 54,
+   "y": 0.36,
+   "phoneify": false,
+   "extra": [
+    {
+     "text": "get your own bag of 50",
+     "y": 0.86,
+     "size": 54
+    }
+   ],
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "no more fighting over the tub 😭",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "pick your flavour, it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

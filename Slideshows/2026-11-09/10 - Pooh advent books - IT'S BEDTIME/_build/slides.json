@@ -1,0 +1,35 @@
+{
+ "slides": [
+  {
+   "text": "it's bedtime.",
+   "style": "classic",
+   "size": 64,
+   "position": "middle",
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "it's bedtime.",
+   "style": "classic",
+   "size": 64,
+   "position": "middle",
+   "phone_strength": 0.15,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "a little Pooh story every night of December 🍯",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

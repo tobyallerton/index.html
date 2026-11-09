@@ -1,0 +1,43 @@
+{
+ "slides": [
+  {
+   "text": "whose hair is all over the bathroom? can you solve it? 🔍",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "clue #1 🔍",
+   "style": "classic",
+   "size": 64,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "clue #2 🔍",
+   "style": "classic",
+   "size": 64,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "it was mine 🫠 so I started the rosemary rice water spray everyone's on about",
+   "style": "classic",
+   "size": 50,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-4.png"
+  }
+ ]
+}

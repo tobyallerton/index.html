@@ -1,0 +1,43 @@
+{
+ "slides": [
+  {
+   "text": "someone's been using my perfume. can you solve it? 🔍",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.1,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "clue #1: her room smells AMAZING 🔍",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "clue #2 🔍",
+   "style": "classic",
+   "size": 64,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "it was my sister. good job it comes as a set of 2 😭",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "one each now. it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-4.png"
+  }
+ ]
+}

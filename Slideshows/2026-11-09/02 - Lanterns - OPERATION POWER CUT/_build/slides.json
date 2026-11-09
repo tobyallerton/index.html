@@ -1,0 +1,43 @@
+{
+ "slides": [
+  {
+   "text": "OPERATION: POWER CUT READY 🔦",
+   "style": "classic",
+   "size": 64,
+   "y": 0.1,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "Step 1: one in the hallway so nobody falls down the stairs",
+   "style": "classic",
+   "size": 52,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "Step 2: push it down and it's a torch for the fuse box",
+   "style": "classic",
+   "size": 52,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "image": "raw/slide-3.png"
+  },
+  {
+   "text": "Step 3: they charge on the windowsill, so no hunting for batteries",
+   "style": "classic",
+   "size": 52,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "mission complete. they're in the basket ⬇️",
+     "y": 0.72,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-4.png"
+  }
+ ]
+}

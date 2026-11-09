@@ -1,0 +1,35 @@
+{
+ "slides": [
+  {
+   "text": "\"my teeth look yellow in every photo. what do I do?\"",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "1. stop wasting money on strips and charcoal",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "image": "raw/slide-2.png"
+  },
+  {
+   "text": "2. the Colgate Max White bundle, every morning and night",
+   "style": "classic",
+   "size": 52,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-3.png"
+  }
+ ]
+}

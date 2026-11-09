@@ -1,0 +1,69 @@
+{
+ "slides": [
+  {
+   "text": "secret santa gifts, as cupcakes 🧁",
+   "style": "box",
+   "size": 46,
+   "y": 0.06,
+   "phoneify": false,
+   "extra": [
+    {
+     "text": "novelty mug",
+     "y": 0.4,
+     "x": 0.08,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    },
+    {
+     "text": "socks again",
+     "y": 0.4,
+     "x": 0.4,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    },
+    {
+     "text": "bath bomb",
+     "y": 0.4,
+     "x": 0.7,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    },
+    {
+     "text": "chocolate orange",
+     "y": 0.8,
+     "x": 0.14,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    },
+    {
+     "text": "medicube minis 🎀",
+     "y": 0.8,
+     "x": 0.58,
+     "align": "left",
+     "style": "box",
+     "size": 34
+    }
+   ],
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "whoever gets this one wins secret santa, no contest 🎁",
+   "style": "classic",
+   "size": 52,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}

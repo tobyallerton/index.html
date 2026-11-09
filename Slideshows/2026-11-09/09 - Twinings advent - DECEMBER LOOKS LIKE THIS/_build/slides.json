@@ -1,0 +1,27 @@
+{
+ "slides": [
+  {
+   "text": "24 days that look like this:",
+   "style": "classic",
+   "size": 56,
+   "y": 0.47,
+   "phoneify": false,
+   "image": "raw/slide-1.png"
+  },
+  {
+   "text": "a different tea behind every door ☕",
+   "style": "classic",
+   "size": 54,
+   "y": 0.1,
+   "phone_strength": 0.15,
+   "extra": [
+    {
+     "text": "it's in the basket ⬇️",
+     "y": 0.74,
+     "size": 52
+    }
+   ],
+   "image": "raw/slide-2.png"
+  }
+ ]
+}
