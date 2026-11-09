@@ -1,0 +1,53 @@
+{
+ "slides": [
+  {
+   "text": "psa don't\nget this for\nher unless\nyou want\nhere eyes to\nball out",
+   "style": "classic",
+   "color": "yellow",
+   "size": 58,
+   "y": 0.17,
+   "align": "left",
+   "x": 0.4,
+   "width": 0.45,
+   "image": "raw/slide-1.png",
+   "phoneify": false
+  },
+  {
+   "text": "I got my daughter this as she's\nobsessed with skincare and\nmakeup..!!💋",
+   "style": "box",
+   "color": "#e0263a",
+   "size": 40,
+   "y": 0.12,
+   "extra": [
+    {
+     "text": "WAS £89.99❌",
+     "y": 0.25,
+     "size": 34,
+     "align": "left",
+     "x": 0.14,
+     "style": "box",
+     "bg": "#000000",
+     "color": "#ffffff"
+    },
+    {
+     "text": "NOW £29.99✅",
+     "y": 0.25,
+     "size": 34,
+     "align": "left",
+     "x": 0.55,
+     "style": "box"
+    },
+    {
+     "text": "hopefully the\nintroductory offer is\nstill on for all of you lot😘\n⬇️⬇️⬇️",
+     "y": 0.7,
+     "size": 26,
+     "align": "left",
+     "x": 0.3,
+     "style": "box"
+    }
+   ],
+   "image": "raw/slide-2.png",
+   "phoneify": false
+  }
+ ]
+}

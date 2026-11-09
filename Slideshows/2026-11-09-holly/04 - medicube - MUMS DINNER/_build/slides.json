@@ -1,0 +1,29 @@
+{
+ "slides": [
+  {
+   "text": "To all of my MUMS who\ndon't know what to get their\ndaughter for Christmas...🎄🤯",
+   "style": "classic",
+   "size": 46,
+   "y": 0.25,
+   "image": "raw/slide-1.png",
+   "phoneify": false
+  },
+  {
+   "text": "My daughter is obsessed with\nMEDICUBE so I got her this BRAND\nNEW miniature skincare set on an\nintroductory sale..!!😍",
+   "style": "box",
+   "size": 38,
+   "y": 0.16,
+   "extra": [
+    {
+     "text": "I'm still shocked on how\naffordable it was..!!😍\n⬇️⬇️",
+     "y": 0.72,
+     "size": 30,
+     "align": "left",
+     "x": 0.08
+    }
+   ],
+   "image": "raw/slide-2.png",
+   "phoneify": false
+  }
+ ]
+}

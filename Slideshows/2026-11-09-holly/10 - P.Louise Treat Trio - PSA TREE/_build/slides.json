@@ -1,0 +1,42 @@
+{
+ "slides": [
+  {
+   "text": "psa don't\nget this for\nher unless\nyou want\nher eyes to\nball out",
+   "style": "classic",
+   "color": "yellow",
+   "size": 74,
+   "y": 0.32,
+   "width": 0.6,
+   "image": "raw/slide-1.png",
+   "phoneify": false
+  },
+  {
+   "text": "My boyfriend got me this\nas I'm obsessed with my\nmakeup and skincare..!!!",
+   "style": "box",
+   "size": 42,
+   "y": 0.14,
+   "extra": [
+    {
+     "text": "WAS £81❌ NOW UNDER £20✅",
+     "y": 0.29,
+     "size": 30,
+     "style": "box",
+     "bg": "#000000",
+     "color": "#ffffff"
+    },
+    {
+     "text": "I FEEL SO BAD FOR HIM,\nHE GOT ALL OF THIS\nWHEN IT WAS £81\nAND NOW IT'S ON\nTHAT HUGE SALE..!!\n⬇️⬇️",
+     "y": 0.64,
+     "size": 26,
+     "align": "left",
+     "x": 0.05,
+     "style": "box",
+     "bg": "#000000",
+     "color": "#ffffff"
+    }
+   ],
+   "image": "raw/slide-2.png",
+   "phoneify": false
+  }
+ ]
+}

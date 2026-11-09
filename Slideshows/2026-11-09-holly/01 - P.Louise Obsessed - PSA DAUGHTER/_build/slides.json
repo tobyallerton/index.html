@@ -1,0 +1,52 @@
+{
+ "slides": [
+  {
+   "text": "psa don't\nget this for\nher unless\nyou want\nher eyes to\nball out",
+   "style": "classic",
+   "color": "yellow",
+   "size": 60,
+   "y": 0.17,
+   "align": "left",
+   "x": 0.56,
+   "width": 0.42,
+   "image": "raw/slide-1.png",
+   "phoneify": false
+  },
+  {
+   "text": "My daughter is obsessed with skincare\nand makeup so I got her this cute\nChristmas themed bundle..!! 😉",
+   "style": "box",
+   "color": "#e0263a",
+   "size": 36,
+   "y": 0.13,
+   "extra": [
+    {
+     "text": "WAS £89.99❌",
+     "y": 0.255,
+     "size": 34,
+     "align": "left",
+     "x": 0.14,
+     "style": "box",
+     "bg": "#000000",
+     "color": "#ffffff"
+    },
+    {
+     "text": "NOW UNDER £30✅",
+     "y": 0.255,
+     "size": 34,
+     "align": "left",
+     "x": 0.52,
+     "style": "box"
+    },
+    {
+     "text": "hopefully the introductory\noffer is still on whilst your\n⬇️⬇️ seeing this 😉",
+     "y": 0.7,
+     "size": 28,
+     "align": "left",
+     "x": 0.2
+    }
+   ],
+   "image": "raw/slide-2.png",
+   "phoneify": false
+  }
+ ]
+}

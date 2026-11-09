@@ -1,0 +1,51 @@
+{
+ "slides": [
+  {
+   "text": "psa don't\nget this\nfor her\nunless you\nwant her\neyes to\nball out",
+   "style": "classic",
+   "color": "yellow",
+   "size": 74,
+   "y": 0.3,
+   "width": 0.55,
+   "image": "raw/slide-1.png",
+   "phoneify": false
+  },
+  {
+   "text": "My boyfriend got me this\nas I'm obsessed with my\nmakeup and skincare..!!!",
+   "style": "box",
+   "color": "#e0263a",
+   "size": 42,
+   "y": 0.12,
+   "extra": [
+    {
+     "text": "WAS £91❌",
+     "y": 0.27,
+     "size": 34,
+     "align": "left",
+     "x": 0.2,
+     "style": "box",
+     "bg": "#000000",
+     "color": "#ffffff"
+    },
+    {
+     "text": "NOW UNDER £20✅",
+     "y": 0.27,
+     "size": 34,
+     "align": "left",
+     "x": 0.5,
+     "style": "box"
+    },
+    {
+     "text": "honestly I still can't\nbelive I paid £91 for\nthis when the flash sale\nsaves you so much!!!\n⬇️⬇️",
+     "y": 0.66,
+     "size": 26,
+     "align": "left",
+     "x": 0.06,
+     "style": "box"
+    }
+   ],
+   "image": "raw/slide-2.png",
+   "phoneify": false
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "slides": [
+  {
+   "text": "TO EVERY\nPARENT STUCK\nON WHAT TO\nBUY YOUR\nDAUGHTER THIS\nCHRISTMAS GET\nTHIS MEDICUBE\nBUNDLE BECAUSE\nI CAN'T BELIEVE\nTHESE PRICES..!!",
+   "style": "classic",
+   "color": "cream",
+   "size": 46,
+   "y": 0.16,
+   "align": "left",
+   "x": 0.05,
+   "width": 0.5,
+   "image": "raw/slide-1.png",
+   "phoneify": false
+  },
+  {
+   "text": "As OMG I just picked up\nMedicube's BRAND NEW PDRN\nGift Set on an INTRODUCTORY\nOFFER For My Daughter..!!😍",
+   "style": "box",
+   "bg": "#000000",
+   "color": "#ffffff",
+   "size": 38,
+   "y": 0.15,
+   "extra": [
+    {
+     "text": "HOPEFULLY THERE IS\nSOME LEFT AS THEIR\nNEW LAUNCHES\nALWAYS SELL OUT😂\n⬇️⬇️",
+     "y": 0.68,
+     "size": 26,
+     "align": "left",
+     "x": 0.05,
+     "style": "box",
+     "bg": "#000000",
+     "color": "#ffffff"
+    }
+   ],
+   "image": "raw/slide-2.png",
+   "phoneify": false
+  }
+ ]
+}

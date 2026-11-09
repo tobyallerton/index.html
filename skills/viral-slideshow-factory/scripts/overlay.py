@@ -125,6 +125,7 @@ def main():
     ap.add_argument("--fit", default="crop", choices=["crop", "pad"])
     ap.add_argument("--font")
     ap.add_argument("--align", default="center", choices=["center", "left"])
+    ap.add_argument("--bg", default="#ffffff", help="box style only: box colour, e.g. #000000 for TikTok's black box")
     ap.add_argument("--x", type=float, default=0.08, help="left edge for --align left, as a fraction of the width")
     ap.add_argument("--weight", type=int, default=None, help="font weight 400-900 (default 620; 700 for a bolder hook like the original)")
     a = ap.parse_args()
@@ -148,7 +149,7 @@ def main():
             d = ImageDraw.Draw(layer)
             for i, line in enumerate(lines):
                 lw = line_width(line, f, em); x = (W - lw) / 2 - 18 if a.align == "center" else W * a.x
-                d.rounded_rectangle([x - pad_x, y + i * lh - pad_y, x + lw + pad_x, y + i * lh + asc + desc + pad_y * 0.6], radius=r, fill=(255, 255, 255, 255))
+                d.rounded_rectangle([x - pad_x, y + i * lh - pad_y, x + lw + pad_x, y + i * lh + asc + desc + pad_y * 0.6], radius=r, fill=tuple(int(a.bg.lstrip("#")[j:j + 2], 16) for j in (0, 2, 4)) + (255,))
             for i, line in enumerate(lines):
                 lw = line_width(line, f, em); x = (W - lw) / 2 - 18 if a.align == "center" else W * a.x
                 draw_line(layer, x, y + i * lh, line, f, em, fill=(0, 0, 0, 255) if a.color == "white" else (COLORS[a.color] if a.color in COLORS else tuple(int(a.color.lstrip("#")[j:j + 2], 16) for j in (0, 2, 4))) + (255,))
