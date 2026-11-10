@@ -1,0 +1,42 @@
+{
+ "style": "classic",
+ "slides": [
+  {
+   "image": "raw/slide-1.png",
+   "text": "if you still have no idea what to get her for christmas… 🎁",
+   "position": "top",
+   "y": 0.1,
+   "size": 68
+  },
+  {
+   "image": "raw/slide-2.png",
+   "text": "rituals have the prettiest christmas gift sets this year 🎀❄️",
+   "position": "top",
+   "y": 0.08,
+   "size": 58
+  },
+  {
+   "image": "raw/slide-3.png",
+   "text": "shower foam, shower oil, whipped body cream & a hair + body mist 🌸",
+   "position": "top",
+   "y": 0.05,
+   "size": 52,
+   "style": "box"
+  },
+  {
+   "image": "raw/slide-4.png",
+   "text": "and it smells like cherry blossom & rice milk 🌸🤍",
+   "position": "top",
+   "y": 0.05,
+   "size": 56
+  },
+  {
+   "image": "raw/slide-5.png",
+   "text": "the perfect gift for her & not even expensive rn 😭\nit's in the basket ⬇️",
+   "position": "top",
+   "y": 0.08,
+   "size": 58,
+   "style": "box"
+  }
+ ]
+}
