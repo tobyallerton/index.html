@@ -48,7 +48,7 @@ Staged, tidy, product-centred images read as AI ads. Every photo prompt should a
 - a genuine, unedited phone photo a normal person posted: candid, slightly tilted, imperfect framing, mixed home lighting (lamp, phone flash), a little grain;
 - an ordinary lived-in background with some mess (unmade bed, mug, charger, clothes on a chair);
 - a person or hand in shot where it makes sense: mirror selfies with the phone covering the face for clothes, a hand holding the product close to the camera for small items.
-**The product must be clearly visible and in focus** (about a third of the frame): open lids fully, show the actual item, not just its box. Clothing is worn, never laid flat.
+**The product must be clearly visible and in focus** (about a third of the frame): open lids fully, show the actual item, not just its box. Clothing: laid out neatly on a bed, NOT worn (user, 10 Nov; this replaces the old 'worn, never laid flat' rule).
 Never copy the face, hair or room of a model in the listing photo.
 
 ## On-screen text
