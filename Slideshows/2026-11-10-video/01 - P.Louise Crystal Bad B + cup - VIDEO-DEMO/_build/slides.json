@@ -2,14 +2,22 @@
  "style": "classic",
  "slides": [
   {
-   "image": "raw/slide-1.png",
-   "text": "you can now get a FREE royal refill cup 😭🩷",
+   "image": "raw/hook.png",
+   "text": "STOP buying the bad b on its own 🛑😭",
    "position": "top",
-   "size": 70
+   "y": 0.2,
+   "size": 76
+  },
+  {
+   "image": "raw/slide-1.png",
+   "text": "p.louise now gives you a FREE royal refill cup 😭🩷",
+   "position": "top",
+   "size": 58,
+   "y": 0.09
   },
   {
    "image": "raw/slide-2.png",
-   "text": "it comes free with any crystal christmas bad b 👑",
+   "text": "with any crystal christmas bad b 👑",
    "position": "top",
    "size": 58,
    "y": 0.08

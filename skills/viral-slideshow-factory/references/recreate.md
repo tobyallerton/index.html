@@ -37,7 +37,7 @@ For slides 2+ in the same chat, start with: "Same person and setting as the prev
 Real TikTok slideshows look like phone photos: natural light, a bit of clutter, real skin texture, slightly off-centre. Over-polished studio images perform worse and look like ads. Ask for "casual iPhone photo" unless the winner was clearly editorial.
 
 ## Text-writing tips
-- Slide 1 hook: under 10 words, about the viewer ("POV:", "you need this if...", "stop scrolling if...").
+- Slide 1 is ALWAYS a hook slide (user's rule, 10 Nov): a scroll-stopping line on a striking or relatable photo, and it doesn't need to show the product (a reaction, a relatable moment or a mood shot often works better). Under 10 words, about the viewer ("POV:", "you need this if...", "stop scrolling if...").
 - Middle slides: one benefit each, concrete and taken from the product listing.
 - Last slide: soft CTA ("linked in the orange basket", "the shop link is on this post").
 - Benefits only: no invented personal results or medical claims.
