@@ -20,7 +20,7 @@ PRICE CHECK
 Re-check the price before posting if it's been more than a day.
 
 SLIDES
-Post slide-1.png to slide-5.png in order.
+Post slide-1.png to slide-2.png in order.
 
 BEFORE YOU POST
 - Switch on the 'AI-generated content' label.
