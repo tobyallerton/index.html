@@ -36,6 +36,9 @@ def main():
     folder = os.path.abspath(sys.argv[1])
     spec = json.load(open(os.path.join(folder, "slides.json")))
     slides = spec["slides"]
+    # The user's choice (10 Nov): they add the text in the TikTok app, so by default the slides are clean photos
+    # and the words go in post.txt (finish.py). Set "text_in_app": false to burn the text onto the images.
+    in_app = spec.get("text_in_app", True)
     missing = [i + 1 for i, s in enumerate(slides) if not str(s.get("text", "")).strip() and not s.get("labels") and not s.get("no_text")]
     if missing:
         sys.exit(f"ERROR: slides {missing} have no text. Every slide needs on-screen text.")
@@ -53,12 +56,12 @@ def main():
             tmp = os.path.join(folder, f".phone-{i}.png")
             phoneify(Image.open(src), s.get("phone_strength", 0.85), seed=i).save(tmp)
             src = tmp
-        cmd = [sys.executable, overlay, "--in", src, "--out", out, "--text", s.get("text", ""),
+        cmd = [sys.executable, overlay, "--in", src, "--out", out, "--text", "" if in_app else s.get("text", ""),
                "--position", s.get("position", "top"), "--style", s.get("style", spec.get("style", "classic")),
                "--color", s.get("color", spec.get("color", "white")), "--width", str(s.get("width", spec.get("width", 0.62))),
                "--size", str(s.get("size", 60)),] + (["--weight", str(s.get("weight", spec.get("weight")))] if s.get("weight", spec.get("weight")) else []) + (["--font", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fonts", s["font"])] if s.get("font") else []) + ["--fit", s.get("fit", "crop"), "--align", s.get("align", "center"), "--x", str(s.get("x", 0.08)), "--bg", s.get("bg", "#ffffff")] + (["--y", str(s["y"])] if s.get("y") is not None else [])
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
-        for e in s.get("extra", []):
+        for e in ([] if in_app else s.get("extra", [])):
             # Extra text blocks on the same slide (originals often have a hook up top and a small CTA lower down).
             c2 = [sys.executable, overlay, "--in", out, "--out", out, "--text", e["text"], "--style", e.get("style", "classic"),
                   "--color", e.get("color", "white"), "--size", str(e.get("size", 44)), "--width", str(e.get("width", 0.8)),
@@ -66,7 +69,7 @@ def main():
             if e.get("weight"): c2 += ["--weight", str(e["weight"])]
             if e.get("font"): c2 += ["--font", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fonts", e["font"])]
             subprocess.run(c2, check=True, stdout=subprocess.DEVNULL)
-        if s.get("labels"):
+        if s.get("labels") and not in_app:
             draw_labels(out, s["labels"])
         outs.append(out)
     thumbs = [Image.open(p).resize((360, 640)) for p in outs]

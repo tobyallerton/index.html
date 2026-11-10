@@ -81,7 +81,23 @@ def check(post, slides):
             if m:
                 warns.append(f"{where}: urgency '{m.group(0)}' — only keep if it's true on the listing right now")
 
-def write_post_txt(folder, post, n_slides):
+def text_guide(slides):
+    """The words for each slide, for the user to type in the TikTok editor (text_in_app, the default)."""
+    spec = slides or {}
+    if not spec.get("text_in_app", True) or not spec.get("slides"):
+        return ""
+    out = ["TEXT TO ADD IN TIKTOK (one text box per slide; the photos have no text on them)"]
+    for i, s in enumerate(spec["slides"], 1):
+        t = " ".join([str(s.get("text", ""))] + [str(e.get("text", "")) for e in s.get("extra", [])]).strip()
+        style = s.get("style", spec.get("style", "classic"))
+        where = {"top": "near the top", "middle": "in the middle", "bottom": "near the bottom"}.get(s.get("position", "top"), "near the top")
+        how = "white text with a background (the 'A' box style)" if style == "box" else "plain white text"
+        if s.get("color", spec.get("color")) == "yellow":
+            how = "yellow text"
+        out.append(f"Slide {i}: {t}\n   ({how}, {where}, keep it off the product and faces)")
+    return "\n".join(out) + "\n"
+
+def write_post_txt(folder, post, n_slides, slides=None):
     p = post.get("product", {})
     sym = SYM.get(str(p.get("currency", "")).upper(), "")
     m = lambda v: f"{float(v):.2f}" if isinstance(v, (int, float)) else str(v)
@@ -95,6 +111,7 @@ def write_post_txt(folder, post, n_slides):
         + (f"\nCommission per sale: {sym}{float(p['commission_per_sale']):.2f}" if p.get("commission_per_sale") else "")
         + "\nRe-check the price before posting if it's been more than a day.\n",
         f"SLIDES\nPost slide-1.png to slide-{n_slides}.png in order.\n",
+        text_guide(slides),
         "BEFORE YOU POST\n- Switch on the 'AI-generated content' label.\n- Add the product link above.\n- Pick the sound above (or a similar trending one).\n",
         f"SOURCE (for your reference, don't post)\nFormat: {get(post, 'source.format') or ''}\nInspired by: {get(post, 'source.url') or 'your own idea'}"
         + (f" ({get(post, 'source.creator')}, {get(post, 'source.views')} views, {get(post, 'source.gmv')} GMV)" if get(post, "source.creator") else "") + "\n",
@@ -161,7 +178,7 @@ def main():
     elif slides.get("slides") and len(finished) != len(slides["slides"]):
         warns.append(f"{len(finished)} finished slides but slides.json lists {len(slides['slides'])}")
     check(post, slides)
-    write_post_txt(folder, post, len(finished))
+    write_post_txt(folder, post, len(finished), slides)
     comp = comparison(folder)
     for w in warns:
         print("WARN  " + w)

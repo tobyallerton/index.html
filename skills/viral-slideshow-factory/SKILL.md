@@ -179,7 +179,7 @@ node $S/chatgpt_image.js --prompt-file _build/slide-1.prompt.txt --ref _build/pr
 
 ## 6. Add the text
 
-No slide ships without on-screen text. Write `_build/slides.json`:
+**The user adds the text in the TikTok app (their choice, 10 Nov).** By default the slides are clean photos with no words on them, and `finish.py` writes the words for every slide into `post.txt` under "TEXT TO ADD IN TIKTOK", with the style (plain white or the box style) and where to put it. Still write `slides.json` with the text, position and style for every slide exactly as below: it is the text plan. Only set `"text_in_app": false` when the user asks for the text burned onto the images. Tell the user the text for each slide in the final reply too, ready to copy. Every slide still needs its line of text in the plan. Write `_build/slides.json`:
 ```json
 {"style": "classic", "slides": [
   {"image": "raw/slide-1.png", "text": "POV: your hair finally grows", "position": "top", "size": 84},
@@ -187,7 +187,7 @@ No slide ships without on-screen text. Write `_build/slides.json`:
 ]}
 ```
 Run `python3 $S/make_slides.py <slideshow>/_build`, then move the results up: `mv <slideshow>/_build/slide-*.png <slideshow>/_build/preview.png <slideshow>/`.
-Open `preview.png` and check: text on every slide, readable, not covering the product, not cut off. If the text looks off compared with real TikTok text (the creator in the demo flagged this as a common weak spot), fix size, position or style and run it again.
+Open `preview.png` and check the photos (and, if text is burned on, that it's readable and off the product). If the text looks off compared with real TikTok text (the creator in the demo flagged this as a common weak spot), fix size, position or style and run it again.
 
 ## 7. The posting pack
 
