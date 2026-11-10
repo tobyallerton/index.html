@@ -49,7 +49,7 @@ def main():
         if not os.path.exists(src):
             sys.exit(f"ERROR: slide {i} image not found: {src}")
         out = os.path.join(folder, f"slide-{i}.png")
-        if not s.get("no_text") and s.get("phoneify", spec.get("phoneify", True)):
+        if not s.get("no_text") and s.get("phoneify", spec.get("phoneify", False)):  # off by default (user, 10 Nov: no grain)
             # Photo slides get the phone-camera finish so they don't look like glossy AI renders.
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
             from phoneify import phoneify
