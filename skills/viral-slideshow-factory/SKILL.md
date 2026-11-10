@@ -1,6 +1,6 @@
 ---
 name: viral-slideshow-factory
-description: Makes ready-to-post TikTok Shop photo slideshows using Social1 research and ChatGPT images. Modes - "make me 10 slideshows" remakes what is going viral on Social1 now (UK, or US on request) with the same product and format but new people and wording; a viral slideshow link plus the user's product applies that format to it; or the user's own products each get the best viral format. Saves slides with TikTok text, caption, sound, product link, price check and an original-vs-remake comparison. Use whenever the user wants TikTok Shop slideshows, carousels or photo posts, gives a TikTok slideshow link to copy, or mentions Social1, Kalodata or faceless TikTok Shop content.
+description: Makes ready-to-post TikTok Shop photo slideshows using Social1 research and ChatGPT images. Main mode - the user uploads or links a TikTok video and it is broken down shot by shot into the images and text for a photo slideshow telling the same story. Other modes - a TikTok slideshow the user sends is remade; "make me 10 slideshows" remakes what is going viral on Social1 now (UK, or US on request) with the same product and format but new people and wording; a viral slideshow link plus the user's product applies that format to it; or the user's own products each get the best viral format. Saves slides with TikTok text, caption, sound, product link, price check and an original-vs-remake comparison. Use whenever the user wants TikTok Shop slideshows, carousels or photo posts, gives a TikTok video or slideshow (link or upload) to turn into slides, or mentions Social1, Kalodata or faceless TikTok Shop content.
 ---
 
 # Viral slideshow factory
@@ -9,9 +9,26 @@ Turns what is selling on TikTok Shop right now into **new** slideshows the user 
 
 Each remake keeps the *idea* of a proven winner (hook angle, slide structure, selling point). It must look like a different post by a different creator, and the **product must be the real product**: same packaging, colours, shape, logo and label.
 
-## MAIN MODE: remake a slideshow the user sends (user's choice, 9 Nov)
+## MAIN MODE: turn a TikTok video into a slideshow (user's choice, 10 Nov)
 
-This is how the user works now. They send a TikTok slideshow (a link, often a vm.tiktok.com share link, or screenshots of the slides) and sometimes the product (a link or screenshots of the listing). You recreate it **pretty much the same**: same concept, same slide order and number of slides, same kind of photo on each slide (scene, framing, props, mood), same text placement, style and colour, and nearly the same words. Change it **slightly** so it reads as a different post: a different (AI) person, a slightly different angle, room and props, and lightly reworded text that still says the same thing. Don't "improve" the story, add slides or invent a new angle: the user wants the proven winner, not a new idea.
+This is how the user works now. They send a **TikTok video**: an uploaded video file, or a link (often a vm.tiktok.com share link), sometimes with the product (a link or screenshots of the listing). You break the video down and make the **images for a TikTok photo slideshow** that tells the same story: same hook, same order of moments, same selling point, same on-screen text (lightly reworded), same look and vibe. The slideshow is the video squeezed into roughly 3-8 swipeable photos, each with its text, ready to post.
+
+1. **Get the video.** Uploaded file: copy it to `<run>/_research/orig/video.mp4`. Link: `scripts/run-chrome.sh tt_fetch.js --url <link> --out <run>/_research/orig` saves `video.mp4`, the caption, the sound and stats (`meta.json`; `type` says video or photo). If it turns out to be a photo slideshow, use the slideshow remake mode below instead. If the download fails, ask the user to upload the video file (Save video in TikTok, then send it here).
+2. **Break it down.** `python3 $S/video_breakdown.py <run>/_research/orig/video.mp4 <run>/_research/orig/breakdown` cuts the video into shots and keeps the sharpest still from each (`shots/NN.jpg`), plus `contact.jpg` (every still with its time) and `audio.m4a`. Look at `contact.jpg`, then every still at full size. For each shot note: what happens, the on-screen text (read it off the still, word for word), who's in it and how they're framed, the product (how it's shown, its size against hands), setting, light and mood. Add what you can tell from the caption and the sound (voiceover or music; say if you can't hear it).
+3. **Turn the shots into slides** (write this in `_build/plan.md` before generating anything):
+   - Slide 1 = the video's hook: its first shot plus its opening text (or the spoken hook, written as text). It must still stop the scroll as a still photo; if the video's hook only works as motion, write the still version and say so.
+   - Then one slide per key moment, in the video's order: problem, product reveal, close-up, using it, result, proof. Merge shots that show the same thing, drop transitions and filler. Aim for **3-8 slides** (match how long and busy the video is); 2 slides is fine for a simple hook + reveal.
+   - Last slide: the video's payoff plus a soft call to action (finish.py needs one).
+   - For each slide: what the photo shows (scene, framing, props, light, person), the exact text, its position, style and size. Text that was spoken or captioned in the video goes on the slide, shortened to fit.
+   - Format label for the folder name, e.g. VIDEO-POV, VIDEO-DEMO, VIDEO-ROUTINE.
+4. **Get the product.** The product the user names or sends; otherwise the one tagged on the video (`meta.json` anchors / Social1). Save the listing photo as `_build/product/listing.jpg`, find its real size, note price and commission.
+5. **Make the images.** ChatGPT prompts that describe each moment as a casual phone photo (same scene with small changes: a different AI person, slightly different angle, room and props), with the product reference attached on every slide that shows it. **Never upload the video's stills to ChatGPT** and never copy a real person's face: describe the scene in words. Screen-style moments (chats, comments, notifications) are redrawn with `screens.py` / `screens2.py`.
+6. **Keep it honest**, the same as everywhere: no exact prices on slides, no fake urgency, invented reviews or results, no copyrighted characters or real people. Say what you changed and why.
+7. **Build, check, send**: make_slides.py, finish.py (put the video's stills in `_build/original/` first so `comparison.png` shows video moments on top, slides below), look at every slide, then send the slides and post.txt as files. In post.json set `source.mode` to `"V"` and `source.url` to the video link (leave it out for an uploaded file). Suggest using the video's sound if it's a trending sound.
+
+## Second mode: remake a slideshow the user sends
+
+When the user sends a TikTok **photo slideshow** (a link or screenshots of the slides) instead of a video. You recreate it **pretty much the same**: same concept, same slide order and number of slides, same kind of photo on each slide (scene, framing, props, mood), same text placement, style and colour, and nearly the same words. Change it **slightly** so it reads as a different post: a different (AI) person, a slightly different angle, room and props, and lightly reworded text that still says the same thing. Don't "improve" the story, add slides or invent a new angle: the user wants the proven winner, not a new idea.
 
 1. **Get the original.** Link: `scripts/run-chrome.sh tt_fetch.js --url <link> --out <run>/_research/orig` saves every slide, the caption, the sound and stats (meta.json). Screenshots: copy the uploaded images into the same folder. Look at every slide at full size.
 2. **Get the product.** Use the product the user names or sends; otherwise the one tagged on the original (Social1 product page or `item.json` anchors). Save the listing photo as `_build/product/listing.jpg` (crop it from the user's screenshots if that's all you have). Note price, commission and sales from what the user sends.
@@ -121,7 +138,7 @@ Pick N winners. Prefer products that appear in several winning slideshows, produ
 
 **A (trending):** open each winner's TikTok post (Social1's open-in-new-tab icon on the card) and save every slide to `_build/original/`. These are for analysis and for the comparison image only.
 
-**B (link):** open the user's link the same way. A TikTok photo post is a swipeable set of images; use `snap.js --site tiktok --scrolls 0` and the image URLs in `page.json`, or screenshots if the images won't download. If the link is a video rather than a photo post, say so and ask whether to turn its idea into a slideshow.
+**B (link):** open the user's link the same way. A TikTok photo post is a swipeable set of images; use `snap.js --site tiktok --scrolls 0` and the image URLs in `page.json`, or screenshots if the images won't download. If the link is a video rather than a photo post, follow the main mode (video into slideshow).
 
 **C (my products):** for each product, search Social1 for top slideshows of **that product** first, then of similar products in the same category and price band. Score the candidates with step 2 and use the best one as the format. Read `references/formats.md` for common winning formats and pick the one that best fits the product if nothing suitable is trending. Say in the report which format was chosen and why.
 
@@ -181,7 +198,7 @@ Write `_build/post.json`:
   "product": {"name": "...", "url": "TikTok Shop product link", "currency": "GBP",
               "price": 14.99, "was_price": 24.99, "commission_rate": 0.15, "commission_per_sale": 2.25,
               "checked_at": "YYYY-MM-DD HH:MM", "checked_on": "where you checked (product page / Social1)"},
-  "source": {"mode": "A|B|C", "url": "original post link", "creator": "@...", "views": "1.2M", "gmv": "£45.3K", "format": "POV"},
+  "source": {"mode": "A|B|C|V", "url": "original post link", "creator": "@...", "views": "1.2M", "gmv": "£45.3K", "format": "POV"},
   "hooks": {"used": "...", "score": 5, "alternatives": ["...", "..."]}
 }
 ```
