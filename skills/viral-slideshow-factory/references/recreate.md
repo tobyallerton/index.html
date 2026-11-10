@@ -43,7 +43,7 @@ Real TikTok slideshows look like phone photos: natural light, a bit of clutter, 
 - Benefits only: no invented personal results or medical claims.
 
 ## Make it look genuine (the user's feedback, 7 Nov; REPLACED on 10 Nov)
-**10 Nov: the user now wants clean, aesthetic, bottom-of-funnel photos: sharp, bright, tidy, product as the hero, no grain or mess. Ignore the grain/mess advice below; keep the parts about people wearing clothes and the product being clearly visible.**
+**10 Nov: casual UGC look (a real person's quick phone photo), but sharp: NO grain, no blur. Lived-in but not messy. Clothing laid on a bed, not worn.**
 Staged, tidy, product-centred images read as AI ads. Every photo prompt should ask for:
 - a genuine, unedited phone photo a normal person posted: candid, slightly tilted, imperfect framing, mixed home lighting (lamp, phone flash), a little grain;
 - an ordinary lived-in background with some mess (unmade bed, mug, charger, clothes on a chair);
