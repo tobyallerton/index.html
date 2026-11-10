@@ -76,9 +76,15 @@ const { openProfile, arg, args, sleep, firstVisible } = require('./lib');
       if (/(can't|cannot|unable to) (help|create|generate)|violat(e|es) our content polic/i.test(bodyText.slice(-1200))) return fail('REFUSED_BY_CHATGPT: ' + bodyText.slice(-400).replace(/\s+/g, ' '));
       const cands = await page.$$eval('img', (els) => els
         .filter((e) => e.naturalWidth >= 512 && !e.closest('[data-message-author-role="user"]'))
-        .map((e) => ({ src: e.currentSrc || e.src, alt: e.alt || '', blur: getComputedStyle(e).filter })));
-      const fresh = cands.filter((c) => !before.has(c.src) && !/blur/.test(c.blur));
-      const gen = fresh.filter((c) => /generated/i.test(c.alt)).pop() || fresh.pop();
+        .map((e) => {
+          // After a reload the reference photos we uploaded show up as ordinary images too; only take
+          // images ChatGPT made: alt "Generated image" or inside an assistant turn.
+          const turn = e.closest('[data-message-author-role], [data-testid^="conversation-turn"], article');
+          const role = turn ? (turn.getAttribute('data-message-author-role') || (turn.querySelector('[data-message-author-role]') || turn).getAttribute('data-message-author-role') || '') : '';
+          return { src: e.currentSrc || e.src, alt: e.alt || '', blur: getComputedStyle(e).filter, role };
+        }));
+      const fresh = cands.filter((c) => !before.has(c.src) && !/blur/.test(c.blur) && c.role !== 'user');
+      const gen = fresh.filter((c) => /generated/i.test(c.alt)).pop() || fresh.filter((c) => c.role === 'assistant').pop();
       const stillWorking = await page.locator('[data-testid="stop-button"], button[aria-label*="Stop" i]').first().isVisible().catch(() => false);
       if (gen && stillWorking && gen.src === lastSrc && Date.now() - lastReload > 60000) {
         // The image is shown but the page never hears that the reply finished (blocked live updates): reload.
