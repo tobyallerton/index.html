@@ -1,0 +1,8 @@
+{"style": "classic", "slides": [
+  {"image": "raw/slide-1.png", "text": "wait… M&S FOOD have an advent calendar?! 😱🎄", "position": "top", "y": 0.1, "size": 72},
+  {"image": "raw/slide-2.png", "text": "it's full of food, sweet treats AND drinks… and it's sooo heavy 😭", "position": "top", "y": 0.08, "size": 58},
+  {"image": "raw/slide-3.png", "text": "i know it's early but i'm opening 2 doors 🤭", "position": "top", "y": 0.08, "size": 58},
+  {"image": "raw/slide-4.png", "text": "door 1: a big bubbly santa 🎅🍫", "position": "top", "y": 0.08, "size": 60},
+  {"image": "raw/slide-5.png", "text": "door 2: 3 belgian hot chocolates ☕\nmilk, dark & salted caramel", "position": "top", "y": 0.08, "size": 58},
+  {"image": "raw/slide-6.png", "text": "follow along, i'm opening every single door 🎄✨", "position": "top", "y": 0.08, "size": 60, "style": "box"}
+]}
