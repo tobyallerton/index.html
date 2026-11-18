@@ -1,0 +1,604 @@
+<title>Car Deal Finder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one dark masthead band, then stacked work panels (search → import → ranked deals) on paper, matching the Car Flip Calculator. */
+:root {
+  --bg: #f5f0e8; --card: #fbf8f3; --ink: #15120f; --mid: #4a4038; --muted: #857a6f; --line: #ddd4c6;
+  --band: #1a1714; --band-fg: #f5f0e8; --red: #c8401a; --red-soft: #fbe9e2;
+  --good: #24683a; --good-bg: #e6f3e9; --warn: #a8670b; --warn-bg: #fdf3e1; --bad: #a3321a; --bad-bg: #fbe9e2;
+  --display: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+  --body: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141210; --card: #1d1a17; --ink: #f1ebe1; --mid: #c9bfb2; --muted: #93887c; --line: #36302a;
+  --band: #0c0b0a; --band-fg: #f1ebe1; --red: #ea6a42; --red-soft: #3a2018;
+  --good: #6fcf8a; --good-bg: #17301e; --warn: #f0b04a; --warn-bg: #352812; --bad: #f08a6c; --bad-bg: #3a1d15; color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg: #141210; --card: #1d1a17; --ink: #f1ebe1; --mid: #c9bfb2; --muted: #93887c; --line: #36302a;
+  --band: #0c0b0a; --band-fg: #f1ebe1; --red: #ea6a42; --red-soft: #3a2018;
+  --good: #6fcf8a; --good-bg: #17301e; --warn: #f0b04a; --warn-bg: #352812; --bad: #f08a6c; --bad-bg: #3a1d15; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mast { background: var(--band); color: var(--band-fg); }
+.mast .wrap { padding-block: 26px 22px; display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: end; justify-content: space-between; }
+.mast h1 { font: 400 clamp(40px, 7vw, 64px)/0.9 var(--display); margin: 0; letter-spacing: 0.01em; }
+.mast h1 span { color: var(--red); }
+.mast p { margin: 6px 0 0; max-width: 520px; color: color-mix(in srgb, var(--band-fg) 62%, transparent); font-size: 14px; }
+.tally { display: flex; gap: 22px; font-variant-numeric: tabular-nums; }
+.tally div { display: grid; }
+.tally b { font: 400 30px/1 var(--display); }
+.tally small { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: color-mix(in srgb, var(--band-fg) 55%, transparent); }
+main.wrap { padding-block: 24px 64px; display: grid; gap: 20px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 820px) { .row2 { grid-template-columns: 1fr; } }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; min-width: 0; }
+.panel h2 { font: 400 22px/1 var(--display); letter-spacing: 0.06em; margin: 0 0 4px; display: flex; gap: 10px; align-items: center; }
+.panel h2 i { font-style: normal; background: var(--red); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 15px; }
+.panel .lede { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+.fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.fields .wide { grid-column: 1 / -1; }
+label { display: grid; gap: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); }
+input, select, textarea { font: 15px var(--body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; width: 100%; min-width: 0; }
+textarea { font: 12px/1.4 var(--mono); min-height: 92px; resize: vertical; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.btn { font: 700 13px var(--body); border-radius: 6px; padding: 9px 14px; border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.red { background: var(--red); border-color: var(--red); color: #fff; }
+.btn.sm { padding: 5px 9px; font-size: 12px; }
+.btn:hover { filter: brightness(1.08); }
+.bm { display: inline-flex; padding: 10px 16px; border: 2px dashed var(--red); border-radius: 8px; color: var(--red); font: 400 20px/1 var(--display); letter-spacing: 0.06em; text-decoration: none; cursor: grab; background: var(--red-soft); }
+ol.steps { margin: 0 0 12px; padding-left: 20px; color: var(--mid); font-size: 14px; display: grid; gap: 4px; }
+.note { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+.toast { font-size: 13px; font-weight: 600; color: var(--good); min-height: 1.4em; margin-top: 8px; }
+.toast.err { color: var(--bad); }
+.example { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; background: var(--warn-bg); color: var(--warn); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 600; }
+.bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 12px; }
+.bar label { min-width: 120px; flex: 1 1 120px; }
+.bar label.chk { flex: 0 0 auto; min-width: 0; display: flex; align-items: center; gap: 6px; text-transform: none; letter-spacing: 0; font-size: 13px; font-weight: 600; padding-bottom: 8px; }
+.bar label.chk input { width: auto; }
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; min-width: 860px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 10px; border-bottom: 1px solid var(--line); background: var(--bg); white-space: nowrap; }
+td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 14px; }
+tr:last-child td { border-bottom: 0; }
+td.num { text-align: right; white-space: nowrap; }
+th.num { text-align: right; }
+.car a { color: var(--ink); font-weight: 700; text-decoration: none; }
+.car a:hover { text-decoration: underline; }
+.meta { color: var(--muted); font-size: 12px; display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 2px; }
+.key { font: 500 11px var(--mono); color: var(--mid); background: transparent; border: 1px dashed var(--line); border-radius: 4px; padding: 1px 5px; cursor: pointer; }
+.src { font: 700 10px var(--body); letter-spacing: 0.08em; text-transform: uppercase; border-radius: 4px; padding: 2px 6px; background: var(--line); color: var(--mid); }
+.pill { display: inline-block; font: 700 11px var(--body); letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.v-steal { background: var(--good); color: var(--card); }
+.v-good { background: var(--good-bg); color: var(--good); }
+.v-fair { background: var(--line); color: var(--mid); }
+.v-pricey { background: var(--bad-bg); color: var(--bad); }
+.v-check { background: var(--warn-bg); color: var(--warn); }
+.v-none { background: transparent; color: var(--muted); border: 1px dashed var(--line); }
+.flags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.flag { font-size: 11px; font-weight: 700; color: var(--warn); background: var(--warn-bg); border-radius: 4px; padding: 1px 6px; }
+.pos { color: var(--good); font-weight: 700; }
+.neg { color: var(--bad); }
+.sub { display: block; font-size: 11px; color: var(--muted); }
+.acts { display: flex; gap: 4px; flex-wrap: wrap; }
+.acts a, .acts button { font: 600 12px var(--body); color: var(--mid); background: none; border: 1px solid var(--line); border-radius: 5px; padding: 3px 7px; cursor: pointer; text-decoration: none; white-space: nowrap; }
+.acts button:hover, .acts a:hover { border-color: var(--ink); color: var(--ink); }
+.valin { width: 90px; padding: 4px 6px; font-size: 13px; }
+.empty { text-align: center; color: var(--muted); padding: 32px 12px; }
+.how { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 22px; font-size: 13px; color: var(--mid); }
+.how h3 { font: 400 17px/1 var(--display); letter-spacing: 0.06em; color: var(--ink); margin: 0 0 4px; }
+.how p { margin: 0; }
+.confirm { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; font-weight: 600; }
+@media (prefers-reduced-motion: no-preference) { .btn, .acts button { transition: filter .15s, border-color .15s; } }
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div>
+      <h1>CAR DEAL <span>FINDER</span></h1>
+      <p>Pull listings from eBay and Facebook Marketplace, compare each car with similar ones, and see which are priced under the market.</p>
+    </div>
+    <div class="tally">
+      <div><b id="tListings">0</b><small>Listings</small></div>
+      <div><b id="tModels">0</b><small>Models</small></div>
+      <div><b id="tDeals" style="color:var(--red)">0</b><small>Deals</small></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="row2">
+    <section class="panel">
+      <h2><i>1</i>SEARCH</h2>
+      <p class="lede">Opens the newest listings first, so you see fresh cars before other buyers.</p>
+      <form id="searchForm" class="fields" autocomplete="off">
+        <label class="wide">Car <input id="q" placeholder="e.g. Toyota Yaris" value="Ford Fiesta"></label>
+        <label>Min £ <input id="minP" type="number" inputmode="numeric" placeholder="500"></label>
+        <label>Max £ <input id="maxP" type="number" inputmode="numeric" value="5000"></label>
+        <label>Min year <input id="minY" type="number" inputmode="numeric" placeholder="2012"></label>
+        <label>Max miles <input id="maxM" type="number" inputmode="numeric" placeholder="90000"></label>
+        <label>Postcode <input id="pc" placeholder="M1 1AE"></label>
+        <label>Radius (mi) <input id="rad" type="number" inputmode="numeric" value="50"></label>
+        <label class="wide">Facebook city <input id="city" placeholder="manchester" value="london"></label>
+      </form>
+      <div class="btns">
+        <a class="btn" id="lnEbay" target="_blank" rel="noopener">eBay · newest</a>
+        <a class="btn ghost" id="lnSold" target="_blank" rel="noopener">eBay · sold prices</a>
+        <a class="btn red" id="lnFb" target="_blank" rel="noopener">Facebook Marketplace</a>
+      </div>
+      <p class="note">Sold prices are the best comparison. Grab them too and the valuations get much more accurate.</p>
+    </section>
+
+    <section class="panel">
+      <h2><i>2</i>GRAB LISTINGS</h2>
+      <p class="lede">A bookmark button that copies the cars on the page you're looking at. Desktop browser only.</p>
+      <ol class="steps">
+        <li>Drag this to your bookmarks bar: <a class="bm" id="bmLink" href="#" title="Drag me to your bookmarks bar">GRAB CARS</a></li>
+        <li>Open a search from step 1 and scroll down so more cars load.</li>
+        <li>Click <b>Grab Cars</b> in your bookmarks bar. It copies the listings.</li>
+        <li>Paste below (Ctrl/Cmd+V). They import automatically.</li>
+      </ol>
+      <textarea id="paste" placeholder="Paste grabbed listings here. You can also paste plain listing text, one car per paragraph, with its £ price."></textarea>
+      <div class="btns">
+        <button class="btn" id="importBtn" type="button">Import</button>
+        <button class="btn ghost" id="copyBm" type="button">Copy bookmarklet code</button>
+      </div>
+      <div class="toast" id="toast" role="status"></div>
+    </section>
+  </div>
+
+  <div class="example" id="exampleBar" hidden>
+    <span>You're looking at example listings. Import your own and they'll be cleared.</span>
+    <button class="btn sm ghost" id="clearEx" type="button">Clear examples</button>
+  </div>
+
+  <section class="panel">
+    <h2><i>3</i>DEALS</h2>
+    <p class="lede">Each car is valued from up to 8 similar listings of the same model, adjusted for year and mileage. Sold listings count double. Click a model tag to fix it if it was read wrong.</p>
+    <div class="bar">
+      <label>Filter <input id="fText" placeholder="golf, 2015, diesel…"></label>
+      <label>Source <select id="fSrc"><option value="">All</option><option value="ebay">eBay</option><option value="facebook">Facebook</option><option value="manual">Pasted</option></select></label>
+      <label>Show <select id="fVerdict"><option value="deals">Deals only</option><option value="">Everything</option><option value="check">Needs checking</option><option value="sold">Sold comps</option></select></label>
+      <label>Sort <select id="fSort"><option value="disc">Most under value</option><option value="profit">Biggest profit</option><option value="price">Cheapest</option><option value="new">Newest grabbed</option></select></label>
+      <label class="chk"><input type="checkbox" id="fFlags"> Hide red flags</label>
+    </div>
+    <div class="tablebox">
+      <table>
+        <thead><tr>
+          <th>Car</th><th class="num">Price</th><th class="num">Market value</th><th class="num">Under by</th><th class="num">Est. profit</th><th>Verdict</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="row2">
+    <section class="panel">
+      <h2>FLIP COSTS</h2>
+      <p class="lede">Used for estimated profit: what you'd sell for, less what it costs you.</p>
+      <div class="fields">
+        <label>Prep, MOT, valet £ <input id="sPrep" type="number" inputmode="numeric" value="250"></label>
+        <label>Fees, fuel, ads £ <input id="sFees" type="number" inputmode="numeric" value="60"></label>
+        <label>Sell under ask % <input id="sDisc" type="number" inputmode="numeric" value="7"></label>
+        <label>Deal threshold % <input id="sThresh" type="number" inputmode="numeric" value="12"></label>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>YOUR DATA</h2>
+      <p class="lede">Listings are saved in this browser only. Copy a backup to keep them or move them to another device.</p>
+      <div class="btns">
+        <button class="btn ghost" id="backup" type="button">Copy backup</button>
+        <span id="clearWrap"><button class="btn ghost" id="clearAll" type="button">Clear all listings</button></span>
+      </div>
+      <p class="note">To restore a backup, paste it into the box in step 2.</p>
+    </section>
+  </div>
+
+  <section class="panel how">
+    <div><h3>Why a bookmark button?</h3><p>Facebook has no public API for Marketplace, and auto-scraping breaks its rules and gets accounts blocked. The button only reads what's already on your screen.</p></div>
+    <div><h3>Red flags</h3><p>Cheap usually means something. Cat S/N, spares or repair, no MOT, swaps, "deposit" prices and placeholder £1 listings are flagged so they don't top the list.</p></div>
+    <div><h3>Auctions</h3><p>An eBay auction shows the current bid, not the final price, so it's marked and left out of other cars' valuations until it sells.</p></div>
+    <div><h3>Always verify</h3><p>Check the MOT history on gov.uk and run an HPI check before you pay. These numbers come from asking prices and are a starting point.</p></div>
+  </section>
+</main>
+
+<script>
+(function () {
+'use strict';
+var $ = function (id) { return document.getElementById(id); };
+var KEY = 'cdf.v1';
+var NOW_YEAR = new Date().getFullYear();
+
+/* ---------- storage ---------- */
+var state = { items: [], settings: {}, example: false };
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+function load() { try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && Array.isArray(s.items)) return s; } catch (e) {} return null; }
+
+/* ---------- bookmarklet (runs on ebay / facebook) ---------- */
+function grab() {
+  var h = location.hostname, src = /ebay\./.test(h) ? 'ebay' : /facebook\./.test(h) ? 'facebook' : 'other';
+  var sel = src === 'facebook' ? 'a[href*="/marketplace/item/"]' : 'a[href*="/itm/"]';
+  var seen = {}, out = [];
+  document.querySelectorAll(sel).forEach(function (a) {
+    var url = a.href.split('?')[0];
+    if (seen[url]) return;
+    var box = a;
+    if (src !== 'facebook') box = a.closest('li') || a.closest('.s-item,.s-card') || a.parentElement;
+    var t = (box.innerText || '').trim();
+    if (!/(£|GBP)\s?\d/.test(t)) return;
+    seen[url] = 1;
+    out.push({ src: src, url: url, text: t.slice(0, 700) });
+  });
+  var json = JSON.stringify({ cdf: 1, at: Date.now(), page: location.href, items: out });
+  var d = document.createElement('div');
+  d.style.cssText = 'position:fixed;z-index:2147483647;top:16px;right:16px;width:360px;max-width:calc(100vw - 32px);background:#1a1714;color:#f5f0e8;font:14px system-ui,sans-serif;padding:16px;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.4)';
+  d.innerHTML = '<b style="color:#ea6a42;font-size:16px">' + out.length + ' cars grabbed</b><div id="cdfMsg" style="margin:6px 0 8px">Copying…</div><textarea style="width:100%;height:80px;font:11px monospace;color:#000"></textarea><button style="margin-top:8px;padding:6px 12px;cursor:pointer">Close</button>';
+  document.body.appendChild(d);
+  var ta = d.querySelector('textarea'); ta.value = json;
+  d.querySelector('button').onclick = function () { d.remove(); };
+  var msg = d.querySelector('#cdfMsg');
+  function manual() { ta.focus(); ta.select(); msg.textContent = 'Press Ctrl/Cmd+C to copy, then paste into Car Deal Finder.'; }
+  if (!out.length) { msg.textContent = 'No listings found. Open a search results page and scroll down first.'; return; }
+  try { navigator.clipboard.writeText(json).then(function () { msg.textContent = 'Copied. Paste into Car Deal Finder.'; }, manual); } catch (e) { manual(); }
+}
+var BM_CODE = '(' + grab.toString() + ')()';
+$('bmLink').href = 'javascript:' + encodeURIComponent(BM_CODE.replace(/\n\s*/g, ' '));
+$('bmLink').addEventListener('click', function (e) { e.preventDefault(); toast('Drag this button to your bookmarks bar, then click it on an eBay or Facebook search page.'); });
+
+/* ---------- parsing ---------- */
+var MAKES = [
+  ['alfa romeo','Alfa Romeo'],['aston martin','Aston Martin'],['land rover','Land Rover'],['range rover','Land Rover'],['mercedes-benz','Mercedes-Benz'],['mercedes benz','Mercedes-Benz'],['mercedes','Mercedes-Benz'],['merc','Mercedes-Benz'],
+  ['abarth','Abarth'],['audi','Audi'],['bentley','Bentley'],['bmw','BMW'],['chevrolet','Chevrolet'],['citroen','Citroen'],['citroën','Citroen'],['cupra','Cupra'],['dacia','Dacia'],['ds','DS'],['fiat','Fiat'],['ford','Ford'],
+  ['honda','Honda'],['hyundai','Hyundai'],['jaguar','Jaguar'],['jeep','Jeep'],['kia','Kia'],['lexus','Lexus'],['lotus','Lotus'],['mazda','Mazda'],['mg','MG'],['mini','Mini'],['mitsubishi','Mitsubishi'],
+  ['nissan','Nissan'],['peugeot','Peugeot'],['polestar','Polestar'],['porsche','Porsche'],['renault','Renault'],['saab','Saab'],['seat','SEAT'],['skoda','Skoda'],['škoda','Skoda'],['smart','Smart'],['ssangyong','SsangYong'],
+  ['subaru','Subaru'],['suzuki','Suzuki'],['tesla','Tesla'],['toyota','Toyota'],['vauxhall','Vauxhall'],['volkswagen','Volkswagen'],['vw','Volkswagen'],['volvo','Volvo']
+];
+var MULTI = ['range rover sport','range rover evoque','range rover velar','discovery sport','grand c-max','c-max','s-max','b-max','golf plus','grand scenic','grand picasso','c4 picasso','grandland x','crossland x','mokka x','tiguan allspace','model 3','model y','model s','cx-5','cx-3','mx-5','cr-v','hr-v'];
+var SKIP = /^(\d(\.\d)?l?|\d{3,4}cc|tdi|tsi|tfsi|crdi|dci|hdi|vti|tdci|ecoboost|hybrid|diesel|petrol|auto|manual|\d+dr|\d-door|\d+v|turbo|new|used|for|sale|the|a|in|uk|cheap|reg|plate|\(?\d{2}\)?)$/i;
+var tcase = function (s) { return s.replace(/(^|[\s-])([a-z])/g, function (m, a, b) { return a + b.toUpperCase(); }); };
+
+function findMake(t) {
+  var low = ' ' + t.toLowerCase().replace(/[^a-z0-9šë!\-\s]/g, ' ') + ' ';
+  var best = null;
+  MAKES.forEach(function (m) {
+    var i = low.indexOf(' ' + m[0] + ' ');
+    if (i >= 0 && (!best || i < best.i || (i === best.i && m[0].length > best.k.length))) best = { i: i, k: m[0], name: m[1] };
+  });
+  if (!best) return null;
+  best.rest = low.slice(best.i + best.k.length + 2).trim();
+  if (best.k === 'range rover') best.rest = 'range rover ' + best.rest;
+  return best;
+}
+function findModel(mk) {
+  var rest = mk.rest, name = mk.name;
+  for (var j = 0; j < MULTI.length; j++) if (rest.indexOf(MULTI[j]) === 0) return tcase(MULTI[j]);
+  if (name === 'Land Rover' && /^range rover/.test(rest)) return 'Range Rover';
+  var toks = rest.split(/\s+/).filter(function (x) { return x && !SKIP.test(x); });
+  var t = toks[0] || '';
+  if (!t) return '';
+  if (name === 'BMW') {
+    var b = t.match(/^(\d)(\d{2})[a-z]*$/); if (b) return b[1] + ' Series';
+    if (/^\d$/.test(t) && toks[1] === 'series') return t + ' Series';
+    return t.toUpperCase();
+  }
+  if (name === 'Mercedes-Benz') {
+    var c = t.match(/^(gla|glc|gle|cla|cls|slk|ml|[abcesv])-?(?:class)?(\d{0,3})[a-z]*$/);
+    if (c) return /^(gla|glc|gle|cla|cls|slk|ml)$/.test(c[1]) ? c[1].toUpperCase() : c[1].toUpperCase() + '-Class';
+  }
+  if (name === 'Mini') { var mm = rest.match(/countryman|clubman|paceman|convertible|roadster/); return mm ? tcase(mm[0]) : 'Hatch'; }
+  if (/^[a-z]+\d+$|^[a-z]\d$/i.test(t) && t.length <= 4) return t.toUpperCase();
+  return tcase(t.replace(/[^a-z0-9!\-]/g, ''));
+}
+function num(s) { return parseFloat(String(s).replace(/,/g, '')); }
+function parseMiles(t) {
+  var m, re = /(?:mileage|odometer)\s*[:\-]?\s*([\d][\d,.]*)\s*(k)?/i;
+  if ((m = t.match(re))) { var v = num(m[1]) * (m[2] ? 1000 : 1); if (v < 1000 && !m[2]) v *= 1000; if (v >= 100 && v < 400000) return Math.round(v); }
+  re = /([\d][\d,.]*)\s*(k)?\s*(miles|mi|mls|km)\b(?!\s*away)/gi;
+  while ((m = re.exec(t))) {
+    var n = num(m[1]) * (m[2] ? 1000 : 1);
+    if (/km/i.test(m[3])) n *= 0.621;
+    if (n >= 500 && n < 400000) return Math.round(n);
+  }
+  return null;
+}
+function parseYear(t) {
+  var m = t.match(/\b(19[89]\d|20[0-3]\d)\b/);
+  if (m && +m[1] <= NOW_YEAR + 1) return +m[1];
+  m = t.match(/\b(\d{2})\s?(?:plate|reg)\b|\((\d{2})\)/i);
+  if (m) { var p = +(m[1] || m[2]); if (p >= 51 && p <= 99) return 2000 + p - 50; if (p >= 2 && p <= NOW_YEAR - 2000) return 2000 + p; }
+  return null;
+}
+var FLAGS = [
+  [/\bcat(egory)?[\s\-]?([sncd])\b/i, function (m) { return 'Cat ' + m[2].toUpperCase(); }],
+  [/spares?\s*(or|\/|&)\s*repairs?|for spares/i, 'Spares or repair'],
+  [/non[\s\-]?runner|not running|doesn'?t start|won'?t start/i, 'Non-runner'],
+  [/\bno mot\b|mot (fail|expired)|without mot/i, 'No MOT'],
+  [/head gasket|gearbox (issue|fault|problem)|engine (issue|fault|problem|knock)|clutch (gone|slipping)|timing (chain|belt) (gone|issue|noise)|dpf (issue|fault)/i, 'Mechanical fault'],
+  [/write[\s\-]?off|written off|salvage|flood|fire damage|accident damaged|\bdamaged\b/i, 'Damaged / write-off'],
+  [/\bbreaking\b|for parts/i, 'Breaking for parts'],
+  [/\bswaps?\b|\bpx\b|part[\s\-]?ex/i, 'Swap / PX'],
+  [/deposit|finance|monthly|per month|\bpcp\b/i, 'Finance or deposit price'],
+  [/\blhd\b|left hand drive|\bexport only\b/i, 'LHD / export'],
+  [/project|needs work|needs tlc|easy fix/i, 'Needs work']
+];
+var JUNK = /^(new listing|sponsored|opens in a new window or tab|buy it now|or best offer|best offer accepted|collection in person|free postage|free delivery|\+?£[\d,.]+ (postage|delivery)|watch|save this|\d+ watchers?|\d+ sold|top rated.*|brand new|pre-owned|used|.*private seller|.*trade seller)$/i;
+
+function parseItem(raw) {
+  var text = String(raw.text || '').replace(/\r/g, '');
+  var lines = text.split('\n').map(function (s) { return s.trim().replace(/^new listing\s*/i, ''); }).filter(Boolean);
+  var pm = text.match(/(?:£|GBP)\s?([\d,]+(?:\.\d{2})?)/);
+  var price = pm ? Math.round(num(pm[1])) : null;
+  if (raw.price != null && raw.price !== '') price = Math.round(num(raw.price));
+  var cands = lines.filter(function (l) { return !JUNK.test(l) && !/^(£|GBP)?\s?[\d,.]+$/.test(l) && !/^(£|GBP)\s?[\d,]/.test(l) && /[a-z]{2}/i.test(l); });
+  var title = raw.title || '';
+  if (!title) { for (var i = 0; i < cands.length; i++) if (findMake(cands[i])) { title = cands[i]; break; } }
+  if (!title) title = cands.sort(function (a, b) { return b.length - a.length; })[0] || 'Untitled listing';
+  title = title.slice(0, 140);
+  var mk = findMake(title) || findMake(text);
+  var flags = [];
+  FLAGS.forEach(function (f) { var m = text.match(f[0]); if (m) { var l = typeof f[1] === 'function' ? f[1](m) : f[1]; if (flags.indexOf(l) < 0) flags.push(l); } });
+  if (price != null && price < 300) flags.push('Placeholder price?');
+  var sold = /\bsold\s+\d{1,2}\s+[a-z]{3}\b/i.test(text) || !!raw.sold;
+  var auction = !sold && /\b\d+\s+bids?\b|time left|\b\d+[dh]\s+\d+[hm]\s+left\b/i.test(text);
+  return {
+    id: raw.url || ('m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7)),
+    src: raw.src === 'ebay' || raw.src === 'facebook' ? raw.src : 'manual',
+    url: /^https?:\/\//.test(raw.url || '') ? raw.url : '',
+    text: text.slice(0, 700), title: title, price: price,
+    year: parseYear(title) || parseYear(text), miles: parseMiles(text),
+    make: mk ? mk.name : '', model: mk ? findModel(mk) : '',
+    flags: flags, sold: sold, auction: auction,
+    added: raw.added || Date.now(), userValue: raw.userValue || null, example: !!raw.example
+  };
+}
+
+function rehydrate(i) { var p = parseItem(i); p.id = i.id || p.id; p.make = i.make || p.make; p.model = i.model || p.model; return p; }
+
+/* ---------- valuation ---------- */
+var keyOf = function (it) { return (it.make + ' ' + it.model).trim().toLowerCase(); };
+function wmedian(vals) {
+  vals.sort(function (a, b) { return a.v - b.v; });
+  var tot = vals.reduce(function (s, x) { return s + x.w; }, 0), acc = 0;
+  for (var i = 0; i < vals.length; i++) { acc += vals[i].w; if (acc >= tot / 2) return vals[i].v; }
+  return vals[vals.length - 1].v;
+}
+function currentSettings() { var o = {}; Object.keys(SET).forEach(function (k) { o[k] = $(SET[k]).value; }); return o; }
+function valueAll(items) {
+  var groups = {};
+  items.forEach(function (it) { var k = keyOf(it); if (it.model) (groups[k] = groups[k] || []).push(it); });
+  items.forEach(function (it) {
+    it.est = null; it.n = 0; it.conf = '';
+    var g = groups[keyOf(it)] || [];
+    var comps = g.filter(function (c) { return c !== it && c.price >= 300 && !c.flags.length && !c.auction; });
+    if (comps.length >= 3) {
+      comps = comps.map(function (c) {
+        var dy = it.year && c.year ? it.year - c.year : null, dm = it.miles != null && c.miles != null ? it.miles - c.miles : null;
+        var d = (dy == null ? 2 : Math.abs(dy)) + (dm == null ? 1.5 : Math.abs(dm) / 15000);
+        var adj = c.price * Math.exp(0.09 * Math.max(-5, Math.min(5, dy || 0)) - 0.012 * Math.max(-10, Math.min(10, (dm || 0) / 10000)));
+        return { d: d, v: adj, w: c.sold ? 2 : 1 };
+      }).sort(function (a, b) { return a.d - b.d; }).slice(0, 8);
+      it.est = Math.round(wmedian(comps.slice()) / 10) * 10;
+      it.n = comps.length;
+      var vs = comps.map(function (c) { return c.v; }).sort(function (a, b) { return a - b; });
+      var spread = (vs[Math.floor(vs.length * 0.75)] - vs[Math.floor(vs.length * 0.25)]) / it.est;
+      it.conf = it.n >= 6 && spread < 0.3 ? 'high' : it.n >= 4 ? 'medium' : 'low';
+    }
+    var value = it.userValue || it.est;
+    var s = currentSettings();
+    it.value = value;
+    it.disc = value && it.price ? (value - it.price) / value : null;
+    it.profit = value && it.price ? Math.round(value * (1 - (+s.disc || 0) / 100) - it.price - (+s.prep || 0) - (+s.fees || 0)) : null;
+    var th = (+s.thresh || 12) / 100;
+    it.verdict = it.sold ? 'sold' : it.disc == null ? 'none' : it.flags.length ? 'check' : it.disc >= th * 2 ? 'steal' : it.disc >= th ? 'good' : it.disc >= -0.05 ? 'fair' : 'pricey';
+  });
+  return groups;
+}
+
+/* ---------- rendering ---------- */
+var gbp = function (n) { return n == null ? '–' : (n < 0 ? '−£' : '£') + Math.abs(n).toLocaleString('en-GB'); };
+var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); };
+var VLABEL = { steal: 'Steal', good: 'Good deal', fair: 'Fair', pricey: 'Over market', check: 'Check flags', none: 'Need comps', sold: 'Sold comp' };
+var editing = null, valEditing = null;
+
+function render() {
+  var groups = valueAll(state.items);
+  var deals = state.items.filter(function (i) { return i.verdict === 'steal' || i.verdict === 'good'; });
+  $('tListings').textContent = state.items.length;
+  $('tModels').textContent = Object.keys(groups).length;
+  $('tDeals').textContent = deals.length;
+  $('exampleBar').hidden = !state.items.some(function (i) { return i.example; });
+
+  var ft = $('fText').value.trim().toLowerCase(), fs = $('fSrc').value, fv = $('fVerdict').value, hide = $('fFlags').checked, sort = $('fSort').value;
+  var list = state.items.filter(function (i) {
+    if (fs && i.src !== fs) return false;
+    if (hide && i.flags.length) return false;
+    if (fv === 'deals' && !(i.verdict === 'steal' || i.verdict === 'good')) return false;
+    if (fv === 'check' && i.verdict !== 'check') return false;
+    if (fv === 'sold' && !i.sold) return false;
+    if (fv === '' && i.sold) return false;
+    if (ft && (i.title + ' ' + i.make + ' ' + i.model + ' ' + (i.year || '')).toLowerCase().indexOf(ft) < 0) return false;
+    return true;
+  });
+  var nz = function (v, d) { return v == null ? d : v; };
+  list.sort(function (a, b) {
+    if (sort === 'profit') return nz(b.profit, -1e9) - nz(a.profit, -1e9);
+    if (sort === 'price') return nz(a.price, 1e9) - nz(b.price, 1e9);
+    if (sort === 'new') return b.added - a.added;
+    return nz(b.disc, -9) - nz(a.disc, -9);
+  });
+
+  if (!list.length) {
+    var msg = state.items.length ? (fv === 'deals' ? 'No deals at your threshold yet. Switch “Show” to Everything, or grab more listings of the same model so there are comparisons.' : 'Nothing matches these filters.') : 'No listings yet. Grab some from eBay or Facebook in step 2.';
+    $('rows').innerHTML = '<tr><td colspan="7" class="empty">' + msg + '</td></tr>';
+    return;
+  }
+  $('rows').innerHTML = list.map(function (i) {
+    var id = esc(i.id);
+    var keyCell = editing === i.id
+      ? '<input class="valin" style="width:200px" id="ed-' + id + '" data-key="' + id + '" value="' + esc((i.make + ' ' + i.model).trim()) + '" aria-label="Make and model">'
+      : '<button class="key" data-act="edit" data-id="' + id + '" title="Fix make and model">' + esc((i.make + ' ' + i.model).trim() || 'set model') + '</button>';
+    var bits = [i.year, i.miles != null ? Math.round(i.miles / 1000) + 'k mi' : null].filter(Boolean).join(' · ');
+    var valCell = valEditing === i.id
+      ? '<input class="valin" type="number" inputmode="numeric" id="uv-' + id + '" data-uv="' + id + '" value="' + (i.userValue || '') + '" placeholder="£" aria-label="Your valuation">'
+      : (i.value ? gbp(i.value) + '<span class="sub">' + (i.userValue ? 'your value' : i.n + ' comps · ' + i.conf) + '</span>' : '<span class="sub">needs 3+ of model</span>');
+    var q = encodeURIComponent([i.year, i.make, i.model].filter(Boolean).join(' '));
+    return '<tr>' +
+      '<td class="car"><div>' + (i.url ? '<a href="' + esc(i.url) + '" target="_blank" rel="noopener">' + esc(i.title) + '</a>' : '<b>' + esc(i.title) + '</b>') + '</div>' +
+        '<div class="meta"><span class="src">' + (i.src === 'facebook' ? 'FB' : i.src === 'ebay' ? 'eBay' : 'Pasted') + '</span>' + (bits ? '<span>' + bits + '</span>' : '') + keyCell + (i.auction ? '<span class="flag">Auction · current bid</span>' : '') + '</div>' +
+        (i.flags.length ? '<div class="flags">' + i.flags.map(function (f) { return '<span class="flag">' + esc(f) + '</span>'; }).join('') + '</div>' : '') + '</td>' +
+      '<td class="num"><b>' + gbp(i.price) + '</b></td>' +
+      '<td class="num">' + valCell + '</td>' +
+      '<td class="num">' + (i.disc == null ? '–' : '<span class="' + (i.disc > 0 ? 'pos' : 'neg') + '">' + Math.round(i.disc * 100) + '%</span><span class="sub">' + gbp(i.value - i.price) + '</span>') + '</td>' +
+      '<td class="num">' + (i.profit == null ? '–' : '<span class="' + (i.profit > 0 ? 'pos' : 'neg') + '">' + gbp(i.profit) + '</span>') + '</td>' +
+      '<td><span class="pill v-' + i.verdict + '">' + VLABEL[i.verdict] + '</span></td>' +
+      '<td><div class="acts">' +
+        '<button data-act="val" data-id="' + id + '">' + (i.userValue ? 'Edit value' : 'Set value') + '</button>' +
+        '<a href="https://www.ebay.co.uk/sch/9801/i.html?_nkw=' + q + '&LH_Sold=1&LH_Complete=1&LH_PrefLoc=1" target="_blank" rel="noopener">Sold prices</a>' +
+        '<button data-act="del" data-id="' + id + '" aria-label="Remove listing">Remove</button>' +
+      '</div></td></tr>';
+  }).join('');
+  var f = document.querySelector('[data-key],[data-uv]'); if (f) { f.focus(); f.select && f.select(); }
+}
+
+/* ---------- import ---------- */
+function toast(m, err) { var t = $('toast'); t.textContent = m; t.className = 'toast' + (err ? ' err' : ''); }
+function importText(txt) {
+  txt = txt.trim(); if (!txt) return;
+  var raws = null, restored = null;
+  try {
+    var j = JSON.parse(txt);
+    if (j && j.cdf && Array.isArray(j.items)) raws = j.items;
+    else if (j && Array.isArray(j.items) && j.settings) restored = j;
+    else if (Array.isArray(j)) raws = j;
+  } catch (e) {
+    raws = txt.split(/\n\s*\n/).filter(function (b) { return /(£|GBP)\s?\d/.test(b); }).map(function (b) { return { src: 'manual', text: b, url: (b.match(/https?:\/\/\S+/) || [''])[0] }; });
+  }
+  if (restored) { state = restored; state.settings = state.settings || {}; state.items = state.items.map(rehydrate); applySettings(); save(); render(); toast('Backup restored: ' + state.items.length + ' listings.'); return; }
+  if (!raws || !raws.length) { toast('No listings found in that paste. Each car needs a £ price.', true); return; }
+  if (state.items.some(function (i) { return i.example; })) state.items = state.items.filter(function (i) { return !i.example; });
+  var byId = {}; state.items.forEach(function (i) { byId[i.id] = i; });
+  var added = 0, updated = 0;
+  raws.forEach(function (r) {
+    var it = parseItem(r);
+    var old = byId[it.id];
+    if (old) { it.userValue = old.userValue; it.added = old.added; if (old.make) { it.make = old.make; it.model = old.model; } Object.assign(old, it); updated++; }
+    else { state.items.push(it); byId[it.id] = it; added++; }
+  });
+  save(); $('fVerdict').value = ''; render();
+  toast(added + ' new listing' + (added === 1 ? '' : 's') + ' added' + (updated ? ', ' + updated + ' updated' : '') + '. Showing everything; switch to “Deals only” to narrow it down.');
+  $('paste').value = '';
+}
+$('importBtn').onclick = function () { importText($('paste').value); };
+$('paste').addEventListener('paste', function (e) { var t = (e.clipboardData || window.clipboardData).getData('text'); if (t) { e.preventDefault(); importText(t); } });
+
+/* ---------- table actions ---------- */
+$('rows').addEventListener('click', function (e) {
+  var b = e.target.closest('button[data-act]'); if (!b) return;
+  var id = b.getAttribute('data-id'), it = state.items.find(function (x) { return x.id === id; });
+  if (!it) return;
+  var act = b.getAttribute('data-act');
+  if (act === 'del') { state.items = state.items.filter(function (x) { return x !== it; }); save(); }
+  if (act === 'edit') { editing = id; valEditing = null; }
+  if (act === 'val') { valEditing = id; editing = null; }
+  render();
+});
+function commit(el) {
+  var id = el.getAttribute('data-key') || el.getAttribute('data-uv');
+  var it = state.items.find(function (x) { return x.id === id; }); if (!it) return;
+  if (el.hasAttribute('data-key')) {
+    var v = el.value.trim(), mk = findMake(v);
+    if (mk) { it.make = mk.name; it.model = findModel(mk) || tcase(mk.rest); }
+    else if (v) { var p = v.split(/\s+/); it.make = tcase(p.shift()); it.model = tcase(p.join(' ')); }
+    editing = null;
+  } else { var n = Math.round(num(el.value)); it.userValue = n > 0 ? n : null; valEditing = null; }
+  save(); render();
+}
+$('rows').addEventListener('keydown', function (e) {
+  if (!e.target.matches('[data-key],[data-uv]')) return;
+  if (e.key === 'Enter') commit(e.target);
+  if (e.key === 'Escape') { editing = valEditing = null; render(); }
+});
+$('rows').addEventListener('focusout', function (e) { if (e.target.matches('[data-key],[data-uv]')) commit(e.target); });
+
+/* ---------- filters + settings ---------- */
+['fText', 'fSrc', 'fVerdict', 'fSort', 'fFlags'].forEach(function (id) { $(id).addEventListener('input', render); });
+var SET = { prep: 'sPrep', fees: 'sFees', disc: 'sDisc', thresh: 'sThresh' };
+function applySettings() { Object.keys(SET).forEach(function (k) { if (state.settings[k] != null) $(SET[k]).value = state.settings[k]; }); }
+Object.keys(SET).forEach(function (k) { $(SET[k]).addEventListener('input', function () { state.settings[k] = this.value; save(); render(); }); });
+
+/* ---------- search links ---------- */
+function links() {
+  var q = $('q').value.trim(), mn = $('minP').value, mx = $('maxP').value, pc = $('pc').value.trim().replace(/\s+/g, ''), r = $('rad').value || 50;
+  var city = ($('city').value.trim().toLowerCase().replace(/\s+/g, '') || 'london'), y = $('minY').value, mm = $('maxM').value;
+  var e = 'https://www.ebay.co.uk/sch/9801/i.html?_nkw=' + encodeURIComponent(q) + '&LH_PrefLoc=1' + (mn ? '&_udlo=' + mn : '') + (mx ? '&_udhi=' + mx : '') + (pc ? '&_stpos=' + encodeURIComponent(pc) + '&_sadis=' + r + '&_fspt=1' : '');
+  $('lnEbay').href = e + '&_sop=10&_ipg=240';
+  $('lnSold').href = e + '&LH_Sold=1&LH_Complete=1&_sop=13&_ipg=240';
+  $('lnFb').href = 'https://www.facebook.com/marketplace/' + encodeURIComponent(city) + '/vehicles?query=' + encodeURIComponent(q) + (mn ? '&minPrice=' + mn : '') + (mx ? '&maxPrice=' + mx : '') + (y ? '&minYear=' + y : '') + (mm ? '&maxMileage=' + mm : '') + '&sortBy=creation_time_descend&exact=false';
+  state.search = { q: q, minP: mn, maxP: mx, pc: $('pc').value, rad: $('rad').value, city: $('city').value, minY: y, maxM: mm };
+  save();
+}
+$('searchForm').addEventListener('input', links);
+$('searchForm').addEventListener('submit', function (e) { e.preventDefault(); });
+
+/* ---------- copy helpers ---------- */
+function copy(text, ok) {
+  var fallback = function () { $('paste').value = text; $('paste').focus(); $('paste').select(); toast('Copy blocked here. The text is selected in the box: press Ctrl/Cmd+C.', true); };
+  try { navigator.clipboard.writeText(text).then(function () { toast(ok); }, fallback); } catch (e) { fallback(); }
+}
+$('copyBm').onclick = function () { copy('javascript:' + encodeURIComponent(BM_CODE.replace(/\n\s*/g, ' ')), 'Bookmarklet copied. Make a new bookmark and paste this as its URL.'); };
+$('backup').onclick = function () { copy(JSON.stringify(state), 'Backup copied (' + state.items.length + ' listings). Paste it somewhere safe.'); };
+function clearHandler() {
+  $('clearWrap').innerHTML = '<span class="confirm">Delete all ' + state.items.length + ' listings? <button class="btn sm red" id="yesClear" type="button">Delete</button><button class="btn sm ghost" id="noClear" type="button">Keep</button></span>';
+  $('yesClear').onclick = function () { state.items = []; save(); render(); resetClear(); toast('All listings cleared.'); };
+  $('noClear').onclick = resetClear;
+}
+function resetClear() { $('clearWrap').innerHTML = '<button class="btn ghost" id="clearAll" type="button">Clear all listings</button>'; $('clearAll').onclick = clearHandler; }
+$('clearAll').onclick = clearHandler;
+$('clearEx').onclick = function () { state.items = state.items.filter(function (i) { return !i.example; }); save(); render(); };
+
+/* ---------- example data ---------- */
+function examples() {
+  var E = [
+    ['ebay', '2014 Ford Fiesta 1.25 Zetec 5dr\nPre-owned\n£3,995.00\nBuy it now\nMileage: 68,000 miles'],
+    ['ebay', '2015 Ford Fiesta 1.0 EcoBoost Titanium\n£4,650.00\nor Best Offer\n61,200 miles'],
+    ['facebook', '£2,750\n2014 Ford Fiesta zetec 1.2\nStockport, United Kingdom\n72K miles'],
+    ['facebook', '£4,200\n2016 Ford Fiesta 1.0 Zetec\nSale, United Kingdom\n58K miles'],
+    ['ebay', '2013 (63) Ford Fiesta 1.6 TDCi Titanium\n£3,450.00\nBuy it now\n89,000 miles'],
+    ['facebook', '£1,600\nFord Fiesta 2015 cat N light damage\nBolton, United Kingdom\n64K miles'],
+    ['ebay', 'Ford Fiesta 1.25 Edge 2012\n£2,950.00\nSold 12 Nov 2026\n81,000 miles'],
+    ['ebay', '2015 FORD FIESTA ZETEC 1.0 ECOBOOST\n£3,300.00\n7 bids · 1d 4h left\n70,500 miles'],
+    ['facebook', '£5,100\n2017 Ford Fiesta 1.1 Zetec\nManchester, United Kingdom\n41K miles'],
+    ['ebay', '2014 Toyota Yaris 1.33 VVT-i Icon 5dr\n£5,250.00\n49,000 miles'],
+    ['facebook', '£3,900\n2013 Toyota Yaris 1.0 VVT-i\nWigan, United Kingdom\n55K miles'],
+    ['ebay', '2015 Toyota Yaris 1.5 Hybrid Icon CVT\n£6,950.00\nSold 9 Nov 2026\n78,000 miles'],
+    ['facebook', '£5,800\n2015 Toyota Yaris hybrid\nLeeds, United Kingdom\n82K miles'],
+    ['ebay', '2012 Toyota Yaris 1.33 TR\n£4,100.00\n67,000 miles'],
+    ['facebook', '£4,995\n2014 Volkswagen Golf 1.6 TDI SE\nPreston, United Kingdom\n96K miles'],
+    ['ebay', '2015 VW Golf 1.4 TSI Match Edition\n£7,250.00\nBuy it now\n58,000 miles'],
+    ['facebook', '£6,400\n2014 VW Golf 2.0 GTD\nOldham, United Kingdom\n88K miles'],
+    ['ebay', '2014 Volkswagen Golf 1.6 TDI Bluemotion\n£4,650.00\nSold 14 Nov 2026\n104,000 miles'],
+    ['facebook', '£2,200\n2014 VW Golf 1.6 tdi spares or repair gearbox issue\nBury, United Kingdom\n110K miles'],
+    ['ebay', '2016 Volkswagen Golf 1.0 TSI Match\n£8,450.00\n44,000 miles']
+  ];
+  return E.map(function (e, n) { return parseItem({ src: e[0], text: e[1], example: true, url: '', added: Date.now() - n * 60000 }); });
+}
+
+/* ---------- boot ---------- */
+var saved = load();
+if (saved) state = saved; else { state = { items: examples(), settings: {}, example: true }; }
+state.settings = state.settings || {};
+state.items = state.items.map(rehydrate);
+applySettings();
+if (state.search) Object.keys(state.search).forEach(function (k) { if ($(k) && state.search[k] != null) $(k).value = state.search[k]; });
+if (!saved) $('fVerdict').value = '';
+links(); render();
+})();
+</script>
