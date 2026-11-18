@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Car Deal Finder",
+  "version": "1.0.0",
+  "description": "Saves the cars you browse on eBay and Facebook Marketplace, values them against similar cars, and flags the underpriced ones.",
+  "permissions": ["storage", "unlimitedStorage", "notifications"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "Open Car Deal Finder", "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png" } },
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
+  "content_scripts": [
+    {
+      "matches": ["https://www.ebay.co.uk/*", "https://www.facebook.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
