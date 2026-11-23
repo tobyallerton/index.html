@@ -1,0 +1,532 @@
+<title>Two-Up Coach</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: phone-first single column; sticky person switch + section tabs; cards only for meals/sessions */
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --sunk:#E3E8ED; --ink:#142030; --muted:#5B6878; --line:#D3DAE2;
+  --p1:#2459E0; --p1-soft:#E2EAFD; --p2:#D2386E; --p2-soft:#FBE3EC;
+  --good:#1E8A4C; --warn:#B86E00; --bad:#C0392B;
+  --accent:var(--p1); --accent-soft:var(--p1-soft);
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F151C; --surface:#17202A; --sunk:#0B1016; --ink:#E6ECF2; --muted:#93A1B1; --line:#283442;
+  --p1:#6C95FF; --p1-soft:#1A2848; --p2:#FF6F9E; --p2-soft:#3A1A27;
+  --good:#4CC17E; --warn:#F0A73A; --bad:#FF7A6B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F151C; --surface:#17202A; --sunk:#0B1016; --ink:#E6ECF2; --muted:#93A1B1; --line:#283442;
+  --p1:#6C95FF; --p1-soft:#1A2848; --p2:#FF6F9E; --p2-soft:#3A1A27;
+  --good:#4CC17E; --warn:#F0A73A; --bad:#FF7A6B; color-scheme:dark}
+body.who-p2{--accent:var(--p2);--accent-soft:var(--p2-soft)}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:.01em}
+h1{font-size:30px;font-weight:800;text-transform:uppercase}
+h2{font-size:24px;font-weight:700;text-transform:uppercase}
+h3{font-size:19px;font-weight:700}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.label{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+button,.btn{font:600 14px var(--f-body);border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 14px;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.ghost{background:transparent}
+button:disabled{opacity:.55;cursor:default}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-top:14px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand small{font-size:12px;color:var(--muted)}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.who button{display:flex;align-items:center;gap:10px;justify-content:flex-start;padding:10px 12px;text-align:left}
+.who .dot{width:12px;height:12px;border-radius:50%;flex:none}
+.who button[aria-pressed="true"].p1{border-color:var(--p1);background:var(--p1-soft)}
+.who button[aria-pressed="true"].p2{border-color:var(--p2);background:var(--p2-soft)}
+.who .nm{font-family:var(--f-display);font-size:19px;font-weight:700;line-height:1}
+.who .sub{font-size:12px;color:var(--muted);font-weight:500}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
+nav.tabs button{border:0;background:transparent;border-bottom:3px solid transparent;border-radius:0;padding:10px 12px;color:var(--muted);white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+main{display:flex;flex-direction:column;gap:20px;padding-top:20px}
+section{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spread{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+
+.targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.targets div{background:var(--surface);padding:10px 12px}
+.targets .v{font-family:var(--f-num);font-size:20px;font-variant-numeric:tabular-nums}
+.targets .u{font-size:12px;color:var(--muted)}
+
+.daypick{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.daypick button{min-width:48px;padding:8px 6px;font-family:var(--f-display);font-size:16px;text-transform:uppercase}
+.daypick button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.daypick button.today:not([aria-pressed="true"]){border-color:var(--accent);color:var(--accent)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.meal .slot{font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+.meal .macro{font-family:var(--f-num);font-size:12px;color:var(--muted);white-space:nowrap}
+.meal p{margin:0;color:var(--muted);font-size:14px}
+.daytotal{font-size:13px;color:var(--muted);text-align:right}
+
+table.ex{width:100%;border-collapse:collapse;font-size:14px}
+table.ex th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;font-weight:600;padding:6px 8px 6px 0;border-bottom:1px solid var(--line)}
+table.ex td{padding:8px 8px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.ex td.n{font-family:var(--f-num);white-space:nowrap}
+table.ex tr:last-child td{border-bottom:0}
+table.ex .note{display:block;font-size:12px;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+.session.done{border-color:var(--good)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.chip.good{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.chip.accent{background:var(--accent-soft);color:var(--accent)}
+.check{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--good)}
+
+.coachnote{border-left:3px solid var(--accent);padding:4px 0 4px 14px}
+.coachnote p{margin:0 0 6px}
+ul.changes{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+ul.shop{columns:2 180px;margin:0;padding-left:18px}
+
+form.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field.wide{grid-column:1/-1}
+.field label{font-size:13px;font-weight:600}
+.field .hint{font-size:12px;color:var(--muted)}
+input,select,textarea{font:15px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 11px;width:100%}
+textarea{min-height:76px;resize:vertical}
+input[type=range]{padding:0;accent-color:var(--accent)}
+.rangeval{font-family:var(--f-num);font-size:13px;color:var(--accent)}
+
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.empty p{margin:0;color:var(--muted);max-width:60ch}
+.status{font-size:13px;color:var(--muted);min-height:20px}
+.status.err{color:var(--bad)}
+.working{display:flex;align-items:center;gap:10px;font-size:14px}
+.spinner{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spinner{animation:none}}
+
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.chart svg{display:block;width:100%;height:auto}
+.hist .card{gap:4px}
+.kv{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px}
+.kv b{font-family:var(--f-num);font-weight:500}
+.disclaimer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;margin-top:10px}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Two-Up Coach</h1>
+      <small id="syncState">Connecting…</small>
+    </div>
+    <div class="who" role="group" aria-label="Whose plan">
+      <button type="button" class="p1" data-who="p1" aria-pressed="true"><span class="dot" style="background:var(--p1)"></span><span><span class="nm" id="nm-p1">Person 1</span><br><span class="sub" id="sub-p1">Not set up</span></span></button>
+      <button type="button" class="p2" data-who="p2" aria-pressed="false"><span class="dot" style="background:var(--p2)"></span><span><span class="nm" id="nm-p2">Person 2</span><br><span class="sub" id="sub-p2">Not set up</span></span></button>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-tab="today" aria-selected="true">Today</button>
+      <button role="tab" data-tab="meals" aria-selected="false">Meals</button>
+      <button role="tab" data-tab="training" aria-selected="false">Training</button>
+      <button role="tab" data-tab="checkin" aria-selected="false">Weekly check-in</button>
+      <button role="tab" data-tab="progress" aria-selected="false">Progress</button>
+      <button role="tab" data-tab="profile" aria-selected="false">Profile</button>
+    </nav>
+  </header>
+  <main id="view" aria-live="polite"></main>
+  <p class="disclaimer">Plans are written by Claude from what you enter here. They are general fitness guidance, not medical advice. Check with a doctor before big diet or training changes, especially with injuries, pregnancy or health conditions.</p>
+</div>
+
+<script>
+(() => {
+const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const S = {
+  who: "p1", tab: "today", day: DAYS[(new Date().getDay()+6)%7],
+  people: {}, plans: {}, checkins: [], db: null, sample: undefined,
+  loaded: false, busy: null, status: "", statusErr: false, stream: 0
+};
+try { const w = localStorage.getItem("tuc.who"); if (w === "p1" || w === "p2") S.who = w; } catch(e) {}
+
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+const other = w => w === "p1" ? "p2" : "p1";
+const nameOf = w => (S.people[w] && S.people[w].name) || (w === "p1" ? "Person 1" : "Person 2");
+const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const fmtDate = iso => { try { return new Date(iso).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"}); } catch(e){ return iso; } };
+const myCheckins = w => S.checkins.filter(c => c.who === w).sort((a,b) => a.date < b.date ? -1 : 1);
+
+/* ---------- header ---------- */
+function renderHeader(){
+  document.body.className = "who-" + S.who;
+  for (const w of ["p1","p2"]) {
+    $("#nm-"+w).textContent = nameOf(w);
+    const p = S.people[w], plan = S.plans[w];
+    $("#sub-"+w).textContent = !p ? "Not set up" : plan ? `${plan.targets?.calories ?? "–"} kcal · week ${plan.week ?? 1}` : "No plan yet";
+    document.querySelector(`.who [data-who="${w}"]`).setAttribute("aria-pressed", S.who === w);
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === S.tab));
+}
+
+/* ---------- views ---------- */
+function render(){
+  renderHeader();
+  const v = $("#view");
+  if (!S.loaded) { v.innerHTML = `<div class="working"><span class="spinner"></span>Loading your plans…</div>`; return; }
+  if (!S.db) { v.innerHTML = `<div class="empty"><h3>Sign in to use the coach</h3><p>Profiles, plans and check-ins are saved for both of you, so this page needs you signed in to claude.ai. Open it from your own Claude account, or ask Toby to share it with you.</p></div>`; return; }
+  const p = S.people[S.who];
+  if (!p && S.tab !== "profile") { v.innerHTML = setupPrompt(); bind(); return; }
+  const fn = {today:viewToday, meals:viewMeals, training:viewTraining, checkin:viewCheckin, progress:viewProgress, profile:viewProfile}[S.tab];
+  v.innerHTML = fn();
+  bind();
+}
+
+function setupPrompt(){
+  return `<div class="empty">
+    <h2>Set up ${esc(nameOf(S.who))}</h2>
+    <p>Fill in a short profile: your body stats, goal, food preferences and the kit you can train with. Claude then writes a full week of meals and workouts. Each Sunday you do a check-in and the plan is adjusted for the week ahead.</p>
+    <button class="primary" data-go="profile">Create profile</button>
+  </div>`;
+}
+
+function noPlan(){
+  return `<div class="empty"><h3>No plan yet</h3><p>Your profile is saved. Generate your first week and Claude will set calorie and protein targets, seven days of meals and your training sessions.${S.plans[other(S.who)] ? ` Dinners will match ${esc(nameOf(other(S.who)))}'s so you can cook once.` : ""}</p>
+  ${genButton("Write my first plan")}</div>`;
+}
+
+function genButton(label){
+  if (S.busy) return `<div class="working"><span class="spinner"></span>${esc(S.busy)}${S.stream ? ` <span class="num muted">${S.stream.toLocaleString()} chars</span>` : ""}</div>`;
+  if (S.sample === null) return `<p class="status err">Claude isn't available in this view, so plans can't be generated here. Open the page in claude.ai while signed in.</p>`;
+  return `<div class="row"><button class="primary" data-act="generate">${esc(label)}</button><span class="status ${S.statusErr?"err":""}">${esc(S.status)}</span></div>`;
+}
+
+function targetsBlock(t){
+  if (!t) return "";
+  const cell = (v,u,l) => v == null ? "" : `<div><div class="label">${l}</div><span class="v">${esc(v)}</span> <span class="u">${u}</span></div>`;
+  return `<div class="targets">${cell(t.calories,"kcal","Calories")}${cell(t.protein,"g","Protein")}${cell(t.carbs,"g","Carbs")}${cell(t.fat,"g","Fat")}${cell(t.water_l,"L","Water")}${cell(t.steps?.toLocaleString?.() ?? t.steps,"","Steps")}</div>`;
+}
+
+function dayPicker(){
+  const today = DAYS[(new Date().getDay()+6)%7];
+  return `<div class="daypick" role="group" aria-label="Day">${DAYS.map(d => `<button data-day="${d}" aria-pressed="${S.day===d}" class="${d===today?"today":""}">${d}</button>`).join("")}</div>`;
+}
+
+function mealCards(plan, day){
+  const d = (plan.meals||[]).find(x => x.day === day);
+  if (!d) return `<p class="muted">No meals listed for ${day}.</p>`;
+  let k=0,pr=0;
+  const cards = d.meals.map(m => { k += +m.kcal||0; pr += +m.protein||0; return `<article class="card meal">
+    <div class="spread"><span class="slot">${esc(m.slot)}</span><span class="macro">${esc(m.kcal)} kcal · ${esc(m.protein)}g P</span></div>
+    <h3>${esc(m.name)}</h3>${m.items?`<p>${esc(m.items)}</p>`:""}${m.shared?`<span class="chip accent">Same dish as ${esc(nameOf(other(S.who)))}</span>`:""}</article>`; }).join("");
+  return cards + `<div class="daytotal num">Day total ≈ ${k} kcal · ${pr}g protein</div>`;
+}
+
+function sessionCard(plan, w, i){
+  const done = !!(plan.done && plan.done[i]);
+  const rows = (w.exercises||[]).map(e => `<tr><td>${esc(e.name)}${e.notes?`<span class="note">${esc(e.notes)}</span>`:""}</td><td class="n">${esc(e.sets)}×${esc(e.reps)}</td><td class="n">${esc(e.rest||"")}</td></tr>`).join("");
+  return `<article class="card session ${done?"done":""}">
+    <div class="spread"><span class="label">${esc(w.day)} · ${esc(w.duration_min||"")} min</span>
+      <label class="check"><input type="checkbox" data-done="${i}" ${done?"checked":""}> Done</label></div>
+    <h3>${esc(w.title)}</h3>${w.focus?`<p class="muted" style="margin:0">${esc(w.focus)}</p>`:""}
+    ${w.warmup?`<p style="margin:0;font-size:14px"><span class="label">Warm-up</span> ${esc(w.warmup)}</p>`:""}
+    ${rows?`<div class="tablewrap"><table class="ex"><thead><tr><th>Exercise</th><th>Sets × reps</th><th>Rest</th></tr></thead><tbody>${rows}</tbody></table></div>`:""}
+    ${w.cardio?`<p style="margin:0;font-size:14px"><span class="label">Cardio</span> ${esc(w.cardio)}</p>`:""}
+  </article>`;
+}
+
+function viewToday(){
+  const plan = S.plans[S.who];
+  if (!plan) return noPlan();
+  const sessions = (plan.workouts||[]).map((w,i)=>[w,i]).filter(([w]) => w.day === S.day);
+  const doneCount = Object.values(plan.done||{}).filter(Boolean).length;
+  const lastCI = myCheckins(S.who).slice(-1)[0];
+  const due = !lastCI || (Date.now() - new Date(lastCI.date)) > 6*864e5;
+  return `<section>
+    <div class="spread"><h2>${esc(nameOf(S.who))} · Week ${esc(plan.week||1)}</h2><span class="chip ${doneCount>=(plan.workouts||[]).length?"good":""}">${doneCount}/${(plan.workouts||[]).length} sessions done</span></div>
+    ${targetsBlock(plan.targets)}
+    ${due && plan.week ? `<div class="row"><span class="chip accent">Check-in due</span><button class="ghost" data-go="checkin">Do this week's check-in</button></div>` : ""}
+  </section>
+  <section>${dayPicker()}</section>
+  <section><h2>Training · ${S.day}</h2>${sessions.length ? sessions.map(([w,i]) => sessionCard(plan,w,i)).join("") : `<p class="muted" style="margin:0">Rest day. ${esc(plan.rest_day_tip || "Get a walk in and hit your step target.")}</p>`}</section>
+  <section><h2>Food · ${S.day}</h2>${mealCards(plan, S.day)}</section>`;
+}
+
+function viewMeals(){
+  const plan = S.plans[S.who];
+  if (!plan) return noPlan();
+  return `<section><h2>Meal plan</h2>${targetsBlock(plan.targets)}${plan.nutrition_notes?`<p class="muted" style="margin:0">${esc(plan.nutrition_notes)}</p>`:""}</section>
+  <section>${dayPicker()}${mealCards(plan, S.day)}</section>
+  ${plan.shopping?.length ? `<section><h2>Shopping list</h2><ul class="shop">${plan.shopping.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></section>`:""}`;
+}
+
+function viewTraining(){
+  const plan = S.plans[S.who];
+  if (!plan) return noPlan();
+  return `<section><div class="spread"><h2>This week's sessions</h2><span class="muted">${(plan.workouts||[]).length} sessions</span></div>
+  ${plan.training_notes?`<p class="muted" style="margin:0">${esc(plan.training_notes)}</p>`:""}
+  ${(plan.workouts||[]).map((w,i)=>sessionCard(plan,w,i)).join("")}</section>`;
+}
+
+function viewCheckin(){
+  const p = S.people[S.who], plan = S.plans[S.who];
+  const prev = myCheckins(S.who).slice(-1)[0];
+  const doneCount = plan ? Object.values(plan.done||{}).filter(Boolean).length : 0;
+  const total = plan ? (plan.workouts||[]).length : 0;
+  const rng = (id,label,lo,hi,def,hint) => `<div class="field"><label for="${id}">${label} <span class="rangeval" id="${id}-v">${def}</span>/${hi}</label><input type="range" id="${id}" name="${id}" min="${lo}" max="${hi}" value="${def}"><span class="hint">${hint}</span></div>`;
+  return `<section>
+    <h2>Weekly check-in</h2>
+    <p class="muted" style="margin:0">Be honest, it makes the next plan better. When you submit, Claude reads this week alongside your history and rewrites next week's meals and training.</p>
+  </section>
+  ${plan && plan.coach_note ? `<section class="coachnote"><span class="label">Last week's focus</span><p>${esc(plan.coach_note)}</p></section>`:""}
+  <form class="grid" id="ciForm">
+    <div class="field"><label for="ci_date">Date</label><input type="date" id="ci_date" name="date" value="${todayISO()}" required></div>
+    <div class="field"><label for="ci_weight">Weight (${esc(p?.units==="imperial"?"lb":"kg")})</label><input type="number" step="0.1" id="ci_weight" name="weight" placeholder="${esc(prev?.weight ?? p?.weight ?? "")}" required><span class="hint">Morning, after the toilet, before food</span></div>
+    <div class="field"><label for="ci_waist">Waist (${esc(p?.units==="imperial"?"in":"cm")})</label><input type="number" step="0.1" id="ci_waist" name="waist" placeholder="Optional"></div>
+    <div class="field"><label for="ci_sessions">Sessions completed</label><input type="number" min="0" max="14" id="ci_sessions" name="sessions" value="${doneCount}"><span class="hint">Out of ${total} planned</span></div>
+    ${rng("diet","Stuck to meals",1,10,7,"1 = way off, 10 = every meal")}
+    ${rng("energy","Energy",1,10,6,"Through the day and in sessions")}
+    ${rng("hunger","Hunger",1,10,5,"1 = never hungry, 10 = starving")}
+    ${rng("sleep","Sleep quality",1,10,6,"")}
+    <div class="field"><label for="ci_sleephrs">Average sleep (hours)</label><input type="number" step="0.5" id="ci_sleephrs" name="sleep_hours" placeholder="7"></div>
+    <div class="field"><label for="ci_steps">Average daily steps</label><input type="number" id="ci_steps" name="steps" placeholder="Optional"></div>
+    <div class="field wide"><label for="ci_lifts">Lifts and numbers</label><textarea id="ci_lifts" name="lifts" placeholder="e.g. Squat 60kg 3×8 felt easy; push-ups 3×12; ran 5k in 31 min"></textarea></div>
+    <div class="field wide"><label for="ci_pain">Pain, injuries or niggles</label><input id="ci_pain" name="pain" placeholder="None"></div>
+    <div class="field wide"><label for="ci_wins">What went well</label><textarea id="ci_wins" name="wins"></textarea></div>
+    <div class="field wide"><label for="ci_hard">What was hard / what to change</label><textarea id="ci_hard" name="struggles" placeholder="e.g. Too much prep on Tuesdays, hated the overnight oats, want more upper body"></textarea></div>
+    <div class="field wide"><label for="ci_next">Anything coming up next week?</label><input id="ci_next" name="next_week" placeholder="e.g. Away Thu–Fri, birthday dinner Saturday"></div>
+    <div class="field wide">${S.busy ? genButton() : `<div class="row"><button class="primary" type="submit">Submit and update my plan</button><span class="status ${S.statusErr?"err":""}">${esc(S.status)}</span></div>`}</div>
+  </form>`;
+}
+
+function chart(list, key, unit){
+  const pts = list.filter(c => c[key] != null && c[key] !== "").map(c => ({d:c.date, v:+c[key]}));
+  if (pts.length < 2) return "";
+  const W=640,H=180,L=44,R=14,T=14,B=28;
+  const vs = pts.map(p=>p.v); let lo=Math.min(...vs), hi=Math.max(...vs); if (hi-lo<1){lo-=1;hi+=1;} const pad=(hi-lo)*.15; lo-=pad; hi+=pad;
+  const x = i => L + i*(W-L-R)/(pts.length-1), y = v => T + (hi-v)*(H-T-B)/(hi-lo);
+  const ticks = [lo+(hi-lo)*.15, (lo+hi)/2, hi-(hi-lo)*.15];
+  const line = pts.map((p,i)=>`${i?"L":"M"}${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join("");
+  const area = line + `L${x(pts.length-1).toFixed(1)},${H-B}L${L},${H-B}Z`;
+  const last = pts[pts.length-1];
+  return `<div class="chart"><div class="spread"><span class="label">${key==="weight"?"Weight":"Waist"} (${unit})</span><span class="num">${(last.v-pts[0].v>0?"+":"")}${(last.v-pts[0].v).toFixed(1)} ${unit} since start</span></div>
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${key} over time">
+    ${ticks.map(t=>`<line x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${y(t)+4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="JetBrains Mono,monospace">${t.toFixed(1)}</text>`).join("")}
+    <path d="${area}" fill="var(--accent)" fill-opacity=".1"/>
+    <path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>
+    ${pts.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p.v)}" r="${i===pts.length-1?5:3}" fill="${i===pts.length-1?"var(--accent)":"var(--surface)"}" stroke="var(--accent)" stroke-width="2"/>`).join("")}
+    <text x="${L}" y="${H-8}" font-size="11" fill="var(--muted)">${esc(fmtDate(pts[0].d))}</text>
+    <text x="${W-R}" y="${H-8}" font-size="11" fill="var(--muted)" text-anchor="end">${esc(fmtDate(last.d))}</text>
+  </svg></div>`;
+}
+
+function viewProgress(){
+  const p = S.people[S.who], list = myCheckins(S.who), plan = S.plans[S.who];
+  const u = p?.units==="imperial" ? ["lb","in"] : ["kg","cm"];
+  return `<section><h2>Progress</h2>
+    ${list.length ? "" : `<div class="empty"><p>No check-ins yet. Your weight chart and weekly history appear here after your first Sunday check-in.</p><button data-go="checkin">Go to check-in</button></div>`}
+    ${chart(list,"weight",u[0])}${chart(list,"waist",u[1])}
+  </section>
+  ${plan?.changes?.length ? `<section class="coachnote"><span class="label">What changed in this week's plan</span><ul class="changes">${plan.changes.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></section>`:""}
+  ${list.length ? `<section class="hist"><h2>Check-in history</h2>${list.slice().reverse().map(c=>`<article class="card">
+    <div class="spread"><h3>${esc(fmtDate(c.date))}</h3><span class="num">${esc(c.weight)} ${u[0]}</span></div>
+    <div class="kv"><span>Sessions <b>${esc(c.sessions)}</b></span><span>Diet <b>${esc(c.diet)}/10</b></span><span>Energy <b>${esc(c.energy)}/10</b></span><span>Hunger <b>${esc(c.hunger)}/10</b></span><span>Sleep <b>${esc(c.sleep)}/10</b>${c.sleep_hours?` · ${esc(c.sleep_hours)}h`:""}</span></div>
+    ${c.struggles?`<p class="muted" style="margin:0;font-size:14px">${esc(c.struggles)}</p>`:""}</article>`).join("")}</section>`:""}`;
+}
+
+function viewProfile(){
+  const p = S.people[S.who] || {};
+  const sel = (n,opts,cur) => `<select id="pf_${n}" name="${n}">${opts.map(([v,l])=>`<option value="${v}" ${String(cur)===v?"selected":""}>${l}</option>`).join("")}</select>`;
+  const f = (n,label,type,extra="",hint="") => `<div class="field"><label for="pf_${n}">${label}</label><input id="pf_${n}" name="${n}" type="${type}" value="${esc(p[n]??"")}" ${extra}>${hint?`<span class="hint">${hint}</span>`:""}</div>`;
+  const t = (n,label,ph) => `<div class="field wide"><label for="pf_${n}">${label}</label><textarea id="pf_${n}" name="${n}" placeholder="${esc(ph)}">${esc(p[n]??"")}</textarea></div>`;
+  return `<section><h2>${S.people[S.who] ? "Profile" : "New profile"}</h2>
+  <p class="muted" style="margin:0">This is what Claude plans from. Change it any time, then press "Rewrite plan from profile".</p></section>
+  <form class="grid" id="pfForm">
+    ${f("name","First name","text","required autocomplete=\"given-name\"")}
+    <div class="field"><label for="pf_units">Units</label>${sel("units",[["metric","Metric (kg, cm)"],["imperial","Imperial (lb, in)"]],p.units||"metric")}</div>
+    ${f("age","Age","number","min=\"14\" max=\"99\" required")}
+    <div class="field"><label for="pf_sex">Sex</label>${sel("sex",[["female","Female"],["male","Male"]],p.sex||(S.who==="p2"?"female":"male"))}<span class="hint">Used for the calorie maths</span></div>
+    ${f("height","Height","number","step=\"0.1\" required","cm or inches")}
+    ${f("weight","Current weight","number","step=\"0.1\" required","kg or lb")}
+    <div class="field"><label for="pf_goal">Main goal</label>${sel("goal",[["lose fat","Lose fat"],["build muscle","Build muscle"],["recomp","Lose fat and build muscle"],["get fitter","Get fitter / healthier"],["strength","Get stronger"],["endurance","Running / endurance"]],p.goal||"lose fat")}</div>
+    ${f("target","Target (optional)","text","placeholder=\"e.g. 65kg by June, first pull-up\"")}
+    <div class="field"><label for="pf_experience">Training experience</label>${sel("experience",[["beginner","Beginner (under 6 months)"],["intermediate","Intermediate (6 months–3 years)"],["advanced","Advanced (3+ years)"]],p.experience||"beginner")}</div>
+    <div class="field"><label for="pf_activity">Day job activity</label>${sel("activity",[["desk","Desk-based"],["mixed","On my feet some of the day"],["active","Physical job"]],p.activity||"desk")}</div>
+    <div class="field"><label for="pf_days">Training days per week</label>${sel("days",[["2","2"],["3","3"],["4","4"],["5","5"],["6","6"]],p.days||"3")}</div>
+    <div class="field"><label for="pf_session">Session length</label>${sel("session",[["30","30 min"],["45","45 min"],["60","60 min"],["75","75 min"],["90","90 min"]],p.session||"45")}</div>
+    <div class="field wide"><label for="pf_equipment">Where you train</label>${sel("equipment",[["full gym","Full gym"],["home dumbbells","Home with dumbbells / bands"],["bodyweight","Bodyweight only"],["mixed gym and home","Mix of gym and home"]],p.equipment||"full gym")}</div>
+    ${t("diet","Diet style and foods you love","e.g. eat everything, love Mexican and curries, high-protein yoghurt for breakfast")}
+    ${t("avoid","Allergies and foods to avoid","e.g. no mushrooms, lactose intolerant")}
+    ${f("meals_per_day","Meals per day","number","min=\"2\" max=\"6\" placeholder=\"4\"","Including snacks")}
+    ${f("budget","Cooking time / budget","text","placeholder=\"e.g. 30 min weeknights, batch cook Sunday\"")}
+    ${t("injuries","Injuries or health notes","e.g. dodgy left knee, lower back gets tight")}
+    ${t("notes","Anything else Claude should know","e.g. train together Mon and Thu, I hate burpees, want to look good for a holiday in May")}
+    <div class="field wide"><label class="check"><input type="checkbox" id="pf_share" name="share_dinners" ${p.share_dinners!==false?"checked":""}> Share dinners with ${esc(nameOf(other(S.who)))} (same dish, portions sized for each of you)</label></div>
+    <div class="field wide row">
+      <button class="primary" type="submit">${S.people[S.who] ? "Save profile" : "Save and write my plan"}</button>
+      ${S.people[S.who] && S.plans[S.who] ? `<button type="button" data-act="regen">Rewrite plan from profile</button>`:""}
+      <span class="status ${S.statusErr?"err":""}">${esc(S.status)}</span>
+    </div>
+  </form>`;
+}
+
+/* ---------- events ---------- */
+function bind(){
+  document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => { S.tab = b.dataset.go; S.status=""; render(); window.scrollTo(0,0); });
+  document.querySelectorAll("[data-day]").forEach(b => b.onclick = () => { S.day = b.dataset.day; render(); });
+  document.querySelectorAll("[data-act=generate]").forEach(b => b.onclick = () => { const r = S.retry && S.retry.who === S.who ? S.retry : null; S.retry = null; r ? generate(r.who, r.checkin, r.reason) : generate(S.who, null); });
+  document.querySelectorAll("[data-act=regen]").forEach(b => b.onclick = () => generate(S.who, null, "Profile changed; rewrite the plan to match the updated profile."));
+  document.querySelectorAll("[data-done]").forEach(cb => cb.onchange = () => toggleDone(+cb.dataset.done, cb.checked));
+  document.querySelectorAll("input[type=range]").forEach(r => { const o = $("#"+r.id+"-v"); r.oninput = () => o.textContent = r.value; });
+  const pf = $("#pfForm"); if (pf) pf.onsubmit = saveProfile;
+  const ci = $("#ciForm"); if (ci) ci.onsubmit = submitCheckin;
+}
+document.querySelectorAll(".who button").forEach(b => b.onclick = () => { S.who = b.dataset.who; S.status=""; try{localStorage.setItem("tuc.who",S.who);}catch(e){} render(); });
+document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => { S.tab = b.dataset.tab; S.status=""; render(); });
+
+function setStatus(msg, err){ S.status = msg; S.statusErr = !!err; render(); }
+
+async function saveProfile(e){
+  e.preventDefault();
+  const fd = Object.fromEntries(new FormData(e.target).entries());
+  fd.share_dinners = !!e.target.share_dinners.checked;
+  const isNew = !S.people[S.who];
+  fd.updatedAt = new Date().toISOString();
+  try {
+    await S.db.doc("people/"+S.who).set(fd);
+    S.people[S.who] = fd;
+    if (isNew || !S.plans[S.who]) { S.tab = "today"; render(); generate(S.who, null); }
+    else setStatus("Profile saved.");
+  } catch(err){ setStatus("Couldn't save: " + (err.message||err.code) + ". You may only have view access; ask Toby to share it with you as an editor.", true); }
+}
+
+async function toggleDone(i, val){
+  const plan = S.plans[S.who]; if (!plan) return;
+  const done = Object.assign({}, plan.done||{}, {[i]: val});
+  plan.done = done; render();
+  try { await S.db.doc("plans/"+S.who).update({done}); } catch(err){ setStatus("Couldn't save that tick.", true); }
+}
+
+async function submitCheckin(e){
+  e.preventDefault();
+  const fd = Object.fromEntries(new FormData(e.target).entries());
+  for (const k of ["weight","waist","sessions","diet","energy","hunger","sleep","sleep_hours","steps"]) if (fd[k] !== "" && fd[k] != null) fd[k] = +fd[k]; else delete fd[k];
+  fd.who = S.who; fd.planned = (S.plans[S.who]?.workouts||[]).length; fd.createdAt = new Date().toISOString();
+  try {
+    await S.db.doc(`checkins/${S.who}_${fd.date}`).set(fd);
+    if (!S.checkins.find(c => c.who===S.who && c.date===fd.date)) S.checkins.push(fd);
+  } catch(err){ setStatus("Couldn't save the check-in: " + (err.message||err.code), true); return; }
+  if (fd.weight) { /* keep profile weight current */
+    try { await S.db.doc("people/"+S.who).update({weight: fd.weight}); S.people[S.who].weight = fd.weight; } catch(e){}
+  }
+  generate(S.who, fd);
+}
+
+/* ---------- Claude ---------- */
+function slimPlan(plan){
+  if (!plan) return null;
+  return { week: plan.week, targets: plan.targets,
+    meals: (plan.meals||[]).map(d => ({day:d.day, meals:d.meals.map(m => `${m.slot}: ${m.name} (${m.kcal} kcal, ${m.protein}g P)`)})),
+    workouts: (plan.workouts||[]).map(w => ({day:w.day, title:w.title, exercises:(w.exercises||[]).map(e => `${e.name} ${e.sets}x${e.reps}`)})),
+    coach_note: plan.coach_note };
+}
+
+function buildPrompt(who, checkin, reason){
+  const p = S.people[who], plan = S.plans[who], hist = myCheckins(who).slice(-6);
+  const partner = S.people[other(who)], partnerPlan = S.plans[other(who)];
+  const shareDinners = p.share_dinners !== false && partner && partner.share_dinners !== false && partnerPlan;
+  const partnerDinners = shareDinners ? (partnerPlan.meals||[]).map(d => { const m = d.meals.find(x => /dinner/i.test(x.slot)); return m ? `${d.day}: ${m.name}` : null; }).filter(Boolean) : [];
+  const nextWeek = plan ? (plan.week||1) + 1 : 1;
+  return `You are an experienced, evidence-based personal trainer and sports nutritionist writing a one-week plan for one client in a couple who train together. Be practical, specific and encouraging. Use UK-friendly foods and supermarket ingredients unless the profile suggests otherwise.
+
+CLIENT PROFILE
+${JSON.stringify(p, null, 1)}
+
+${plan ? `CURRENT PLAN (week ${plan.week||1})\n${JSON.stringify(slimPlan(plan))}\n` : "This is the client's FIRST plan.\n"}
+${hist.length ? `CHECK-IN HISTORY (oldest first)\n${JSON.stringify(hist.map(c => { const {createdAt, who, ...rest} = c; return rest; }))}\n` : ""}
+${checkin ? `THIS WEEK'S CHECK-IN (just submitted): ${JSON.stringify(checkin)}\n` : ""}
+${reason ? `REASON FOR THIS REWRITE: ${reason}\n` : ""}
+${partnerDinners.length ? `COUPLE: they cook dinner together. Use these SAME dinner dishes on the same days as ${partner.name}'s plan, with portions and sides adjusted to this client's targets, and mark them "shared": true:\n${partnerDinners.join("\n")}\n` : partner ? `COUPLE: ${partner.name} (${partner.goal}) eats with them. Pick dinners that suit both of them; mark dinners "shared": true.\n` : ""}
+RULES
+- Work out calories from Mifflin-St Jeor with a sensible activity factor, then apply the goal. Fat loss: deficit aiming for about 0.5–1% bodyweight per week. Never go below 1200 kcal for women or 1500 kcal for men. Muscle gain: small surplus (about 200–300 kcal).
+- Protein about 1.6–2.2 g per kg bodyweight. Round targets to sensible numbers.
+- If there is check-in data, ADJUST, don't start over: compare weight trend to goal (use the average of recent weigh-ins, ignore one-off spikes), and adjust calories by 100–200 kcal only if the trend is off for 2+ weeks or hunger/energy is poor. Swap meals they disliked or struggled with, keep ones that worked. Progress lifts that felt easy (more weight or reps), back off anything causing pain and offer a safe substitute. Account for anything coming up next week.
+- Respect allergies and foods to avoid strictly. Keep prep realistic for their time/budget. Reuse ingredients across the week to keep shopping simple; leftovers for lunch are fine.
+- Exactly ${p.days || 3} training sessions of about ${p.session || 45} minutes, using only their equipment (${p.equipment}). Spread across the week with rest days. Include progressive overload and sets/reps/rest. Beginners: simple compound movements.
+- ${p.meals_per_day || 4} meals/snacks per day; each day's total should be within about 5% of the calorie target.
+- Keep text short: meal "items" is one line listing ingredients with amounts; exercise "notes" a few words or empty.
+
+Reply with ONLY a JSON object of this shape:
+{"week": ${nextWeek},
+ "targets": {"calories": number, "protein": number, "carbs": number, "fat": number, "water_l": number, "steps": number},
+ "coach_note": "2–3 sentences to the client: this week's focus, in second person",
+ "changes": ["each change from last week and why, short; for a first plan, explain how targets were set"],
+ "nutrition_notes": "one or two practical tips",
+ "training_notes": "one or two tips on progression/form",
+ "rest_day_tip": "one line",
+ "meals": [{"day":"Mon","meals":[{"slot":"Breakfast","name":"","items":"","kcal":0,"protein":0,"shared":false}]}  ... all 7 days Mon..Sun],
+ "workouts": [{"day":"Mon","title":"","focus":"","duration_min":0,"warmup":"","exercises":[{"name":"","sets":3,"reps":"8-10","rest":"90s","notes":""}],"cardio":""}],
+ "shopping": ["grouped shopping list items with rough quantities for the week"]}`;
+}
+
+async function generate(who, checkin, reason){
+  if (S.busy) return;
+  if (S.sample === undefined) { setStatus("Still connecting to Claude, try again in a moment.", true); return; }
+  if (!S.sample) { setStatus("Claude isn't available in this view.", true); return; }
+  S.busy = checkin ? "Claude is reading your check-in and writing next week…" : "Claude is writing your plan…";
+  S.stream = 0; S.status = ""; render();
+  let plan;
+  try {
+    plan = await S.sample.json(buildPrompt(who, checkin, reason), {
+      modelTier: "complex", cache: false,
+      onText: ({text}) => { const n = text.length; if (n - S.stream > 400) { S.stream = n; const w = document.querySelector(".working .num"); if (w) w.textContent = n.toLocaleString()+" chars"; else render(); } }
+    });
+    if (!plan || !Array.isArray(plan.meals) || !Array.isArray(plan.workouts)) throw {code:"invalid_json", message:"The plan came back incomplete."};
+  } catch(err){
+    S.busy = null; S.retry = {who, checkin, reason};
+    const msg = err.code === "rate_limited" ? "You've hit a usage limit. Try again in a little while."
+      : err.code === "not_granted" ? "Claude access was declined for this page. Allow it from the page's Permissions menu to generate plans."
+      : err.code === "invalid_json" ? "The plan came back cut off or malformed. Press the button to try again."
+      : "Couldn't generate the plan (" + (err.message || err.code || "unknown error") + ").";
+    if (checkin) { S.tab = "checkin"; }
+    setStatus(msg + (checkin ? " Your check-in is saved." : ""), true);
+    if (checkin || !S.plans[who]) { const v=$("#view"); if (!v.querySelector("[data-act=generate]")) v.insertAdjacentHTML("afterbegin", `<div class="row"><button class="primary" data-act="generate">Try again</button></div>`); bind(); }
+    return;
+  }
+  const old = S.plans[who];
+  plan.who = who; plan.done = {}; plan.createdAt = new Date().toISOString();
+  plan.basedOn = checkin ? checkin.date : (reason ? "profile update" : "first plan");
+  if (old && !reason) plan.week = (old.week||1) + 1; else if (old) plan.week = old.week || 1; else plan.week = 1;
+  try {
+    if (old) await S.db.doc(`planHistory/${who}_${(old.createdAt||Date.now()).toString().replace(/[^0-9]/g,"")}`).set(old);
+    await S.db.doc("plans/"+who).set(plan);
+    S.plans[who] = plan;
+  } catch(err){ S.busy = null; setStatus("Plan written but couldn't be saved: " + (err.message||err.code), true); return; }
+  S.busy = null; S.status = ""; S.tab = checkin ? "progress" : "today"; S.day = DAYS[(new Date().getDay()+6)%7];
+  render(); window.scrollTo(0,0);
+}
+
+function liveRender(){ if (S.busy) return; if (document.querySelector("#ciForm, #pfForm")) { renderHeader(); return; } render(); }
+/* ---------- boot ---------- */
+render();
+const loadTimer = setTimeout(() => { if (!S.loaded) { S.loaded = true; $("#syncState").textContent = "Offline"; render(); } }, 10000);
+(async () => {
+  const claudeApi = window.claude;
+  if (!claudeApi || !claudeApi.use) { clearTimeout(loadTimer); S.loaded = true; S.sample = null; $("#syncState").textContent = "Preview only"; render(); return; }
+  claudeApi.use("sample").then(s => { S.sample = s; if (S.loaded) render(); });
+  const db = await claudeApi.use("db");
+  if (!db) { clearTimeout(loadTimer); S.loaded = true; $("#syncState").textContent = "Not signed in"; render(); return; }
+  S.db = db;
+  let got = 0; const ready = () => { if (++got >= 3) { clearTimeout(loadTimer); S.loaded = true; $("#syncState").textContent = "Synced"; } };
+  const onErr = err => { $("#syncState").textContent = "Sync problem"; console.warn(err); };
+  let first = [true,true,true];
+  db.collection("people").onSnapshot(q => { S.people = {}; q.docs.forEach(d => S.people[d.id] = structuredClone(d.data())); if (first[0]) { first[0]=false; ready(); } liveRender(); }, onErr);
+  db.collection("plans").onSnapshot(q => { S.plans = {}; q.docs.forEach(d => S.plans[d.id] = structuredClone(d.data())); if (first[1]) { first[1]=false; ready(); } liveRender(); }, onErr);
+  db.collection("checkins").onSnapshot(q => { S.checkins = q.docs.map(d => structuredClone(d.data())); if (first[2]) { first[2]=false; ready(); } liveRender(); }, onErr);
+})();
+})();
+</script>
