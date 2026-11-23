@@ -118,6 +118,36 @@ input[type=range]{padding:0;accent-color:var(--accent)}
 .kv{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px}
 .kv b{font-family:var(--f-num);font-weight:500}
 .disclaimer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;margin-top:10px}
+.coachmsg{background:var(--accent-soft);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.coachmsg .from{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em}
+.coachmsg p{margin:0;font-size:16px;line-height:1.55;white-space:pre-wrap}
+.coachmsg .ask{align-self:flex-start;margin-top:4px}
+.avatar{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 14px var(--f-display);flex:none}
+.bar{height:8px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--good);border-radius:inherit}
+.chat{display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;line-height:1.5;overflow-wrap:anywhere}
+.msg.user{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.msg.assistant{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg .t{display:block;font-size:11px;opacity:.7;margin-top:4px}
+.chatbar{position:sticky;bottom:0;background:var(--bg);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line)}
+.chatbar form{display:flex;gap:8px}
+.chatbar textarea{min-height:44px;height:44px;flex:1}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.chips button{white-space:nowrap;padding:6px 11px;font-size:13px;border-radius:999px}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.photo{display:flex;flex-direction:column;gap:4px;min-width:0}
+.photo img,.compare img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;background:var(--sunk);border:1px solid var(--line)}
+.photo .cap{display:flex;justify-content:space-between;gap:6px;font-size:12px;color:var(--muted)}
+.photo button{padding:2px 8px;font-size:12px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.compare figure{margin:0;display:flex;flex-direction:column;gap:4px}
+.compare figcaption{font-size:12px;color:var(--muted);text-align:center}
+.posepick{display:flex;gap:6px}
+.posepick button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.upl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.upl label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
+.upl input{font-size:12px;padding:6px}
 </style>
 
 <div class="wrap">
@@ -132,10 +162,11 @@ input[type=range]{padding:0;accent-color:var(--accent)}
     </div>
     <nav class="tabs" role="tablist" aria-label="Sections">
       <button role="tab" data-tab="today" aria-selected="true">Today</button>
+      <button role="tab" data-tab="coach" aria-selected="false">Coach</button>
       <button role="tab" data-tab="meals" aria-selected="false">Meals</button>
       <button role="tab" data-tab="training" aria-selected="false">Training</button>
       <button role="tab" data-tab="checkin" aria-selected="false">Weekly check-in</button>
-      <button role="tab" data-tab="progress" aria-selected="false">Progress</button>
+      <button role="tab" data-tab="progress" aria-selected="false">Progress &amp; photos</button>
       <button role="tab" data-tab="profile" aria-selected="false">Profile</button>
     </nav>
   </header>
@@ -149,7 +180,8 @@ const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const S = {
   who: "p1", tab: "today", day: DAYS[(new Date().getDay()+6)%7],
   people: {}, plans: {}, checkins: [], db: null, sample: undefined,
-  loaded: false, busy: null, status: "", statusErr: false, stream: 0
+  loaded: false, busy: null, status: "", statusErr: false, stream: 0,
+  chat: [], photos: [], daily: {}, assets: undefined, chatBusy: false, chatDraft: "", dailyReq: {}, pose: "front", confirmDel: null
 };
 try { const w = localStorage.getItem("tuc.who"); if (w === "p1" || w === "p2") S.who = w; } catch(e) {}
 
@@ -181,9 +213,12 @@ function render(){
   if (!S.db) { v.innerHTML = `<div class="empty"><h3>Sign in to use the coach</h3><p>Profiles, plans and check-ins are saved for both of you, so this page needs you signed in to claude.ai. Open it from your own Claude account, or ask Toby to share it with you.</p></div>`; return; }
   const p = S.people[S.who];
   if (!p && S.tab !== "profile") { v.innerHTML = setupPrompt(); bind(); return; }
-  const fn = {today:viewToday, meals:viewMeals, training:viewTraining, checkin:viewCheckin, progress:viewProgress, profile:viewProfile}[S.tab];
+  const fn = {today:viewToday, coach:viewCoach, meals:viewMeals, training:viewTraining, checkin:viewCheckin, progress:viewProgress, profile:viewProfile}[S.tab];
+  const ci = $("#chatInput"), draft = ci ? ci.value : null, foc = ci && document.activeElement === ci;
   v.innerHTML = fn();
   bind();
+  const ni = $("#chatInput"); if (ni && draft != null) { ni.value = draft; if (foc) ni.focus(); }
+  if (S.tab === "today") ensureDaily(S.who);
 }
 
 function setupPrompt(){
@@ -246,8 +281,11 @@ function viewToday(){
   const doneCount = Object.values(plan.done||{}).filter(Boolean).length;
   const lastCI = myCheckins(S.who).slice(-1)[0];
   const due = !lastCI || (Date.now() - new Date(lastCI.date)) > 6*864e5;
-  return `<section>
-    <div class="spread"><h2>${esc(nameOf(S.who))} · Week ${esc(plan.week||1)}</h2><span class="chip ${doneCount>=(plan.workouts||[]).length?"good":""}">${doneCount}/${(plan.workouts||[]).length} sessions done</span></div>
+  const total = (plan.workouts||[]).length || 1;
+  const streak = checkinStreak(S.who);
+  return `${dailyBlock()}<section>
+    <div class="spread"><h2>${esc(nameOf(S.who))} · Week ${esc(plan.week||1)}</h2><span class="row" style="gap:6px">${streak>1?`<span class="chip accent">${streak}-week check-in streak</span>`:""}<span class="chip ${doneCount>=total?"good":""}">${doneCount}/${(plan.workouts||[]).length} sessions done</span></span></div>
+    <div class="bar" aria-hidden="true"><i style="width:${Math.min(100,Math.round(doneCount/total*100))}%"></i></div>
     ${targetsBlock(plan.targets)}
     ${due && plan.week ? `<div class="row"><span class="chip accent">Check-in due</span><button class="ghost" data-go="checkin">Do this week's check-in</button></div>` : ""}
   </section>
@@ -299,6 +337,7 @@ function viewCheckin(){
     <div class="field wide"><label for="ci_wins">What went well</label><textarea id="ci_wins" name="wins"></textarea></div>
     <div class="field wide"><label for="ci_hard">What was hard / what to change</label><textarea id="ci_hard" name="struggles" placeholder="e.g. Too much prep on Tuesdays, hated the overnight oats, want more upper body"></textarea></div>
     <div class="field wide"><label for="ci_next">Anything coming up next week?</label><input id="ci_next" name="next_week" placeholder="e.g. Away Thu–Fri, birthday dinner Saturday"></div>
+    <div class="field wide"><span class="label">Progress photos (optional)</span>${S.assets ? `<div class="upl">${["front","side","back"].map(k=>`<label for="ci_ph_${k}">${k[0].toUpperCase()+k.slice(1)}<input type="file" accept="image/*" id="ci_ph_${k}" data-pose="${k}"></label>`).join("")}</div><span class="hint">Same spot, same light, same time of day each week. ${p?.photos_to_coach ? "Your coach will look at these in the review." : "Turn on \"Coach can see my photos\" in your profile if you want feedback on them."}</span>` : `<span class="hint">Photo uploads need edit access to this page.</span>`}</div>
     <div class="field wide">${S.busy ? genButton() : `<div class="row"><button class="primary" type="submit">Submit and update my plan</button><span class="status ${S.statusErr?"err":""}">${esc(S.status)}</span></div>`}</div>
   </form>`;
 }
@@ -327,7 +366,9 @@ function chart(list, key, unit){
 function viewProgress(){
   const p = S.people[S.who], list = myCheckins(S.who), plan = S.plans[S.who];
   const u = p?.units==="imperial" ? ["lb","in"] : ["kg","cm"];
-  return `<section><h2>Progress</h2>
+  return `${plan?.review ? `<section class="coachmsg"><span class="from"><span class="avatar">C</span>${plan.basedOn && plan.basedOn !== "first plan" ? "Coach's review" : "From your coach"}</span><p>${esc(plan.review)}</p></section>` : ""}
+  ${photosSection()}
+  <section><h2>Weight &amp; waist</h2>
     ${list.length ? "" : `<div class="empty"><p>No check-ins yet. Your weight chart and weekly history appear here after your first Sunday check-in.</p><button data-go="checkin">Go to check-in</button></div>`}
     ${chart(list,"weight",u[0])}${chart(list,"waist",u[1])}
   </section>
@@ -365,6 +406,9 @@ function viewProfile(){
     ${f("budget","Cooking time / budget","text","placeholder=\"e.g. 30 min weeknights, batch cook Sunday\"")}
     ${t("injuries","Injuries or health notes","e.g. dodgy left knee, lower back gets tight")}
     ${t("notes","Anything else Claude should know","e.g. train together Mon and Thu, I hate burpees, want to look good for a holiday in May")}
+    <div class="field"><label for="pf_coach_style">Coaching style</label>${sel("coach_style",[["balanced","Balanced: honest and encouraging"],["hype","Hype: big energy, cheerleader"],["tough","Tough love: no excuses"],["gentle","Gentle: calm and supportive"]],p.coach_style||"balanced")}</div>
+    ${f("why","Your big why","text","placeholder=\"e.g. feel confident on holiday, keep up with my kids\"","Your coach brings this up when motivation dips")}
+    <div class="field wide"><label class="check"><input type="checkbox" id="pf_photos" name="photos_to_coach" ${p.photos_to_coach?"checked":""}> Coach can see my progress photos at check-in (for feedback on changes)</label></div>
     <div class="field wide"><label class="check"><input type="checkbox" id="pf_share" name="share_dinners" ${p.share_dinners!==false?"checked":""}> Share dinners with ${esc(nameOf(other(S.who)))} (same dish, portions sized for each of you)</label></div>
     <div class="field wide row">
       <button class="primary" type="submit">${S.people[S.who] ? "Save profile" : "Save and write my plan"}</button>
@@ -383,6 +427,12 @@ function bind(){
   document.querySelectorAll("[data-done]").forEach(cb => cb.onchange = () => toggleDone(+cb.dataset.done, cb.checked));
   document.querySelectorAll("input[type=range]").forEach(r => { const o = $("#"+r.id+"-v"); r.oninput = () => o.textContent = r.value; });
   const pf = $("#pfForm"); if (pf) pf.onsubmit = saveProfile;
+  const cf = $("#chatForm"); if (cf) { cf.onsubmit = e => { e.preventDefault(); sendChat($("#chatInput").value); }; $("#chatInput").onkeydown = e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChat(e.target.value); } }; }
+  document.querySelectorAll("[data-say]").forEach(b => b.onclick = () => sendChat(b.dataset.say));
+  document.querySelectorAll("[data-pose-pick]").forEach(b => b.onclick = () => { S.pose = b.dataset.posePick; render(); });
+  document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => deletePhoto(b.dataset.del));
+  const pu = $("#photoAdd"); if (pu) pu.onchange = async () => { const f = pu.files[0]; if (!f) return; const pose = $("#photoPose").value; S.busy = "Uploading photo…"; render(); try { await uploadPhoto(S.who, todayISO(), pose, f); S.busy = null; setStatus("Photo saved."); } catch(err){ S.busy = null; setStatus("Upload failed: " + (err.message||err.code), true); } };
+  const chatEnd = $("#chatEnd"); if (chatEnd && S.tab === "coach") chatEnd.scrollIntoView({block:"end"});
   const ci = $("#ciForm"); if (ci) ci.onsubmit = submitCheckin;
 }
 document.querySelectorAll(".who button").forEach(b => b.onclick = () => { S.who = b.dataset.who; S.status=""; try{localStorage.setItem("tuc.who",S.who);}catch(e){} render(); });
@@ -393,7 +443,7 @@ function setStatus(msg, err){ S.status = msg; S.statusErr = !!err; render(); }
 async function saveProfile(e){
   e.preventDefault();
   const fd = Object.fromEntries(new FormData(e.target).entries());
-  fd.share_dinners = !!e.target.share_dinners.checked;
+  fd.share_dinners = !!e.target.share_dinners.checked; fd.photos_to_coach = !!e.target.photos_to_coach.checked;
   const isNew = !S.people[S.who];
   fd.updatedAt = new Date().toISOString();
   try {
@@ -416,6 +466,14 @@ async function submitCheckin(e){
   const fd = Object.fromEntries(new FormData(e.target).entries());
   for (const k of ["weight","waist","sessions","diet","energy","hunger","sleep","sleep_hours","steps"]) if (fd[k] !== "" && fd[k] != null) fd[k] = +fd[k]; else delete fd[k];
   fd.who = S.who; fd.planned = (S.plans[S.who]?.workouts||[]).length; fd.createdAt = new Date().toISOString();
+  const files = [...e.target.querySelectorAll("input[type=file][data-pose]")].filter(i => i.files && i.files[0]).map(i => ({pose:i.dataset.pose, file:i.files[0]}));
+  const blobs = [];
+  if (files.length) {
+    S.busy = "Uploading photos…"; render();
+    for (const f of files) { try { const b = await uploadPhoto(S.who, fd.date, f.pose, f.file); blobs.push({pose:f.pose, blob:b}); } catch(err){ S.busy = null; setStatus("Photo upload failed (" + (err.code||err.message) + "). Your check-in wasn't submitted, try again.", true); return; } }
+    S.busy = null;
+  }
+  fd.photos = files.map(f => f.pose);
   try {
     await S.db.doc(`checkins/${S.who}_${fd.date}`).set(fd);
     if (!S.checkins.find(c => c.who===S.who && c.date===fd.date)) S.checkins.push(fd);
@@ -423,7 +481,7 @@ async function submitCheckin(e){
   if (fd.weight) { /* keep profile weight current */
     try { await S.db.doc("people/"+S.who).update({weight: fd.weight}); S.people[S.who].weight = fd.weight; } catch(e){}
   }
-  generate(S.who, fd);
+  generate(S.who, fd, null, blobs);
 }
 
 /* ---------- Claude ---------- */
@@ -441,7 +499,7 @@ function buildPrompt(who, checkin, reason){
   const shareDinners = p.share_dinners !== false && partner && partner.share_dinners !== false && partnerPlan;
   const partnerDinners = shareDinners ? (partnerPlan.meals||[]).map(d => { const m = d.meals.find(x => /dinner/i.test(x.slot)); return m ? `${d.day}: ${m.name}` : null; }).filter(Boolean) : [];
   const nextWeek = plan ? (plan.week||1) + 1 : 1;
-  return `You are an experienced, evidence-based personal trainer and sports nutritionist writing a one-week plan for one client in a couple who train together. Be practical, specific and encouraging. Use UK-friendly foods and supermarket ingredients unless the profile suggests otherwise.
+  return `You are ${p.name}'s personal trainer and sports nutritionist: experienced, evidence-based, and invested in them. They are one half of a couple who train together. Coaching voice: ${STYLE[p.coach_style||"balanced"]}${p.why ? ` Their big why: "${p.why}".` : ""} Be practical and specific. Use UK-friendly foods and supermarket ingredients unless the profile suggests otherwise.
 
 CLIENT PROFILE
 ${JSON.stringify(p, null, 1)}
@@ -463,7 +521,8 @@ RULES
 Reply with ONLY a JSON object of this shape:
 {"week": ${nextWeek},
  "targets": {"calories": number, "protein": number, "carbs": number, "fat": number, "water_l": number, "steps": number},
- "coach_note": "2–3 sentences to the client: this week's focus, in second person",
+ "review": "${!checkin && reason && plan ? "2–3 sentences telling them what you changed mid-week and why, in your coaching voice" : checkin ? "Your PT review of their week, written directly to them, 4–7 sentences: call out specific wins with numbers, be honest about what slipped and why it matters, connect it to their why, and finish with a clear challenge for next week" : "A short welcome from their new coach, 3–4 sentences: what you're going to do together and what you expect from them"}",
+ "coach_note": "1–2 sentences: this week's single focus, in second person",
  "changes": ["each change from last week and why, short; for a first plan, explain how targets were set"],
  "nutrition_notes": "one or two practical tips",
  "training_notes": "one or two tips on progression/form",
@@ -473,16 +532,25 @@ Reply with ONLY a JSON object of this shape:
  "shopping": ["grouped shopping list items with rough quantities for the week"]}`;
 }
 
-async function generate(who, checkin, reason){
+async function generate(who, checkin, reason, photoBlobs){
   if (S.busy) return;
   if (S.sample === undefined) { setStatus("Still connecting to Claude, try again in a moment.", true); return; }
   if (!S.sample) { setStatus("Claude isn't available in this view.", true); return; }
   S.busy = checkin ? "Claude is reading your check-in and writing next week…" : "Claude is writing your plan…";
   S.stream = 0; S.status = ""; render();
-  let plan;
+  let plan, images;
+  if (photoBlobs && photoBlobs.length && S.people[who]?.photos_to_coach) {
+    images = []; let desc = "";
+    for (const pb of photoBlobs) { images.push(pb.blob); desc += `\n- Image ${images.length}: ${pb.pose} photo, this week`; }
+    const firstFront = S.photos.filter(x => x.who===who && x.pose==="front" && x.date < (checkin?.date||"9")).sort((a,b)=>a.date<b.date?-1:1)[0];
+    if (firstFront) { try { const r = await fetch("/_blob/"+firstFront.asset); if (r.ok) { images.push(await shrink(await r.blob(), 1024)); desc += `\n- Image ${images.length}: front photo from ${firstFront.date} (their starting point)`; } } catch(e){} }
+    S.photoDesc = desc;
+  } else S.photoDesc = "";
   try {
-    plan = await S.sample.json(buildPrompt(who, checkin, reason), {
-      modelTier: "complex", cache: false,
+    const lim = images ? await S.sample.limits().catch(()=>null) : null;
+    if (!lim?.images) images = undefined; else images = images.slice(0, lim.images.maxCount || 4);
+    plan = await S.sample.json(buildPrompt(who, checkin, reason) + (images ? `\n\nPROGRESS PHOTOS are attached:${S.photoDesc}\nIn the review, comment briefly and kindly on visible changes (posture, shape, definition) without guessing body-fat numbers or criticising their body.` : ""), {
+      modelTier: "complex", cache: false, images,
       onText: ({text}) => { const n = text.length; if (n - S.stream > 400) { S.stream = n; const w = document.querySelector(".working .num"); if (w) w.textContent = n.toLocaleString()+" chars"; else render(); } }
     });
     if (!plan || !Array.isArray(plan.meals) || !Array.isArray(plan.workouts)) throw {code:"invalid_json", message:"The plan came back incomplete."};
@@ -498,19 +566,160 @@ async function generate(who, checkin, reason){
     return;
   }
   const old = S.plans[who];
-  plan.who = who; plan.done = {}; plan.createdAt = new Date().toISOString();
+  plan.who = who; plan.done = (old && reason) ? (old.done||{}) : {}; plan.createdAt = new Date().toISOString();
   plan.basedOn = checkin ? checkin.date : (reason ? "profile update" : "first plan");
   if (old && !reason) plan.week = (old.week||1) + 1; else if (old) plan.week = old.week || 1; else plan.week = 1;
   try {
     if (old) await S.db.doc(`planHistory/${who}_${(old.createdAt||Date.now()).toString().replace(/[^0-9]/g,"")}`).set(old);
     await S.db.doc("plans/"+who).set(plan);
     S.plans[who] = plan;
+    if (plan.review) await addChat(who, "assistant", (checkin ? `Week ${plan.week-1} review\n\n` : "") + plan.review);
   } catch(err){ S.busy = null; setStatus("Plan written but couldn't be saved: " + (err.message||err.code), true); return; }
   S.busy = null; S.status = ""; S.tab = checkin ? "progress" : "today"; S.day = DAYS[(new Date().getDay()+6)%7];
   render(); window.scrollTo(0,0);
 }
 
-function liveRender(){ if (S.busy) return; if (document.querySelector("#ciForm, #pfForm")) { renderHeader(); return; } render(); }
+/* ---------- coach: daily message, chat ---------- */
+const STYLE = {
+  balanced: "warm, direct and honest, like a good real-life PT; praise effort, call out excuses kindly but clearly.",
+  hype: "high-energy and fired up, a hype-man who makes them feel unstoppable, while still being specific.",
+  tough: "tough love, no-excuses, blunt and demanding but never cruel or body-shaming; you hold them to their word.",
+  gentle: "calm, patient and reassuring; focus on consistency over perfection and self-kindness."
+};
+function checkinStreak(w){
+  const l = myCheckins(w).map(c => new Date(c.date).getTime()).reverse(); if (!l.length) return 0;
+  if (Date.now() - l[0] > 9*864e5) return 0;
+  let n = 1; for (let i=1;i<l.length;i++){ if (l[i-1]-l[i] <= 9*864e5) n++; else break; } return n;
+}
+function coachContext(w){
+  const p = S.people[w], plan = S.plans[w], today = DAYS[(new Date().getDay()+6)%7];
+  const sess = (plan?.workouts||[]).map((x,i)=>({day:x.day,title:x.title,done:!!plan.done?.[i]}));
+  const todayMeals = (plan?.meals||[]).find(d=>d.day===today);
+  return `ABOUT ${p.name}: ${JSON.stringify({age:p.age,sex:p.sex,weight:p.weight,units:p.units,goal:p.goal,target:p.target,why:p.why,experience:p.experience,equipment:p.equipment,injuries:p.injuries,avoid:p.avoid,notes:p.notes})}
+PARTNER: ${S.people[other(w)]?.name || "none set up"} (they train as a couple)
+TODAY: ${new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}
+PLAN week ${plan?.week||"-"}: targets ${JSON.stringify(plan?.targets||{})}; this week's sessions ${JSON.stringify(sess)}; this week's focus: ${plan?.coach_note||""}
+TODAY'S MEALS: ${todayMeals ? todayMeals.meals.map(m=>`${m.slot}: ${m.name}`).join("; ") : "n/a"}
+RECENT CHECK-INS: ${JSON.stringify(myCheckins(w).slice(-3).map(({createdAt,who,...r})=>r))}
+CHECK-IN STREAK: ${checkinStreak(w)} weeks`;
+}
+function dailyBlock(){
+  const d = S.daily[`${S.who}_${todayISO()}`];
+  const txt = d ? d.text : S.dailyReq[S.who+todayISO()] === "busy" ? "" : null;
+  if (txt === null && S.sample === null) return "";
+  return `<section class="coachmsg"><span class="from"><span class="avatar">C</span>Coach · ${new Date().toLocaleDateString(undefined,{weekday:"long"})}</span>
+    ${d ? `<p>${esc(d.text)}</p>` : `<div class="working"><span class="spinner"></span>Your coach is writing today's message…</div>`}
+    <button class="ghost ask" data-go="coach">Talk to your coach</button></section>`;
+}
+async function ensureDaily(w){
+  const key = `${w}_${todayISO()}`;
+  if (S.daily[key] || S.dailyReq[w+todayISO()] || !S.sample || !S.people[w] || !S.plans[w] || !S.dailyLoaded) return;
+  S.dailyReq[w+todayISO()] = "busy";
+  const p = S.people[w];
+  try {
+    const {text} = await S.sample(`You are ${p.name}'s personal trainer. Voice: ${STYLE[p.coach_style||"balanced"]}
+${coachContext(w)}
+
+Write today's morning message to ${p.name}: 2–4 short sentences, plain text, no emoji spam (one at most), no greeting cliches. Reference something specific: today's session (or that it's a rest day and what to do instead), how many sessions they've done so far this week, a meal, a recent check-in detail, or their why. End with one concrete thing to do today. Reply with the message only.`, {modelTier:"quick", cache:false});
+    const doc = {who:w, date:todayISO(), text:text.trim(), createdAt:new Date().toISOString()};
+    S.daily[key] = doc; await S.db.doc("daily/"+key).set(doc);
+  } catch(err){ S.dailyReq[w+todayISO()] = "failed"; }
+  if (S.tab === "today" && S.who === w) render();
+}
+function myChat(w){ return S.chat.filter(m => m.who === w).sort((a,b)=>a.ts<b.ts?-1:1); }
+async function addChat(w, role, text){
+  const ts = new Date().toISOString(); const m = {who:w, role, text, ts};
+  S.chat.push(m);
+  await S.db.doc(`chat/${w}_${ts.replace(/[^0-9]/g,"")}_${role[0]}`).set(m);
+}
+function viewCoach(){
+  const msgs = myChat(S.who);
+  const p = S.people[S.who];
+  const chips = ["I really don't feel like training today","Can I swap tonight's dinner?","Something hurts","I'm off track this week","Hype me up for my session","What should I eat if I'm eating out?"];
+  return `<section><div class="spread"><h2>Coach</h2><span class="muted" style="font-size:13px">${esc(({balanced:"Balanced",hype:"Hype",tough:"Tough love",gentle:"Gentle"})[p.coach_style||"balanced"])} style · change in Profile</span></div>
+  <div class="chat">
+    ${msgs.length ? "" : `<div class="msg assistant">${esc(`Hey ${p.name}. I'm your coach. Tell me how you're feeling, ask about food or form, tell me when life gets in the way, or ask me to change your plan. I'll keep you honest.`)}</div>`}
+    ${msgs.slice(-60).map(m => `<div class="msg ${m.role}">${esc(m.text)}<span class="t">${new Date(m.ts).toLocaleString(undefined,{weekday:"short",hour:"2-digit",minute:"2-digit"})}</span></div>`).join("")}
+    ${S.chatBusy ? `<div class="msg assistant" id="chatStream">${S.chatDraft ? esc(S.chatDraft) : `<span class="working"><span class="spinner"></span>Typing…</span>`}</div>` : ""}
+    ${S.busy ? `<div class="working"><span class="spinner"></span>${esc(S.busy)}</div>` : ""}
+    <div id="chatEnd"></div>
+  </div></section>
+  <div class="chatbar">
+    <div class="chips">${chips.map(c=>`<button type="button" data-say="${esc(c)}" ${S.chatBusy?"disabled":""}>${esc(c)}</button>`).join("")}</div>
+    <form id="chatForm"><textarea id="chatInput" placeholder="Message your coach" aria-label="Message your coach" ${S.sample?"":"disabled"}></textarea><button class="primary" type="submit" ${S.chatBusy||!S.sample?"disabled":""}>Send</button></form>
+    ${S.status ? `<span class="status ${S.statusErr?"err":""}">${esc(S.status)}</span>` : ""}
+  </div>`;
+}
+async function sendChat(text){
+  text = (text||"").trim(); if (!text || S.chatBusy || !S.sample) return;
+  const w = S.who, p = S.people[w];
+  const inp = $("#chatInput"); if (inp) inp.value = "";
+  S.chatBusy = true; S.chatDraft = ""; S.status = "";
+  try { await addChat(w, "user", text); } catch(err){ S.chatBusy = false; setStatus("Couldn't send: " + (err.message||err.code), true); return; }
+  render();
+  const hist = myChat(w).slice(-16).map(m => ({role:m.role, content:m.text}));
+  while (hist.length && hist[0].role !== "user") hist.shift();
+  const merged = []; for (const m of hist) { if (merged.length && merged[merged.length-1].role === m.role) merged[merged.length-1].content += "\n\n" + m.content; else merged.push({...m}); }
+  merged[0].content = `[Coach briefing, not from the client]
+You are ${p.name}'s personal trainer and nutrition coach in a chat app. Voice: ${STYLE[p.coach_style||"balanced"]}
+Act like a real PT texting a client: short replies (usually 2–5 sentences), specific to their plan and data, motivating, accountable. Push them to train when it's just low motivation; tell them to rest when it's illness, real pain or exhaustion. For pain, give safe swaps and say to see a physio/doctor if it's sharp, persistent or swelling. Never give medical diagnoses. Plain text, no markdown headings.
+If they need their plan changed (a schedule change, a food swap for the week, a new injury, travel), call the rewrite_plan tool with a clear reason, then tell them it's being updated.
+${coachContext(w)}
+[End briefing]
+
+${merged[0].content}`;
+  let rewrite = null;
+  try {
+    const {text: reply} = await S.sample(merged, {
+      modelTier: "default", cache: false,
+      onText: ({text}) => { S.chatDraft = text; const el = $("#chatStream"); if (el) el.textContent = text; },
+      tools: [{ name: "rewrite_plan", description: "Rewrite this client's weekly meal and training plan. Use when they ask for or need a plan change.", inputSchema: {type:"object", properties:{reason:{type:"string", description:"What to change and why"}}, required:["reason"]}, execute: (inp) => { rewrite = inp.reason; return "Plan rewrite queued; it starts as soon as you finish replying."; } }]
+    });
+    await addChat(w, "assistant", reply.trim());
+  } catch(err){
+    setStatus(err.code === "rate_limited" ? "Usage limit reached, try again later." : err.code === "not_granted" ? "Claude access is off for this page. Turn it on in the page's Permissions menu." : "Coach couldn't reply (" + (err.message||err.code) + ").", true);
+  }
+  S.chatBusy = false; S.chatDraft = ""; render();
+  if (rewrite) { const keepTab = S.tab; await generate(w, null, rewrite); S.tab = keepTab; render(); }
+}
+
+/* ---------- photos ---------- */
+function shrink(blob, max){
+  return new Promise((res, rej) => { const url = URL.createObjectURL(blob); const img = new Image();
+    img.onload = () => { const k = Math.min(1, max/Math.max(img.width,img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width*k); c.height = Math.round(img.height*k); c.getContext("2d").drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(url); c.toBlob(b => b ? res(b) : rej({code:"encode_failed"}), "image/jpeg", .85); };
+    img.onerror = () => { URL.revokeObjectURL(url); rej({code:"unsupported_type", message:"That file isn't an image this browser can read"}); }; img.src = url; });
+}
+async function uploadPhoto(w, date, pose, file){
+  if (!S.assets) throw {code:"not_granted", message:"Uploads need edit access"};
+  const big = await shrink(file, 1600);          // re-encoding also strips location data
+  const up = await S.assets.upload(big);
+  const doc = {who:w, date, pose, asset:up.id, createdAt:new Date().toISOString()};
+  await S.db.doc(`photos/${w}_${date}_${pose}`).set(doc);
+  S.photos = S.photos.filter(x => !(x.who===w && x.date===date && x.pose===pose)).concat(doc);
+  return await shrink(file, 1024);
+}
+async function deletePhoto(key){
+  if (S.confirmDel !== key) { S.confirmDel = key; render(); return; }
+  const ph = S.photos.find(x => `${x.who}_${x.date}_${x.pose}` === key); S.confirmDel = null;
+  if (!ph) return;
+  try { await S.db.doc("photos/"+key).delete(); if (S.assets) await S.assets.delete(ph.asset).catch(()=>{}); S.photos = S.photos.filter(x => x !== ph); render(); }
+  catch(err){ setStatus("Couldn't delete: " + (err.message||err.code), true); }
+}
+function photosSection(){
+  const mine = S.photos.filter(x => x.who === S.who).sort((a,b)=>a.date<b.date?-1:1);
+  const pose = mine.filter(x => x.pose === S.pose);
+  const first = pose[0], last = pose[pose.length-1];
+  const add = S.assets ? `<div class="row"><select id="photoPose" aria-label="Pose" style="width:auto"><option value="front">Front</option><option value="side">Side</option><option value="back">Back</option></select><label class="btn" for="photoAdd" style="cursor:pointer">Add photo for today</label><input type="file" id="photoAdd" accept="image/*" hidden></div>` : `<p class="hint muted" style="margin:0">Photo uploads need edit access to this page.</p>`;
+  return `<section><div class="spread"><h2>Progress photos</h2><span class="muted" style="font-size:12px">Visible to both of you</span></div>
+    ${!mine.length ? `<div class="empty"><p>No photos yet. Add front, side and back shots at each check-in. Same spot, same lighting, same time of day. In a few weeks you'll see changes the scales miss.</p>${add}</div>` : `
+    <div class="posepick" role="group" aria-label="Pose">${["front","side","back"].map(k=>`<button data-pose-pick="${k}" aria-pressed="${S.pose===k}">${k[0].toUpperCase()+k.slice(1)}</button>`).join("")}</div>
+    ${first && last && first !== last ? `<div class="compare"><figure><img src="/_blob/${esc(first.asset)}" alt="${esc(S.pose)} photo ${esc(first.date)}" loading="lazy"><figcaption>Start · ${esc(fmtDate(first.date))}</figcaption></figure><figure><img src="/_blob/${esc(last.asset)}" alt="${esc(S.pose)} photo ${esc(last.date)}" loading="lazy"><figcaption>Latest · ${esc(fmtDate(last.date))}</figcaption></figure></div>` : pose.length ? `<p class="muted" style="margin:0">Add a second ${esc(S.pose)} photo on a later week to see a before/after.</p>` : `<p class="muted" style="margin:0">No ${esc(S.pose)} photos yet.</p>`}
+    <div class="photos">${mine.slice().reverse().map(x => { const k = `${x.who}_${x.date}_${x.pose}`; return `<div class="photo"><img src="/_blob/${esc(x.asset)}" alt="${esc(x.pose)} ${esc(x.date)}" loading="lazy"><div class="cap"><span>${esc(fmtDate(x.date))} · ${esc(x.pose)}</span>${S.assets?`<button class="ghost" data-del="${esc(k)}">${S.confirmDel===k?"Confirm":"Delete"}</button>`:""}</div></div>`; }).join("")}</div>
+    ${add}`}
+  </section>`;
+}
+
+function liveRender(){ if (S.busy || S.chatBusy) return; if (document.querySelector("#ciForm, #pfForm")) { renderHeader(); return; } render(); }
 /* ---------- boot ---------- */
 render();
 const loadTimer = setTimeout(() => { if (!S.loaded) { S.loaded = true; $("#syncState").textContent = "Offline"; render(); } }, 10000);
@@ -518,6 +727,7 @@ const loadTimer = setTimeout(() => { if (!S.loaded) { S.loaded = true; $("#syncS
   const claudeApi = window.claude;
   if (!claudeApi || !claudeApi.use) { clearTimeout(loadTimer); S.loaded = true; S.sample = null; $("#syncState").textContent = "Preview only"; render(); return; }
   claudeApi.use("sample").then(s => { S.sample = s; if (S.loaded) render(); });
+  claudeApi.use("assets").then(a => { S.assets = a; if (S.loaded) render(); });
   const db = await claudeApi.use("db");
   if (!db) { clearTimeout(loadTimer); S.loaded = true; $("#syncState").textContent = "Not signed in"; render(); return; }
   S.db = db;
@@ -526,6 +736,9 @@ const loadTimer = setTimeout(() => { if (!S.loaded) { S.loaded = true; $("#syncS
   let first = [true,true,true];
   db.collection("people").onSnapshot(q => { S.people = {}; q.docs.forEach(d => S.people[d.id] = structuredClone(d.data())); if (first[0]) { first[0]=false; ready(); } liveRender(); }, onErr);
   db.collection("plans").onSnapshot(q => { S.plans = {}; q.docs.forEach(d => S.plans[d.id] = structuredClone(d.data())); if (first[1]) { first[1]=false; ready(); } liveRender(); }, onErr);
+  db.collection("chat").onSnapshot(q => { S.chat = q.docs.map(d => structuredClone(d.data())); liveRender(); }, onErr);
+  db.collection("photos").onSnapshot(q => { S.photos = q.docs.map(d => structuredClone(d.data())); liveRender(); }, onErr);
+  db.collection("daily").onSnapshot(q => { S.daily = {}; q.docs.forEach(d => S.daily[d.id] = structuredClone(d.data())); S.dailyLoaded = true; liveRender(); }, onErr);
   db.collection("checkins").onSnapshot(q => { S.checkins = q.docs.map(d => structuredClone(d.data())); if (first[2]) { first[2]=false; ready(); } liveRender(); }, onErr);
 })();
 })();
