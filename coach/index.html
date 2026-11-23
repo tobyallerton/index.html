@@ -210,6 +210,7 @@ try { const w = localStorage.getItem("tuc.who"); if (w === "p1" || w === "p2") S
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
 const other = w => w === "p1" ? "p2" : "p1";
+const calm = w => !!((S.people[w] || S.drafts?.[w] || {}).no_fat_loss);
 const nameOf = w => (S.people[w] && S.people[w].name) || (S.drafts && S.drafts[w] && S.drafts[w].name) || (w === "p1" ? "Person 1" : "Person 2");
 const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
 const fmtDate = iso => { try { return new Date(iso).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"}); } catch(e){ return iso; } };
@@ -221,7 +222,7 @@ function renderHeader(){
   for (const w of ["p1","p2"]) {
     $("#nm-"+w).textContent = nameOf(w);
     const p = S.people[w], plan = S.plans[w];
-    $("#sub-"+w).textContent = !p ? "Not set up" : plan ? `${plan.targets?.calories ?? "–"} kcal · week ${plan.week ?? 1}` : "No plan yet";
+    $("#sub-"+w).textContent = !p ? "Not set up" : plan ? (calm(w) ? `Week ${plan.week ?? 1}` : `${plan.targets?.calories ?? "–"} kcal · week ${plan.week ?? 1}`) : "No plan yet";
     document.querySelector(`.who [data-who="${w}"]`).setAttribute("aria-pressed", S.who === w);
   }
   document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === S.tab));
@@ -278,9 +279,9 @@ function mealCards(plan, day){
   if (!d) return `<p class="muted">No meals listed for ${day}.</p>`;
   let k=0,pr=0;
   const cards = d.meals.map(m => { k += +m.kcal||0; pr += +m.protein||0; return `<article class="card meal">
-    <div class="spread"><span class="slot">${esc(m.slot)}</span><span class="macro">${esc(m.kcal)} kcal · ${esc(m.protein)}g P</span></div>
+    <div class="spread"><span class="slot">${esc(m.slot)}</span>${calm(S.who) ? "" : `<span class="macro">${esc(m.kcal)} kcal · ${esc(m.protein)}g P</span>`}</div>
     <h3>${esc(m.name)}</h3>${m.mins||m.kit?`<span class="row" style="gap:6px">${m.mins?`<span class="chip">${esc(m.mins)} min</span>`:""}${m.kit?`<span class="chip">${esc(m.kit)}</span>`:""}</span>`:""}${m.items?`<p>${esc(m.items)}</p>`:""}${m.shared?`<span class="chip accent">Same dish as ${esc(nameOf(other(S.who)))}</span>`:""}</article>`; }).join("");
-  return cards + `<div class="daytotal num">Day total ≈ ${k} kcal · ${pr}g protein</div>`;
+  return cards + (calm(S.who) ? "" : `<div class="daytotal num">Day total ≈ ${k} kcal · ${pr}g protein</div>`);
 }
 
 function sessionCard(plan, w, i){
@@ -311,7 +312,7 @@ function viewToday(){
   return `${dailyBlock()}<section>
     <div class="spread"><h2>${esc(nameOf(S.who))} · Week ${esc(plan.week||1)}</h2><span class="row" style="gap:6px">${streak>1?`<span class="chip accent">${streak}-week check-in streak</span>`:""}<span class="chip ${doneCount>=total?"good":""}">${doneCount}/${(plan.workouts||[]).length} sessions done</span></span></div>
     <div class="bar" aria-hidden="true"><i style="width:${Math.min(100,Math.round(doneCount/total*100))}%"></i></div>
-    ${targetsBlock(plan.targets)}
+    ${calm(S.who) ? "" : targetsBlock(plan.targets)}
     ${due && plan.week ? `<div class="row"><span class="chip accent">Check-in due</span><button class="ghost" data-go="checkin">Do this week's check-in</button></div>` : ""}
   </section>
   <section>${dayPicker()}</section>
@@ -322,7 +323,7 @@ function viewToday(){
 function viewMeals(){
   const plan = S.plans[S.who];
   if (!plan) return noPlan();
-  return `<section><h2>Meal plan</h2>${targetsBlock(plan.targets)}${plan.nutrition_notes?`<p class="muted" style="margin:0">${esc(plan.nutrition_notes)}</p>`:""}</section>
+  return `<section><h2>Meal plan</h2>${calm(S.who) ? "" : targetsBlock(plan.targets)}${plan.nutrition_notes?`<p class="muted" style="margin:0">${esc(plan.nutrition_notes)}</p>`:""}</section>
   <section>${dayPicker()}${mealCards(plan, S.day)}</section>
   <section class="row"><button class="primary" data-go="shopping">Open our Sainsbury's list</button></section>`;
 }
@@ -348,8 +349,8 @@ function viewCheckin(){
   ${plan && plan.coach_note ? `<section class="coachnote"><span class="label">Last week's focus</span><p>${esc(plan.coach_note)}</p></section>`:""}
   <form class="grid" id="ciForm">
     <div class="field"><label for="ci_date">Date</label><input type="date" id="ci_date" name="date" value="${todayISO()}" required></div>
-    <div class="field"><label for="ci_weight">Weight (${esc(p?.units==="imperial"?"lb":"kg")})</label><input type="number" step="0.1" id="ci_weight" name="weight" placeholder="${esc(prev?.weight ?? p?.weight ?? "")}" required><span class="hint">Morning, after the toilet, before food</span></div>
-    <div class="field"><label for="ci_waist">Waist (${esc(p?.units==="imperial"?"in":"cm")})</label><input type="number" step="0.1" id="ci_waist" name="waist" placeholder="Optional"></div>
+    ${calm(S.who) ? "" : `<div class="field"><label for="ci_weight">Weight (${esc(p?.units==="imperial"?"lb":"kg")})</label><input type="number" step="0.1" id="ci_weight" name="weight" placeholder="${esc(prev?.weight ?? p?.weight ?? "")}" required><span class="hint">Morning, after the toilet, before food</span></div>
+    <div class="field"><label for="ci_waist">Waist (${esc(p?.units==="imperial"?"in":"cm")})</label><input type="number" step="0.1" id="ci_waist" name="waist" placeholder="Optional"></div>`}
     <div class="field"><label for="ci_sessions">Sessions completed</label><input type="number" min="0" max="14" id="ci_sessions" name="sessions" value="${doneCount}"><span class="hint">Out of ${total} planned</span></div>
     ${rng("diet","Stuck to meals",1,10,7,"1 = way off, 10 = every meal")}
     ${rng("energy","Energy",1,10,6,"Through the day and in sessions")}
@@ -362,7 +363,7 @@ function viewCheckin(){
     <div class="field wide"><label for="ci_wins">What went well</label><textarea id="ci_wins" name="wins"></textarea></div>
     <div class="field wide"><label for="ci_hard">What was hard / what to change</label><textarea id="ci_hard" name="struggles" placeholder="e.g. Too much prep on Tuesdays, hated the overnight oats, want more upper body"></textarea></div>
     <div class="field wide"><label for="ci_next">Anything coming up next week?</label><input id="ci_next" name="next_week" placeholder="e.g. Away Thu–Fri, birthday dinner Saturday"></div>
-    <div class="field wide"><span class="label">Progress photos (optional)</span>${S.assets ? `<div class="upl">${["front","side","back"].map(k=>`<label for="ci_ph_${k}">${k[0].toUpperCase()+k.slice(1)}<input type="file" accept="image/*" id="ci_ph_${k}" data-pose="${k}"></label>`).join("")}</div><span class="hint">Same spot, same light, same time of day each week. ${p?.photos_to_coach ? "Your coach will look at these in the review." : "Turn on \"Coach can see my photos\" in your profile if you want feedback on them."}</span>` : `<span class="hint">Photo uploads need edit access to this page.</span>`}</div>
+    ${calm(S.who) ? "" : `<div class="field wide"><span class="label">Progress photos (optional)</span>${S.assets ? `<div class="upl">${["front","side","back"].map(k=>`<label for="ci_ph_${k}">${k[0].toUpperCase()+k.slice(1)}<input type="file" accept="image/*" id="ci_ph_${k}" data-pose="${k}"></label>`).join("")}</div><span class="hint">Same spot, same light, same time of day each week. ${p?.photos_to_coach ? "Your coach will look at these in the review." : "Turn on \"Coach can see my photos\" in your profile if you want feedback on them."}</span>` : `<span class="hint">Photo uploads need edit access to this page.</span>`}</div>`}
     <div class="field wide">${S.busy ? genButton() : `<div class="row"><button class="primary" type="submit">Submit and update my plan</button><span class="status ${S.statusErr?"err":""}">${esc(S.status)}</span></div>`}</div>
   </form>`;
 }
@@ -392,16 +393,16 @@ function viewProgress(){
   const p = S.people[S.who], list = myCheckins(S.who), plan = S.plans[S.who];
   const u = p?.units==="imperial" ? ["lb","in"] : ["kg","cm"];
   return `${plan?.review ? `<section class="coachmsg"><span class="from"><span class="avatar">C</span>${plan.basedOn && plan.basedOn !== "first plan" ? "Coach's review" : "From your coach"}</span><p>${esc(plan.review)}</p></section>` : ""}
-  ${photosSection()}
-  <section><h2>Weight &amp; waist</h2>
+  ${calm(S.who) ? "" : photosSection()}
+  ${calm(S.who) ? (list.length ? "" : `<section><div class="empty"><p>No check-ins yet. Your weekly history (sessions, energy, sleep and your lifts) appears here after your first Sunday check-in.</p><button data-go="checkin">Go to check-in</button></div></section>`) : `<section><h2>Weight &amp; waist</h2>
     ${list.length ? "" : `<div class="empty"><p>No check-ins yet. Your weight chart and weekly history appear here after your first Sunday check-in.</p><button data-go="checkin">Go to check-in</button></div>`}
     ${chart(list,"weight",u[0])}${chart(list,"waist",u[1])}
-  </section>
+  </section>`}
   ${plan?.changes?.length ? `<section class="coachnote"><span class="label">What changed in this week's plan</span><ul class="changes">${plan.changes.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></section>`:""}
   ${list.length ? `<section class="hist"><h2>Check-in history</h2>${list.slice().reverse().map(c=>`<article class="card">
-    <div class="spread"><h3>${esc(fmtDate(c.date))}</h3><span class="num">${esc(c.weight)} ${u[0]}</span></div>
+    <div class="spread"><h3>${esc(fmtDate(c.date))}</h3>${calm(S.who) || c.weight == null ? "" : `<span class="num">${esc(c.weight)} ${u[0]}</span>`}</div>
     <div class="kv"><span>Sessions <b>${esc(c.sessions)}</b></span><span>Diet <b>${esc(c.diet)}/10</b></span><span>Energy <b>${esc(c.energy)}/10</b></span><span>Hunger <b>${esc(c.hunger)}/10</b></span><span>Sleep <b>${esc(c.sleep)}/10</b>${c.sleep_hours?` · ${esc(c.sleep_hours)}h`:""}</span></div>
-    ${c.struggles?`<p class="muted" style="margin:0;font-size:14px">${esc(c.struggles)}</p>`:""}</article>`).join("")}</section>`:""}`;
+    ${c.lifts?`<p style="margin:0;font-size:14px">${esc(c.lifts)}</p>`:""}${c.struggles?`<p class="muted" style="margin:0;font-size:14px">${esc(c.struggles)}</p>`:""}</article>`).join("")}</section>`:""}`;
 }
 
 function viewProfile(){
@@ -415,12 +416,12 @@ function viewProfile(){
     ${f("name","First name","text","required autocomplete=\"given-name\"")}
     <div class="field"><label for="pf_units">Units</label>${sel("units",[["metric","Metric (kg, cm)"],["imperial","Imperial (lb, in)"]],p.units||"metric")}</div>
     ${f("age","Age","number","min=\"14\" max=\"99\" required")}
-    <div class="field"><label for="pf_sex">Sex</label>${sel("sex",[["female","Female"],["male","Male"]],p.sex||(S.who==="p2"?"female":"male"))}<span class="hint">Used for the calorie maths</span></div>
+    <div class="field"><label for="pf_sex">Sex</label>${sel("sex",[["female","Female"],["male","Male"]],p.sex||(S.who==="p2"?"female":"male"))}<span class="hint">${p.no_fat_loss ? "Used to size your portions" : "Used for the calorie maths"}</span></div>
     ${f("height","Height","number","step=\"0.1\" required","cm or inches")}
-    ${f("weight","Current weight","number","step=\"0.1\" required","kg or lb")}
+    ${f("weight",p.no_fat_loss ? "Weight" : "Current weight","number","step=\"0.1\" required",p.no_fat_loss ? "Only used to size your portions. It isn't shown anywhere in the app." : "kg or lb")}
     <div class="field wide"><span class="label" style="font-size:13px;text-transform:none;letter-spacing:0;color:var(--ink)">Focus areas</span><div class="row" style="gap:12px">${[["glutes","Glutes"],["abs","Abs & core"],["legs","Legs"],["arms","Arms"],["back","Back & posture"],["shoulders","Shoulders"],["chest","Chest"]].map(([v,l])=>`<label class="check" style="font-weight:500"><input type="checkbox" name="focus" value="${v}" ${(p.focus||[]).includes(v)?"checked":""}> ${l}</label>`).join("")}</div><span class="hint">Your training puts extra work here, while still training the whole body</span></div>
-    <div class="field"><label for="pf_goal">Main goal</label>${sel("goal",[["shape","Build shape and tone (no fat loss)"],["lose fat","Lose fat"],["build muscle","Build muscle"],["recomp","Lose fat and build muscle"],["tone","Tone up: lose a bit of fat, add shape"],["get fitter","Get fitter / healthier"],["strength","Get stronger"],["endurance","Running / endurance"]].filter(([v]) => !(p.no_fat_loss && ["lose fat","recomp","tone"].includes(v))),p.goal||(p.no_fat_loss?"shape":"lose fat"))}</div>
-    <div class="field"><span class="label" style="font-size:13px;text-transform:none;letter-spacing:0;color:var(--ink)">Fat loss</span><label class="check" style="font-weight:500"><input type="checkbox" id="pf_nofat" name="no_fat_loss" ${p.no_fat_loss?"checked":""}> I don't need to lose fat</label><span class="hint">Hides fat-loss goals; calories never go below maintenance</span></div>
+    <div class="field"><label for="pf_goal">Main goal</label>${sel("goal",[["shape","Strength and tone"],["lose fat","Lose fat"],["build muscle","Build muscle"],["recomp","Lose fat and build muscle"],["tone","Tone up: lose a bit of fat, add shape"],["get fitter","Get fitter / healthier"],["strength","Get stronger"],["endurance","Running / endurance"]].filter(([v]) => !(p.no_fat_loss && ["lose fat","recomp","tone"].includes(v))),p.goal||(p.no_fat_loss?"shape":"lose fat"))}</div>
+    <div class="field"><span class="label" style="font-size:13px;text-transform:none;letter-spacing:0;color:var(--ink)">How I track progress</span><label class="check" style="font-weight:500"><input type="checkbox" id="pf_nofat" name="no_fat_loss" ${p.no_fat_loss?"checked":""}> Strength and how I feel, not numbers</label><span class="hint">No scales, body numbers or photos in the app. Progress is shown through lifts, energy and consistency.</span></div>
     ${f("target","Target (optional)","text","placeholder=\"e.g. 65kg by June, first pull-up\"")}
     <div class="field"><label for="pf_experience">Training experience</label>${sel("experience",[["beginner","Beginner (under 6 months)"],["intermediate","Intermediate (6 months–3 years)"],["advanced","Advanced (3+ years)"]],p.experience||"beginner")}</div>
     <div class="field"><label for="pf_activity">Day job activity</label>${sel("activity",[["desk","Desk-based"],["mixed","On my feet some of the day"],["active","Physical job"]],p.activity||"desk")}</div>
@@ -439,7 +440,7 @@ function viewProfile(){
     <div class="field"><label for="pf_coach_style">Coaching style</label>${sel("coach_style",[["balanced","Balanced: honest and encouraging"],["hype","Hype: big energy, cheerleader"],["tough","Tough love: no excuses"],["gentle","Gentle: calm and supportive"]],p.coach_style||"balanced")}</div>
     ${f("why","Your big why","text","placeholder=\"e.g. feel confident on holiday, keep up with my kids\"","Your coach brings this up when motivation dips")}
     <div class="field wide"><label class="check"><input type="checkbox" id="pf_sweet" name="sweet_tooth" ${p.sweet_tooth?"checked":""}> I have a sweet tooth (build a dessert or sweet snack into every day)</label></div>
-    <div class="field wide"><label class="check"><input type="checkbox" id="pf_photos" name="photos_to_coach" ${p.photos_to_coach?"checked":""}> Coach can see my progress photos at check-in (for feedback on changes)</label></div>
+    ${p.no_fat_loss ? "" : `<div class="field wide"><label class="check"><input type="checkbox" id="pf_photos" name="photos_to_coach" ${p.photos_to_coach?"checked":""}> Coach can see my progress photos at check-in (for feedback on changes)</label></div>`}
     <div class="field wide"><label class="check"><input type="checkbox" id="pf_share" name="share_dinners" ${p.share_dinners!==false?"checked":""}> Share dinners with ${esc(nameOf(other(S.who)))} (same dish, portions sized for each of you)</label></div>
     <div class="field wide row">
       <button class="primary" type="submit">${S.people[S.who] ? "Save profile" : "Save and write my plan"}</button>
@@ -479,7 +480,7 @@ function setStatus(msg, err){ S.status = msg; S.statusErr = !!err; render(); }
 async function saveProfile(e){
   e.preventDefault();
   const fd = Object.fromEntries(new FormData(e.target).entries());
-  fd.focus = [...e.target.querySelectorAll("input[name=focus]:checked")].map(i => i.value); fd.sweet_tooth = !!e.target.sweet_tooth.checked; fd.no_fat_loss = !!e.target.no_fat_loss.checked; if (fd.no_fat_loss && ["lose fat","recomp","tone"].includes(fd.goal)) fd.goal = "shape"; fd.share_dinners = !!e.target.share_dinners.checked; fd.photos_to_coach = !!e.target.photos_to_coach.checked;
+  fd.focus = [...e.target.querySelectorAll("input[name=focus]:checked")].map(i => i.value); fd.sweet_tooth = !!e.target.sweet_tooth.checked; fd.no_fat_loss = !!e.target.no_fat_loss.checked; if (fd.no_fat_loss) fd.photos_to_coach = false; if (fd.no_fat_loss && ["lose fat","recomp","tone"].includes(fd.goal)) fd.goal = "shape"; fd.share_dinners = !!e.target.share_dinners.checked; fd.photos_to_coach = !!(e.target.photos_to_coach && e.target.photos_to_coach.checked);
   const isNew = !S.people[S.who];
   fd.updatedAt = new Date().toISOString();
   try {
@@ -550,7 +551,7 @@ RULES
 - Protein about 1.6–2.2 g per kg bodyweight. Round targets to sensible numbers.
 - If there is check-in data, ADJUST, don't start over: compare weight trend to goal (use the average of recent weigh-ins, ignore one-off spikes), and adjust calories by 100–200 kcal only if the trend is off for 2+ weeks or hunger/energy is poor. Swap meals they disliked or struggled with, keep ones that worked. Progress lifts that felt easy (more weight or reps), back off anything causing pain and offer a safe substitute. Account for anything coming up next week.
 - Respect allergies and foods to avoid strictly. Keep prep realistic for their time and budget, and keep each meal to one pan/tray where possible. Reuse ingredients across the week to keep shopping simple; leftovers for lunch are fine.
-${p.no_fat_loss || p.goal === "shape" ? "- NO FAT LOSS: this client does NOT need or want to lose fat. Set calories at maintenance to a small surplus (about +100 to +200 kcal), never a deficit. Goal is shape and tone through building muscle with progressive resistance training (8–15 reps), with high-enough protein. Never mention fat loss, cutting, deficits or 'leaning out' anywhere in the plan or notes. If weight creeps up slightly, that is expected muscle and is good.\n" : ""}${p.goal === "tone" ? "- GOAL 'TONE UP': resistance training is the priority (not endless cardio), with a modest calorie deficit (or maintenance if already lean) and high protein, so they lose a little fat and build visible shape. Moderate reps (8–15), progressive overload, plus daily steps.\n" : ""}${(p.focus||[]).length ? `- FOCUS AREAS: ${p.focus.join(", ")}. Give these extra weekly volume while keeping the programme balanced full-body.${p.focus.includes("glutes") ? " Glutes: train them in most sessions with hip thrusts or glute bridges, Romanian deadlifts, Bulgarian split squats/lunges, step-ups, cable or band kickbacks and abductions; progress the load." : ""}${p.focus.includes("abs") ? " Abs & core: finish 2–3 sessions with 2–3 core moves (dead bugs, planks/side planks, hanging or lying leg raises, cable crunches, Pallof press). " + (p.no_fat_loss || p.goal === "shape" ? "Frame abs work as building a strong, flatter, more defined midsection; do not talk about body fat." : "In coach_note or nutrition_notes, be honest that visible abs come mainly from lower body fat, so nutrition matters as much as crunches.") : ""}\n` : ""}- Exactly ${p.days || 3} training sessions of about ${p.session || 45} minutes, using only their equipment (${p.equipment}${p.kit ? ": " + p.kit : ""}).${/kettlebell/.test(p.equipment||"") ? " HOME KETTLEBELL WORKOUTS ONLY: kettlebells, bodyweight and the floor. No barbell, bench, cables, machines or pull-up bar. Use kettlebell staples (goblet squat, swings, deadlifts and RDLs, rows, floor press, clean & press, lunges, hip thrusts, carries, halos) and say which bell to use (lighter/heavier). Progress with reps, tempo, pauses, unilateral work and moving up a bell." : ""} Spread across the week with rest days. Include progressive overload and sets/reps/rest. Beginners: simple compound movements.
+${p.no_fat_loss ? "- BODY-NEUTRAL CLIENT (very important; they have body image difficulties): set calories at maintenance to a small surplus, never a deficit, and keep the targets internal. In ALL text you write (review, coach_note, changes, nutrition_notes, training_notes, rest_day_tip, meal names) NEVER mention weight, body fat, fat loss, calories, deficits, 'toning', 'shape', how their body looks or will look, or body parts in an appearance sense. Talk only about strength, lifts going up, energy, sleep, mood, consistency, enjoying food and feeling good. Training still targets their focus areas, described by what the muscles DO (strong glutes for power and posture, a strong core for stability). Food is framed as fuel and enjoyment.\n" : p.goal === "shape" ? "- Calories at maintenance to a small surplus; build strength with progressive resistance training.\n" : ""}${p.goal === "tone" ? "- GOAL 'TONE UP': resistance training is the priority (not endless cardio), with a modest calorie deficit (or maintenance if already lean) and high protein, so they lose a little fat and build visible shape. Moderate reps (8–15), progressive overload, plus daily steps.\n" : ""}${(p.focus||[]).length ? `- FOCUS AREAS: ${p.focus.join(", ")}. Give these extra weekly volume while keeping the programme balanced full-body.${p.focus.includes("glutes") ? " Glutes: train them in most sessions with hip thrusts or glute bridges, Romanian deadlifts, Bulgarian split squats/lunges, step-ups, cable or band kickbacks and abductions; progress the load." : ""}${p.focus.includes("abs") ? " Abs & core: finish 2–3 sessions with 2–3 core moves (dead bugs, planks/side planks, hanging or lying leg raises, cable crunches, Pallof press). " + (p.no_fat_loss ? "Describe core work only in terms of strength and stability, never appearance." : "In coach_note or nutrition_notes, be honest that visible abs come mainly from lower body fat, so nutrition matters as much as crunches.") : ""}\n` : ""}- Exactly ${p.days || 3} training sessions of about ${p.session || 45} minutes, using only their equipment (${p.equipment}${p.kit ? ": " + p.kit : ""}).${/kettlebell/.test(p.equipment||"") ? " HOME KETTLEBELL WORKOUTS ONLY: kettlebells, bodyweight and the floor. No barbell, bench, cables, machines or pull-up bar. Use kettlebell staples (goblet squat, swings, deadlifts and RDLs, rows, floor press, clean & press, lunges, hip thrusts, carries, halos) and say which bell to use (lighter/heavier). Progress with reps, tempo, pauses, unilateral work and moving up a bell." : ""} Spread across the week with rest days. Include progressive overload and sets/reps/rest. Beginners: simple compound movements.
 - ${p.meals_per_day || 4} meals/snacks per day; each day's total should be within about 5% of the calorie target.
 ${p.breakfast === "no" ? "- They do NOT eat breakfast. No breakfast slot at all: the first meal is lunch. Fit the day's calories and protein into lunch, an afternoon snack and dinner (an evening snack is fine). Don't lecture them about breakfast.\n" : p.breakfast === "light" ? "- Breakfast must be very light or a drink only (e.g. a protein coffee, a smoothie, a yoghurt drink). No cooked breakfasts.\n" : ""}${p.sweet_tooth ? "- SWEET TOOTH: build a sweet treat into EVERY day within the targets: usually a dessert after dinner and/or a sweet snack (e.g. protein mousse, Greek-style yoghurt with honey and dark chocolate, protein hot chocolate, frozen yoghurt bark, banana and peanut butter with chocolate chips, baked oats, a small bar of chocolate or a couple of biscuits). Use the slot name 'Dessert' or 'Sweet snack'. Real treats are fine in moderation; vary them through the week. Respect lactose intolerance where listed.\n" : ""}${p.appetite === "small" ? "- SMALL APPETITE, eat-enough-without-noticing: they don't enjoy eating much, so they must hit their calorie target WITHOUT the food feeling like a lot. Make portions look normal or small but energy-dense: cook with a little extra olive oil or butter, add nut butter, nuts, seeds, granola, cheese, avocado, dried fruit, whole/full-fat dairy or oat milk, pesto, hummus; use calorie-dense carbs (wraps, bagels, pasta, rice pouches) over bulky veg-heavy plates; include drinkable calories (smoothies with oats and peanut butter, protein milkshakes, hot chocolate made with milk) which don't feel like eating; snacks that feel like treats. Never a huge plate or a long list of food. Protein can sit at about 1.6 g/kg; spread it in small hits. Keep any fat-loss deficit gentle. In notes, frame food positively (fuel for strength and shape), never 'you need to eat more'.\n" : p.appetite === "big" ? "- They have a BIG appetite: prioritise high-volume, filling foods (lean protein, veg, potatoes, fruit, soups) so the targets feel like plenty.\n" : ""}
 - Keep text short: meal "items" is one line listing ingredients with amounts; exercise "notes" a few words or empty.
@@ -657,7 +658,7 @@ async function ensureDaily(w){
     const {text} = await S.sample(`You are ${p.name}'s personal trainer. Voice: ${STYLE[p.coach_style||"balanced"]}
 ${coachContext(w)}
 
-Write today's morning message to ${p.name}: 2–4 short sentences, plain text, no emoji spam (one at most), no greeting cliches. Reference something specific: today's session (or that it's a rest day and what to do instead), how many sessions they've done so far this week, a meal, a recent check-in detail, or their why. End with one concrete thing to do today. Reply with the message only.`, {modelTier:"quick", cache:false});
+${p.no_fat_loss ? "Never mention weight, calories, body fat, appearance or how their body looks; focus on strength, energy, mood and consistency.\n" : ""}Write today's morning message to ${p.name}: 2–4 short sentences, plain text, no emoji spam (one at most), no greeting cliches. Reference something specific: today's session (or that it's a rest day and what to do instead), how many sessions they've done so far this week, a meal, a recent check-in detail, or their why. End with one concrete thing to do today. Reply with the message only.`, {modelTier:"quick", cache:false});
     const doc = {who:w, date:todayISO(), text:text.trim(), createdAt:new Date().toISOString()};
     S.daily[key] = doc; await S.db.doc("daily/"+key).set(doc);
   } catch(err){ S.dailyReq[w+todayISO()] = "failed"; }
@@ -699,7 +700,7 @@ async function sendChat(text){
   const merged = []; for (const m of hist) { if (merged.length && merged[merged.length-1].role === m.role) merged[merged.length-1].content += "\n\n" + m.content; else merged.push({...m}); }
   merged[0].content = `[Coach briefing, not from the client]
 You are ${p.name}'s personal trainer and nutrition coach in a chat app. Voice: ${STYLE[p.coach_style||"balanced"]}
-Act like a real PT texting a client: short replies (usually 2–5 sentences), specific to their plan and data, motivating, accountable. Push them to train when it's just low motivation; tell them to rest when it's illness, real pain or exhaustion. For pain, give safe swaps and say to see a physio/doctor if it's sharp, persistent or swelling. Never give medical diagnoses.${p.no_fat_loss ? " This client does not want or need to lose fat: never suggest cutting, deficits or weight loss." : ""}${p.appetite === "small" ? " This client has a small appetite: never pressure them about how much they eat or make food sound like a chore. If they seem under-fuelled, suggest easy energy-dense swaps or a smoothie, framed as fuel for strength and shape." : ""}${p.sweet_tooth ? " They have a sweet tooth: treats are planned in, so never guilt-trip them about sweets; help them fit cravings in." : ""} Plain text, no markdown headings.
+Act like a real PT texting a client: short replies (usually 2–5 sentences), specific to their plan and data, motivating, accountable. Push them to train when it's just low motivation; tell them to rest when it's illness, real pain or exhaustion. For pain, give safe swaps and say to see a physio/doctor if it's sharp, persistent or swelling. Never give medical diagnoses.${p.no_fat_loss ? " This client has body image difficulties: NEVER mention weight, body fat, calories, fat loss, appearance, 'toning' or how their body looks, and never compliment or comment on their body. Praise strength, effort, consistency and how they feel. If they say something negative about their body or seem distressed about it, respond with warmth and without judgement, gently steer to what their body can do, and if it seems persistent suggest talking to their GP or someone they trust (the BDD Foundation and Mind have support)." : ""}${p.appetite === "small" ? " This client has a small appetite: never pressure them about how much they eat or make food sound like a chore. If they seem under-fuelled, suggest easy energy-dense swaps or a smoothie, framed as fuel for strength and shape." : ""}${p.sweet_tooth ? " They have a sweet tooth: treats are planned in, so never guilt-trip them about sweets; help them fit cravings in." : ""} Plain text, no markdown headings.
 If they need their plan changed (a schedule change, a food swap for the week, a new injury, travel), call the rewrite_plan tool with a clear reason, then tell them it's being updated.
 ${coachContext(w)}
 [End briefing]
