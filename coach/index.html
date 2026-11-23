@@ -158,6 +158,17 @@ input[type=range]{padding:0;accent-color:var(--accent)}
 .upl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .upl label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
 .upl input{font-size:12px;padding:6px}
+.shoplist{display:flex;flex-direction:column;gap:16px}
+.aisle h3{font-size:16px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:4px}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.item input{width:20px;height:20px;accent-color:var(--good)}
+.item.got .nm{text-decoration:line-through;color:var(--muted)}
+.item .nm{min-width:0}
+.item .nm a{color:inherit;text-decoration:none;font-weight:500}
+.item .nm small{display:block;color:var(--muted);font-size:12px}
+.item .pr{font-family:var(--f-num);font-size:13px;white-space:nowrap}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.total .v{font-family:var(--f-num);font-size:24px}
 </style>
 
 <div class="wrap">
@@ -174,6 +185,7 @@ input[type=range]{padding:0;accent-color:var(--accent)}
       <button role="tab" data-tab="today" aria-selected="true">Today</button>
       <button role="tab" data-tab="coach" aria-selected="false">Coach</button>
       <button role="tab" data-tab="meals" aria-selected="false">Meals</button>
+      <button role="tab" data-tab="shopping" aria-selected="false">Shopping</button>
       <button role="tab" data-tab="training" aria-selected="false">Training</button>
       <button role="tab" data-tab="checkin" aria-selected="false">Weekly check-in</button>
       <button role="tab" data-tab="progress" aria-selected="false">Progress &amp; photos</button>
@@ -191,7 +203,7 @@ const S = {
   who: "p1", tab: "today", day: DAYS[(new Date().getDay()+6)%7],
   people: {}, plans: {}, checkins: [], db: null, sample: undefined,
   loaded: false, busy: null, status: "", statusErr: false, stream: 0,
-  chat: [], photos: [], daily: {}, howto: {}, howtoReq: {}, openEx: null, assets: undefined, chatBusy: false, chatDraft: "", dailyReq: {}, pose: "front", confirmDel: null
+  chat: [], photos: [], daily: {}, howto: {}, howtoReq: {}, shopping: null, openEx: null, assets: undefined, chatBusy: false, chatDraft: "", dailyReq: {}, pose: "front", confirmDel: null
 };
 try { const w = localStorage.getItem("tuc.who"); if (w === "p1" || w === "p2") S.who = w; } catch(e) {}
 
@@ -223,7 +235,7 @@ function render(){
   if (!S.db) { v.innerHTML = `<div class="empty"><h3>Sign in to use the coach</h3><p>Profiles, plans and check-ins are saved for both of you, so this page needs you signed in to claude.ai. Open it from your own Claude account, or ask Toby to share it with you.</p></div>`; return; }
   const p = S.people[S.who];
   if (!p && S.tab !== "profile") { v.innerHTML = setupPrompt(); bind(); return; }
-  const fn = {today:viewToday, coach:viewCoach, meals:viewMeals, training:viewTraining, checkin:viewCheckin, progress:viewProgress, profile:viewProfile}[S.tab];
+  const fn = {today:viewToday, coach:viewCoach, meals:viewMeals, shopping:viewShopping, training:viewTraining, checkin:viewCheckin, progress:viewProgress, profile:viewProfile}[S.tab];
   const ci = $("#chatInput"), draft = ci ? ci.value : null, foc = ci && document.activeElement === ci;
   v.innerHTML = fn();
   bind();
@@ -267,7 +279,7 @@ function mealCards(plan, day){
   let k=0,pr=0;
   const cards = d.meals.map(m => { k += +m.kcal||0; pr += +m.protein||0; return `<article class="card meal">
     <div class="spread"><span class="slot">${esc(m.slot)}</span><span class="macro">${esc(m.kcal)} kcal · ${esc(m.protein)}g P</span></div>
-    <h3>${esc(m.name)}</h3>${m.items?`<p>${esc(m.items)}</p>`:""}${m.shared?`<span class="chip accent">Same dish as ${esc(nameOf(other(S.who)))}</span>`:""}</article>`; }).join("");
+    <h3>${esc(m.name)}</h3>${m.mins||m.kit?`<span class="row" style="gap:6px">${m.mins?`<span class="chip">${esc(m.mins)} min</span>`:""}${m.kit?`<span class="chip">${esc(m.kit)}</span>`:""}</span>`:""}${m.items?`<p>${esc(m.items)}</p>`:""}${m.shared?`<span class="chip accent">Same dish as ${esc(nameOf(other(S.who)))}</span>`:""}</article>`; }).join("");
   return cards + `<div class="daytotal num">Day total ≈ ${k} kcal · ${pr}g protein</div>`;
 }
 
@@ -312,7 +324,7 @@ function viewMeals(){
   if (!plan) return noPlan();
   return `<section><h2>Meal plan</h2>${targetsBlock(plan.targets)}${plan.nutrition_notes?`<p class="muted" style="margin:0">${esc(plan.nutrition_notes)}</p>`:""}</section>
   <section>${dayPicker()}${mealCards(plan, S.day)}</section>
-  ${plan.shopping?.length ? `<section><h2>Shopping list</h2><ul class="shop">${plan.shopping.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></section>`:""}`;
+  <section class="row"><button class="primary" data-go="shopping">Open our Sainsbury's list</button></section>`;
 }
 
 function viewTraining(){
@@ -445,6 +457,10 @@ function bind(){
   const cf = $("#chatForm"); if (cf) { cf.onsubmit = e => { e.preventDefault(); sendChat($("#chatInput").value); }; $("#chatInput").onkeydown = e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChat(e.target.value); } }; }
   document.querySelectorAll("[data-say]").forEach(b => b.onclick = () => sendChat(b.dataset.say));
   document.querySelectorAll("[data-pose-pick]").forEach(b => b.onclick = () => { S.pose = b.dataset.posePick; render(); });
+  document.querySelectorAll("[data-act=shopgen]").forEach(b => b.onclick = buildShopping);
+  document.querySelectorAll("[data-act=shopcopy]").forEach(b => b.onclick = copyShop);
+  document.querySelectorAll("[data-act=shopclear]").forEach(b => b.onclick = async () => { S.shopping.checked = {}; render(); try { await S.db.doc("shopping/current").set({...S.shopping, checked:{}}); } catch(e){ setStatus("Couldn't clear ticks.", true); } });
+  document.querySelectorAll("[data-shop]").forEach(cb => cb.onchange = () => tickShop(cb.dataset.shop, cb.checked));
   document.querySelectorAll("[data-howto]").forEach(b => b.onclick = () => openHowto(b.dataset.howto, b.dataset.exname));
   document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => deletePhoto(b.dataset.del));
   const pu = $("#photoAdd"); if (pu) pu.onchange = async () => { const f = pu.files[0]; if (!f) return; const pose = $("#photoPose").value; S.busy = "Uploading photo…"; render(); try { await uploadPhoto(S.who, todayISO(), pose, f); S.busy = null; setStatus("Photo saved."); } catch(err){ S.busy = null; setStatus("Upload failed: " + (err.message||err.code), true); } };
@@ -515,7 +531,7 @@ function buildPrompt(who, checkin, reason){
   const shareDinners = p.share_dinners !== false && partner && partner.share_dinners !== false && partnerPlan;
   const partnerDinners = shareDinners ? (partnerPlan.meals||[]).map(d => { const m = d.meals.find(x => /dinner/i.test(x.slot)); return m ? `${d.day}: ${m.name}` : null; }).filter(Boolean) : [];
   const nextWeek = plan ? (plan.week||1) + 1 : 1;
-  return `You are ${p.name}'s personal trainer and sports nutritionist: experienced, evidence-based, and invested in them. They are one half of a couple who train together. Coaching voice: ${STYLE[p.coach_style||"balanced"]}${p.why ? ` Their big why: "${p.why}".` : ""} Be practical and specific. Use UK-friendly foods and supermarket ingredients unless the profile suggests otherwise.
+  return `You are ${p.name}'s personal trainer and sports nutritionist: experienced, evidence-based, and invested in them. They are one half of a couple who train together. Coaching voice: ${STYLE[p.coach_style||"balanced"]}${p.why ? ` Their big why: "${p.why}".` : ""} Be practical and specific. FOOD STYLE FOR THIS HOUSEHOLD: they shop at Sainsbury's on a budget, so use ingredients Sainsbury's stocks, favouring own-brand and good-value staples (frozen veg, tins, eggs, chicken thighs, mince, rice pouches, wraps, Greek-style/lactose-free yoghurt as needed). Meals must be QUICK and EASY with MINIMAL WASHING UP: most under 20 minutes, none over 30; one pan, one tray, air fryer, microwave or no-cook; batch-cook once and reuse as leftovers; few ingredients per meal.
 
 CLIENT PROFILE
 ${JSON.stringify(p, null, 1)}
@@ -529,7 +545,7 @@ RULES
 - Work out calories from Mifflin-St Jeor with a sensible activity factor, then apply the goal. Fat loss: deficit aiming for about 0.5–1% bodyweight per week. Never go below 1200 kcal for women or 1500 kcal for men. Muscle gain: small surplus (about 200–300 kcal).
 - Protein about 1.6–2.2 g per kg bodyweight. Round targets to sensible numbers.
 - If there is check-in data, ADJUST, don't start over: compare weight trend to goal (use the average of recent weigh-ins, ignore one-off spikes), and adjust calories by 100–200 kcal only if the trend is off for 2+ weeks or hunger/energy is poor. Swap meals they disliked or struggled with, keep ones that worked. Progress lifts that felt easy (more weight or reps), back off anything causing pain and offer a safe substitute. Account for anything coming up next week.
-- Respect allergies and foods to avoid strictly. Keep prep realistic for their time/budget. Reuse ingredients across the week to keep shopping simple; leftovers for lunch are fine.
+- Respect allergies and foods to avoid strictly. Keep prep realistic for their time and budget, and keep each meal to one pan/tray where possible. Reuse ingredients across the week to keep shopping simple; leftovers for lunch are fine.
 - Exactly ${p.days || 3} training sessions of about ${p.session || 45} minutes, using only their equipment (${p.equipment}). Spread across the week with rest days. Include progressive overload and sets/reps/rest. Beginners: simple compound movements.
 - ${p.meals_per_day || 4} meals/snacks per day; each day's total should be within about 5% of the calorie target.
 ${p.breakfast === "no" ? "- They do NOT eat breakfast. No breakfast slot at all: the first meal is lunch. Fit the day's calories and protein into lunch, an afternoon snack and dinner (an evening snack is fine). Don't lecture them about breakfast.\n" : p.breakfast === "light" ? "- Breakfast must be very light or a drink only (e.g. a protein coffee, a smoothie, a yoghurt drink). No cooked breakfasts.\n" : ""}${p.appetite === "small" ? "- They have a SMALL appetite and don't enjoy eating much. Use small, easy-to-eat, calorie- and protein-dense meals, not big plates; things they can graze on; drinkable options (shakes, smoothies) count; tasty over 'clean'. Don't set an aggressive deficit (if fat loss, keep it gentle) and make sure they still reach the calorie floor and protein target; protein can sit at the lower end (about 1.6 g/kg) if hitting it is a struggle. Check in on whether they are eating enough.\n" : p.appetite === "big" ? "- They have a BIG appetite: prioritise high-volume, filling foods (lean protein, veg, potatoes, fruit, soups) so the targets feel like plenty.\n" : ""}
@@ -544,9 +560,9 @@ Reply with ONLY a JSON object of this shape:
  "nutrition_notes": "one or two practical tips",
  "training_notes": "one or two tips on progression/form",
  "rest_day_tip": "one line",
- "meals": [{"day":"Mon","meals":[{"slot":"Breakfast","name":"","items":"","kcal":0,"protein":0,"shared":false}]}  ... all 7 days Mon..Sun],
+ "meals": [{"day":"Mon","meals":[{"slot":"Breakfast","name":"","items":"","kcal":0,"protein":0,"mins":15,"kit":"one pan | tray bake | air fryer | microwave | no-cook | leftovers","shared":false}]}  ... all 7 days Mon..Sun],
  "workouts": [{"day":"Mon","title":"","focus":"","duration_min":0,"warmup":"","exercises":[{"name":"","sets":3,"reps":"8-10","rest":"90s","notes":""}],"cardio":""}],
- "shopping": ["grouped shopping list items with rough quantities for the week"]}`;
+ "shopping": []}  (leave shopping empty; a combined household list is built separately)`;
 }
 
 async function generate(who, checkin, reason, photoBlobs){
@@ -700,6 +716,64 @@ ${merged[0].content}`;
   if (rewrite) { const keepTab = S.tab; await generate(w, null, rewrite); S.tab = keepTab; render(); }
 }
 
+/* ---------- shopping ---------- */
+const sainsUrl = n => "https://www.sainsburys.co.uk/gol-ui/SearchResults/" + encodeURIComponent(n);
+function viewShopping(){
+  const sh = S.shopping, have = ["p1","p2"].filter(w => S.plans[w]);
+  const people = have.map(nameOf).join(" and ");
+  const checked = sh?.checked || {};
+  const head = `<section><div class="spread"><h2>Sainsbury's list</h2>${sh?`<span class="muted" style="font-size:13px">Built ${esc(fmtDate(sh.createdAt))}</span>`:""}</div>
+    <p class="muted" style="margin:0">One list for ${esc(people || "you both")}, built from this week's meal plans. Own-brand where it makes sense, grouped by aisle. Prices are Claude's estimates, not live Sainsbury's prices, so the real total may differ a bit. Tap an item to find it on Sainsbury's.</p>
+    <div class="row"><label for="shBudget" style="font-weight:600;font-size:14px">Weekly budget £</label><input id="shBudget" type="number" min="10" step="5" value="${esc(sh?.budget ?? S.shopBudget ?? 70)}" style="width:100px">
+    ${S.busy ? genButton() : `<button class="primary" data-act="shopgen" ${have.length?"":"disabled"}>${sh ? "Rebuild list" : "Build this week's list"}</button>`}
+    <span class="status ${S.statusErr?"err":""}">${esc(S.status)}</span></div></section>`;
+  if (!have.length) return head + `<div class="empty"><p>Generate a meal plan first, then build the shopping list here.</p></div>`;
+  if (!sh) return head + `<div class="empty"><p>No list yet. Set your weekly budget and press Build. Claude combines both plans, removes duplicates and sizes quantities to what you'll actually use.</p></div>`;
+  const all = sh.sections.flatMap(a => a.items); let left = 0;
+  all.forEach((it,i) => { if (!checked[it.id]) left += +it.price || 0; });
+  const over = sh.total > sh.budget;
+  return head + `<div class="total"><div><div class="label">Estimated total</div><span class="v ${over?"":""}" style="color:var(${over?"--bad":"--good"})">£${(+sh.total).toFixed(2)}</span> <span class="muted">of £${esc(sh.budget)} budget</span></div><div><div class="label">Still to get</div><span class="num">£${left.toFixed(2)}</span></div></div>
+  ${sh.note?`<p class="muted" style="margin:0">${esc(sh.note)}</p>`:""}
+  <div class="row"><button data-act="shopcopy">Copy list</button><button class="ghost" data-act="shopclear">Untick all</button></div>
+  <div class="shoplist">${sh.sections.map(a => `<div class="aisle"><h3>${esc(a.aisle)}</h3>${a.items.map(it => `<label class="item ${checked[it.id]?"got":""}"><input type="checkbox" data-shop="${esc(it.id)}" ${checked[it.id]?"checked":""}><span class="nm"><a href="${sainsUrl(it.search||it.name)}" target="_blank" rel="noopener">${esc(it.name)}</a><small>${esc(it.qty||"")}${it.for && it.for!=="both"?` · ${esc(it.for)}`:""}</small></span><span class="pr">£${(+it.price||0).toFixed(2)}</span></label>`).join("")}</div>`).join("")}</div>
+  ${sh.tips?.length?`<section class="coachnote"><span class="label">Saving tips</span><ul class="changes">${sh.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></section>`:""}`;
+}
+async function buildShopping(){
+  if (S.busy || !S.sample) return;
+  const budget = +($("#shBudget")?.value) || 70; S.shopBudget = budget;
+  const lines = ["p1","p2"].filter(w => S.plans[w]).map(w => { const p = S.people[w];
+    return `${p.name} (avoid: ${p.avoid||"nothing"}):\n` + (S.plans[w].meals||[]).map(d => `${d.day}: ` + d.meals.map(m => `${m.name}${m.shared?" [shared dinner, cooked once for both]":""} [${m.items||""}]`).join(" | ")).join("\n"); }).join("\n\n");
+  S.busy = "Building your Sainsbury's list…"; S.status = ""; render();
+  try {
+    const r = await S.sample.json(`You are doing the weekly food shop at Sainsbury's (UK) for a couple. Build ONE combined shopping list covering every meal below for 7 days.
+- Merge duplicates across both people; shared dinners are cooked once, so buy them once at combined portions.
+- Use real Sainsbury's pack sizes and own-brand / good-value options ("by Sainsbury's", Stamford Street, frozen and tinned where sensible). Prefer packs that get used up across the week.
+- Leave out basic cupboard items most homes have (salt, pepper, oil, stock cubes) unless a lot is needed; put them in a final "Check the cupboard" aisle with price 0.
+- Price each line with a realistic current Sainsbury's estimate in GBP. Weekly budget: £${budget}. If the total would exceed it, swap to cheaper options and say what you swapped in "note".
+- Respect each person's foods to avoid.
+
+MEAL PLANS
+${lines}
+
+Reply with ONLY JSON:
+{"total": number, "note": "one or two sentences: how it fits the budget and any swaps", "sections": [{"aisle": "Fruit & veg | Meat & fish | Dairy & eggs | Bakery | Frozen | Tins, jars & dried | Snacks & drinks | Check the cupboard", "items": [{"name": "Sainsbury's Chicken Thighs Boneless", "search": "short search term", "qty": "2 × 500g (Mon, Wed dinners)", "price": 3.50, "for": "both|<name>"}]}], "tips": ["2-3 short money-saving tips for this list, e.g. Nectar prices or yellow-sticker swaps"]}`, {modelTier:"default", cache:false, onText: ({text}) => { const n=text.length; if (n - S.stream > 300) { S.stream = n; const el=document.querySelector(".working .num"); if (el) el.textContent = n.toLocaleString()+" chars"; } }});
+    if (!r || !Array.isArray(r.sections)) throw {code:"invalid_json"};
+    let id = 0; r.sections.forEach(a => (a.items||[]).forEach(it => it.id = "i" + (id++)));
+    r.total = +r.total || r.sections.flatMap(a=>a.items).reduce((t,it)=>t+(+it.price||0),0);
+    const doc = {...r, budget, checked:{}, createdAt:new Date().toISOString()};
+    await S.db.doc("shopping/current").set(doc); S.shopping = doc;
+    S.busy = null; S.stream = 0; render();
+  } catch(err){ S.busy = null; S.stream = 0; setStatus(err.code === "rate_limited" ? "Usage limit reached, try again later." : "Couldn't build the list (" + (err.message||err.code) + "). Try again.", true); }
+}
+async function tickShop(id, val){
+  const checked = Object.assign({}, S.shopping.checked||{}, {[id]: val}); S.shopping.checked = checked; render();
+  try { await S.db.doc("shopping/current").update({checked}); } catch(e){ setStatus("Couldn't save that tick.", true); }
+}
+async function copyShop(){
+  const sh = S.shopping; const txt = "Sainsbury's list (est. £" + (+sh.total).toFixed(2) + ")\n" + sh.sections.map(a => "\n" + a.aisle.toUpperCase() + "\n" + a.items.map(it => `- ${it.name} (${it.qty||""}) £${(+it.price||0).toFixed(2)}`).join("\n")).join("\n");
+  try { await navigator.clipboard.writeText(txt); setStatus("List copied. Paste it into your notes app."); } catch(e){ setStatus("Couldn't copy automatically on this device.", true); }
+}
+
 /* ---------- exercise tutorials ---------- */
 const slug = n => String(n).toLowerCase().replace(/\(.*?\)/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,90) || "exercise";
 const ytUrl = (n, extra) => "https://www.youtube.com/results?search_query=" + encodeURIComponent(`how to ${n} ${extra || "proper form tutorial"}`);
@@ -790,6 +864,7 @@ const loadTimer = setTimeout(() => { if (!S.loaded) { S.loaded = true; $("#syncS
   db.collection("plans").onSnapshot(q => { S.plans = {}; q.docs.forEach(d => S.plans[d.id] = structuredClone(d.data())); if (first[1]) { first[1]=false; ready(); } liveRender(); }, onErr);
   db.collection("chat").onSnapshot(q => { S.chat = q.docs.map(d => structuredClone(d.data())); liveRender(); }, onErr);
   db.collection("photos").onSnapshot(q => { S.photos = q.docs.map(d => structuredClone(d.data())); liveRender(); }, onErr);
+  db.doc("shopping/current").onSnapshot(d => { S.shopping = d.exists ? structuredClone(d.data()) : null; liveRender(); }, onErr);
   db.collection("howto").onSnapshot(q => { q.docs.forEach(d => S.howto[d.id] = structuredClone(d.data())); liveRender(); }, onErr);
   db.collection("daily").onSnapshot(q => { S.daily = {}; q.docs.forEach(d => S.daily[d.id] = structuredClone(d.data())); S.dailyLoaded = true; liveRender(); }, onErr);
   db.collection("checkins").onSnapshot(q => { S.checkins = q.docs.map(d => structuredClone(d.data())); if (first[2]) { first[2]=false; ready(); } liveRender(); }, onErr);
