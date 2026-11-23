@@ -80,6 +80,16 @@ table.ex td{padding:8px 8px 8px 0;border-bottom:1px solid var(--line);vertical-a
 table.ex td.n{font-family:var(--f-num);white-space:nowrap}
 table.ex tr:last-child td{border-bottom:0}
 table.ex .note{display:block;font-size:12px;color:var(--muted)}
+.exbtns{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.exbtns button,.exbtns a{padding:4px 10px;font-size:12px;border-radius:999px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600}
+.exbtns a.vid{background:var(--accent);border-color:var(--accent);color:#fff}
+.exbtns button[aria-expanded="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+table.ex td.howto{background:var(--sunk);border-radius:8px;padding:14px 16px}
+.howto h4{margin:10px 0 4px;font:600 11px var(--f-body);text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+.howto h4:first-child{margin-top:0}
+.howto ol,.howto ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
+.howto p{margin:0}
+.howto .vids{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .tablewrap{overflow-x:auto}
 .session.done{border-color:var(--good)}
 .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--sunk);color:var(--muted)}
@@ -181,7 +191,7 @@ const S = {
   who: "p1", tab: "today", day: DAYS[(new Date().getDay()+6)%7],
   people: {}, plans: {}, checkins: [], db: null, sample: undefined,
   loaded: false, busy: null, status: "", statusErr: false, stream: 0,
-  chat: [], photos: [], daily: {}, assets: undefined, chatBusy: false, chatDraft: "", dailyReq: {}, pose: "front", confirmDel: null
+  chat: [], photos: [], daily: {}, howto: {}, howtoReq: {}, openEx: null, assets: undefined, chatBusy: false, chatDraft: "", dailyReq: {}, pose: "front", confirmDel: null
 };
 try { const w = localStorage.getItem("tuc.who"); if (w === "p1" || w === "p2") S.who = w; } catch(e) {}
 
@@ -263,7 +273,10 @@ function mealCards(plan, day){
 
 function sessionCard(plan, w, i){
   const done = !!(plan.done && plan.done[i]);
-  const rows = (w.exercises||[]).map(e => `<tr><td>${esc(e.name)}${e.notes?`<span class="note">${esc(e.notes)}</span>`:""}</td><td class="n">${esc(e.sets)}×${esc(e.reps)}</td><td class="n">${esc(e.rest||"")}</td></tr>`).join("");
+  const rows = (w.exercises||[]).map((e,j) => { const key = `${i}-${j}`, open = S.openEx === key;
+    return `<tr><td><b style="font-weight:600">${esc(e.name)}</b>${e.notes?`<span class="note">${esc(e.notes)}</span>`:""}
+      <div class="exbtns"><button type="button" data-howto="${key}" data-exname="${esc(e.name)}" aria-expanded="${open}">How to</button><a class="vid" href="${ytUrl(e.name)}" target="_blank" rel="noopener">▶ Watch video</a></div></td>
+      <td class="n">${esc(e.sets)}×${esc(e.reps)}</td><td class="n">${esc(e.rest||"")}</td></tr>${open ? `<tr><td colspan="3" class="howto">${howtoBody(e.name)}</td></tr>` : ""}`; }).join("");
   return `<article class="card session ${done?"done":""}">
     <div class="spread"><span class="label">${esc(w.day)} · ${esc(w.duration_min||"")} min</span>
       <label class="check"><input type="checkbox" data-done="${i}" ${done?"checked":""}> Done</label></div>
@@ -430,6 +443,7 @@ function bind(){
   const cf = $("#chatForm"); if (cf) { cf.onsubmit = e => { e.preventDefault(); sendChat($("#chatInput").value); }; $("#chatInput").onkeydown = e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChat(e.target.value); } }; }
   document.querySelectorAll("[data-say]").forEach(b => b.onclick = () => sendChat(b.dataset.say));
   document.querySelectorAll("[data-pose-pick]").forEach(b => b.onclick = () => { S.pose = b.dataset.posePick; render(); });
+  document.querySelectorAll("[data-howto]").forEach(b => b.onclick = () => openHowto(b.dataset.howto, b.dataset.exname));
   document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => deletePhoto(b.dataset.del));
   const pu = $("#photoAdd"); if (pu) pu.onchange = async () => { const f = pu.files[0]; if (!f) return; const pose = $("#photoPose").value; S.busy = "Uploading photo…"; render(); try { await uploadPhoto(S.who, todayISO(), pose, f); S.busy = null; setStatus("Photo saved."); } catch(err){ S.busy = null; setStatus("Upload failed: " + (err.message||err.code), true); } };
   const chatEnd = $("#chatEnd"); if (chatEnd && S.tab === "coach") chatEnd.scrollIntoView({block:"end"});
@@ -683,6 +697,41 @@ ${merged[0].content}`;
   if (rewrite) { const keepTab = S.tab; await generate(w, null, rewrite); S.tab = keepTab; render(); }
 }
 
+/* ---------- exercise tutorials ---------- */
+const slug = n => String(n).toLowerCase().replace(/\(.*?\)/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,90) || "exercise";
+const ytUrl = (n, extra) => "https://www.youtube.com/results?search_query=" + encodeURIComponent(`how to ${n} ${extra || "proper form tutorial"}`);
+function howtoBody(name){
+  const h = S.howto[slug(name)];
+  const vids = `<div class="vids exbtns"><a class="vid" href="${ytUrl(name)}" target="_blank" rel="noopener">▶ Form tutorial videos</a><a href="${ytUrl(name,"common mistakes")}" target="_blank" rel="noopener">▶ Common mistakes</a><a href="${ytUrl(name,"beginner")}" target="_blank" rel="noopener">▶ Beginner version</a></div>`;
+  if (!h) return S.howtoReq[slug(name)] === "failed" ? `<p class="muted">Couldn't load the guide. Close and try again, or use the videos below.</p>${vids}` : S.sample === null ? vids : `<div class="working"><span class="spinner"></span>Writing the guide…</div>${vids}`;
+  const li = a => (a||[]).map(x=>`<li>${esc(x)}</li>`).join("");
+  return `<div class="howto">
+    ${h.muscles?`<p class="muted" style="font-size:13px">Works: ${esc(h.muscles)}</p>`:""}
+    <h4>Setup</h4><p>${esc(h.setup)}</p>
+    <h4>Steps</h4><ol>${li(h.steps)}</ol>
+    <h4>Form cues</h4><ul>${li(h.cues)}</ul>
+    <h4>Common mistakes</h4><ul>${li(h.mistakes)}</ul>
+    ${h.breathing?`<h4>Breathing</h4><p>${esc(h.breathing)}</p>`:""}
+    <h4>Make it easier / harder</h4><ul>${h.easier?`<li><b>Easier:</b> ${esc(h.easier)}</li>`:""}${h.harder?`<li><b>Harder:</b> ${esc(h.harder)}</li>`:""}</ul>
+    ${h.safety?`<h4>Safety</h4><p>${esc(h.safety)}</p>`:""}
+    ${vids}</div>`;
+}
+async function openHowto(key, name){
+  S.openEx = S.openEx === key ? null : key; render();
+  const k = slug(name);
+  if (!S.openEx || S.howto[k] || S.howtoReq[k] === "busy" || !S.sample) return;
+  S.howtoReq[k] = "busy";
+  try {
+    const h = await S.sample.json(`You are an expert strength coach. Write a clear, accurate technique guide for the exercise "${name}" for a gym-goer. Plain English, short lines. Reply with ONLY JSON:
+{"muscles":"main muscles worked","setup":"1-2 sentences: equipment, stance, grip","steps":["4-6 numbered movement steps"],"cues":["3-4 short form cues"],"mistakes":["3-4 common mistakes and the fix"],"breathing":"one line","easier":"a regression","harder":"a progression","safety":"one line, or empty"}`, {modelTier:"quick", cache:false});
+    if (!h || !Array.isArray(h.steps)) throw {code:"invalid_json"};
+    h.name = name; h.createdAt = new Date().toISOString();
+    S.howto[k] = h; S.howtoReq[k] = "done";
+    await S.db.doc("howto/"+k).set(h).catch(()=>{});
+  } catch(err){ S.howtoReq[k] = "failed"; }
+  render();
+}
+
 /* ---------- photos ---------- */
 function shrink(blob, max){
   return new Promise((res, rej) => { const url = URL.createObjectURL(blob); const img = new Image();
@@ -738,6 +787,7 @@ const loadTimer = setTimeout(() => { if (!S.loaded) { S.loaded = true; $("#syncS
   db.collection("plans").onSnapshot(q => { S.plans = {}; q.docs.forEach(d => S.plans[d.id] = structuredClone(d.data())); if (first[1]) { first[1]=false; ready(); } liveRender(); }, onErr);
   db.collection("chat").onSnapshot(q => { S.chat = q.docs.map(d => structuredClone(d.data())); liveRender(); }, onErr);
   db.collection("photos").onSnapshot(q => { S.photos = q.docs.map(d => structuredClone(d.data())); liveRender(); }, onErr);
+  db.collection("howto").onSnapshot(q => { q.docs.forEach(d => S.howto[d.id] = structuredClone(d.data())); liveRender(); }, onErr);
   db.collection("daily").onSnapshot(q => { S.daily = {}; q.docs.forEach(d => S.daily[d.id] = structuredClone(d.data())); S.dailyLoaded = true; liveRender(); }, onErr);
   db.collection("checkins").onSnapshot(q => { S.checkins = q.docs.map(d => structuredClone(d.data())); if (first[2]) { first[2]=false; ready(); } liveRender(); }, onErr);
 })();
