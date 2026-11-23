@@ -416,6 +416,8 @@ function viewProfile(){
     ${t("diet","Diet style and foods you love","e.g. eat everything, love Mexican and curries, high-protein yoghurt for breakfast")}
     ${t("avoid","Allergies and foods to avoid","e.g. no mushrooms, lactose intolerant")}
     ${f("meals_per_day","Meals per day","number","min=\"2\" max=\"6\" placeholder=\"4\"","Including snacks")}
+    <div class="field"><label for="pf_breakfast">Breakfast</label>${sel("breakfast",[["yes","I eat breakfast"],["no","I skip breakfast (first food at lunch)"],["light","Something small or a drink only"]],p.breakfast||"yes")}</div>
+    <div class="field"><label for="pf_appetite">Appetite</label>${sel("appetite",[["normal","Normal"],["small","Small: I don't enjoy eating much"],["big","Big: always hungry"]],p.appetite||"normal")}</div>
     ${f("budget","Cooking time / budget","text","placeholder=\"e.g. 30 min weeknights, batch cook Sunday\"")}
     ${t("injuries","Injuries or health notes","e.g. dodgy left knee, lower back gets tight")}
     ${t("notes","Anything else Claude should know","e.g. train together Mon and Thu, I hate burpees, want to look good for a holiday in May")}
@@ -530,6 +532,7 @@ RULES
 - Respect allergies and foods to avoid strictly. Keep prep realistic for their time/budget. Reuse ingredients across the week to keep shopping simple; leftovers for lunch are fine.
 - Exactly ${p.days || 3} training sessions of about ${p.session || 45} minutes, using only their equipment (${p.equipment}). Spread across the week with rest days. Include progressive overload and sets/reps/rest. Beginners: simple compound movements.
 - ${p.meals_per_day || 4} meals/snacks per day; each day's total should be within about 5% of the calorie target.
+${p.breakfast === "no" ? "- They do NOT eat breakfast. No breakfast slot at all: the first meal is lunch. Fit the day's calories and protein into lunch, an afternoon snack and dinner (an evening snack is fine). Don't lecture them about breakfast.\n" : p.breakfast === "light" ? "- Breakfast must be very light or a drink only (e.g. a protein coffee, a smoothie, a yoghurt drink). No cooked breakfasts.\n" : ""}${p.appetite === "small" ? "- They have a SMALL appetite and don't enjoy eating much. Use small, easy-to-eat, calorie- and protein-dense meals, not big plates; things they can graze on; drinkable options (shakes, smoothies) count; tasty over 'clean'. Don't set an aggressive deficit (if fat loss, keep it gentle) and make sure they still reach the calorie floor and protein target; protein can sit at the lower end (about 1.6 g/kg) if hitting it is a struggle. Check in on whether they are eating enough.\n" : p.appetite === "big" ? "- They have a BIG appetite: prioritise high-volume, filling foods (lean protein, veg, potatoes, fruit, soups) so the targets feel like plenty.\n" : ""}
 - Keep text short: meal "items" is one line listing ingredients with amounts; exercise "notes" a few words or empty.
 
 Reply with ONLY a JSON object of this shape:
@@ -609,7 +612,7 @@ function coachContext(w){
   const p = S.people[w], plan = S.plans[w], today = DAYS[(new Date().getDay()+6)%7];
   const sess = (plan?.workouts||[]).map((x,i)=>({day:x.day,title:x.title,done:!!plan.done?.[i]}));
   const todayMeals = (plan?.meals||[]).find(d=>d.day===today);
-  return `ABOUT ${p.name}: ${JSON.stringify({age:p.age,sex:p.sex,weight:p.weight,units:p.units,goal:p.goal,target:p.target,why:p.why,experience:p.experience,equipment:p.equipment,injuries:p.injuries,avoid:p.avoid,notes:p.notes})}
+  return `ABOUT ${p.name}: ${JSON.stringify({age:p.age,sex:p.sex,weight:p.weight,units:p.units,goal:p.goal,target:p.target,why:p.why,experience:p.experience,equipment:p.equipment,injuries:p.injuries,avoid:p.avoid,breakfast:p.breakfast,appetite:p.appetite,notes:p.notes})}
 PARTNER: ${S.people[other(w)]?.name || "none set up"} (they train as a couple)
 TODAY: ${new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}
 PLAN week ${plan?.week||"-"}: targets ${JSON.stringify(plan?.targets||{})}; this week's sessions ${JSON.stringify(sess)}; this week's focus: ${plan?.coach_note||""}
